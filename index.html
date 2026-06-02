@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EU⁺ Missão — Tecnologia a Serviço de Quem Serve</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink: #0D0D0D;
+            --ivory: #F5F2EC;
+            --green: #2A7C4A;           /* Cor principal Verde */
+            --green-light: #4A9C6A;
+            --muted: #6B6459;
+            --rule: rgba(42,124,74,0.25);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--ivory);
+            color: var(--ink);
+            overflow-x: hidden;
+        }
+
+        /* ==================== NAV ==================== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 60px;
+            background: rgba(245,242,236,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            color: var(--ink);
+            text-decoration: none;
+        }
+        .nav-logo span { color: var(--green); }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 120px 60px 80px;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 42%;
+            background: linear-gradient(135deg, #2A7C4A 0%, #4A9C6A 100%);
+            opacity: 0.93;
+            z-index: -1;
+        }
+
+        .hero-left {
+            padding-right: 60px;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 28px;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(40px, 5vw, 72px);
+            font-weight: 300;
+            line-height: 1.08;
+            margin-bottom: 24px;
+            color: var(--ink);
+        }
+        .hero-title em { font-style: italic; color: #fff; }
+
+        .hero-sub {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: #333;
+            max-width: 460px;
+            margin-bottom: 44px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: white;
+            background: var(--green);
+            padding: 16px 36px;
+            text-decoration: none;
+            border: 1px solid var(--green);
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--ink);
+            border-color: var(--ink);
+        }
+
+        /* ==================== PRODUTOS ==================== */
+        .produtos {
+            padding: 120px 60px;
+            background: var(--ivory);
+        }
+
+        .produtos-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-label {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 16px;
+        }
+
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+        }
+
+        .produto-card {
+            background: white;
+            border: 1px solid var(--rule);
+            padding: 40px 32px;
+            transition: all 0.3s ease;
+        }
+
+        .produto-card:hover {
+            border-color: var(--green);
+            box-shadow: 0 12px 40px rgba(42,124,74,0.12);
+            transform: translateY(-6px);
+        }
+
+        .produto-tag {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 14px;
+        }
+
+        .produto-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 400;
+            line-height: 1.25;
+            margin-bottom: 16px;
+        }
+
+        .produto-card p {
+            font-size: 14.5px;
+            line-height: 1.65;
+            color: var(--muted);
+        }
+
+        .produto-status {
+            margin-top: 24px;
+            font-size: 11px;
+            padding: 6px 14px;
+            border-radius: 30px;
+            display: inline-block;
+            background: rgba(42,124,74,0.12);
+            color: var(--green);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="../index.html" class="nav-logo">EU⁺ <span>Missão</span></a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-left">
+            <div class="hero-eyebrow">FRONTEIRA EU⁺ MISSÃO</div>
+            <h1 class="hero-title">Tecnologia a serviço<br>de quem <em>serve</em>.</h1>
+            <p class="hero-sub">Gestão de propósito, transparência e impacto. Ferramentas leves e dignas para líderes espirituais, ministérios, organizações sociais e projetos de transformação.</p>
+            
+            <div class="hero-ctas">
+                <a href="#produtos" class="btn-primary">Ver nossas soluções</a>
+                <a href="#" class="btn-ghost" style="color: #333; border-bottom: 1px solid #2A7C4A; padding-bottom: 4px;">Fazer diagnóstico de missão</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFÓLIO DE SOLUÇÕES -->
+    <section class="produtos" id="produtos">
+        <div class="produtos-header">
+            <div class="section-label">PORTFÓLIO</div>
+            <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; line-height: 1.1; margin-bottom: 20px;">
+                Soluções para quem vive<br>por uma causa maior
+            </h2>
+            <p style="max-width: 620px; margin: 0 auto; font-size: 15.5px; color: var(--muted);">
+                Começamos pela gestão de propósito e expandimos para todas as necessidades práticas de ministérios e organizações de impacto.
+            </p>
+        </div>
+
+        <div class="produtos-grid">
+
+            <div class="produto-card">
+                <div class="produto-tag">Propósito</div>
+                <h3>EU⁺ Gestão de Missão</h3>
+                <p>Organização clara da visão, valores e objetivos estratégicos da sua missão.</p>
+                <span class="produto-status">Em desenvolvimento prioritário</span>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-tag">Propósito</div>
+                <h3>EU⁺ Propósito Vivo</h3>
+                <p>Ferramenta para alinhamento contínuo entre a causa e as ações diárias.</p>
+                <span class="produto-status">Em desenvolvimento prioritário</span>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-tag">Finanças</div>
+                <h3>EU⁺ Transparência Total</h3>
+                <p>Gestão financeira ética, prestação de contas e relatórios claros para doadores.</p>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-tag">Pessoas</div>
+                <h3>EU⁺ Equipe em Missão</h3>
+                <p>Gestão de voluntários, líderes e equipes com foco em chamado e desenvolvimento.</p>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-tag">Alcance</div>
+                <h3>EU⁺ Expansão de Impacto</h3>
+                <p>Planejamento e acompanhamento de projetos de expansão e multiplicação.</p>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-tag">Comunidade</div>
+                <h3>EU⁺ Comunidade Viva</h3>
+                <p>Gestão de membros, discipulado, eventos e engajamento da comunidade.</p>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-tag">Doações</div>
+                <h3>EU⁺ Generosidade Inteligente</h3>
+                <p>Gestão de ofertas, doações recorrentes e relacionamento com mantenedores.</p>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-tag">Conhecimento</div>
+                <h3>EU⁺ Ensinamentos & Conteúdo</h3>
+                <p>Organização de materiais, sermões, estudos e produção de conteúdo.</p>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-tag">Rede</div>
+                <h3>EU⁺ Rede de Alianças</h3>
+                <p>Gestão de parcerias, colaborações e rede de ministérios.</p>
+            </div>
+
+            <div class="produto-card">
+                <div class="produto-tag">Proteção</div>
+                <h3>EU⁺ Missão Protegida</h3>
+                <p>Orientações jurídicas, governança e proteção do patrimônio da missão.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background:#0a0a0a; color:#aaa; padding:60px 40px; text-align:center; font-size:13px;">
+        <p>EU⁺ Missão — Parte do ecossistema <strong>EU⁺</strong></p>
+        <p style="margin-top:20px; opacity:0.6;">© 2026 • Todos os direitos reservados</p>
+    </footer>
+
+</body>
+</html>
