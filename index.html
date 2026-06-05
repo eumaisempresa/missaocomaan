@@ -117,6 +117,7 @@
             text-decoration: none;
             transition: all 0.3s ease;
             border: 2px solid var(--yellow);
+            cursor: pointer;
         }
 
         .btn:hover {
@@ -125,7 +126,6 @@
             color: var(--yellow);
         }
 
-        /* QUADRADO INSTAGRAM (HERO) */
         .btn-instagram {
             display: inline-flex;
             align-items: center;
@@ -147,7 +147,6 @@
             transform: translateY(-2px);
             background: transparent;
             color: #E1306C;
-            box-shadow: 0 5px 15px rgba(225, 48, 108, 0.3);
         }
 
         .btn-outline {
@@ -168,14 +167,10 @@
         .btn-outline:hover {
             border-color: #FF0000;
             color: #FF0000;
-            background: transparent;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
         }
 
-        section {
-            padding: 100px 5%;
-        }
+        section { padding: 100px 5%; }
 
         .section-title {
             font-family: 'Playfair Display', serif;
@@ -216,18 +211,9 @@
             border-color: rgba(255, 237, 0, 0.2);
         }
 
-        .card h3 {
-            font-size: 20px;
-            margin-bottom: 12px;
-        }
+        .card h3 { font-size: 20px; margin-bottom: 12px; }
+        .card p { font-size: 15px; color: #CCCCCC; margin-bottom: 20px; }
 
-        .card p {
-            font-size: 15px;
-            color: #CCCCCC;
-            margin-bottom: 20px;
-        }
-
-        /* BADGES PARA DESENVOLVIMENTO FUTURO */
         .future-link {
             display: inline-flex;
             align-items: center;
@@ -236,13 +222,19 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
-            color: #888888;
-            background: rgba(255,255,255,0.05);
-            padding: 6px 14px;
-            border-radius: 20px;
+            color: var(--yellow);
+            background: rgba(255, 237, 0, 0.1);
+            padding: 8px 16px;
+            border-radius: 4px;
             align-self: flex-start;
             text-decoration: none;
-            cursor: not-allowed;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .future-link:hover {
+            background: var(--yellow);
+            color: black;
         }
 
         /* CONECTE-SE (REDES SOCIAIS) */
@@ -272,15 +264,8 @@
             transition: all 0.3s ease;
         }
 
-        .instagram-btn {
-            background: #E1306C;
-            color: white;
-        }
-
-        .youtube-btn {
-            background: #FF0000;
-            color: white;
-        }
+        .instagram-btn { background: #E1306C; color: white; }
+        .youtube-btn { background: #FF0000; color: white; }
 
         .social-btn:hover {
             transform: translateY(-3px);
@@ -313,8 +298,65 @@
             transition: transform 0.3s;
         }
 
-        .floating-btn:hover {
-            transform: scale(1.1);
+        .floating-btn:hover { transform: scale(1.1); }
+
+        /* MODAIS / JANELAS FLUTUANTES */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #151515;
+            border: 1px solid rgba(255, 237, 0, 0.2);
+            padding: 40px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            text-align: center;
+            transform: translateY(-2px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 24px;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover { color: white; }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .modal-input:focus {
+            border-color: var(--yellow);
+            outline: none;
         }
 
         /* FOOTER */
@@ -328,21 +370,14 @@
         @media (max-width: 768px) {
             nav { display: none; }
             section { padding: 70px 5%; }
-            .hero-buttons {
-                flex-direction: column;
-                width: 100%;
-                max-width: 300px;
-                margin: 0 auto;
-            }
-            .hero-buttons a {
-                width: 100%;
-                text-align: center;
-            }
+            .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
+            .hero-buttons a { width: 100%; text-align: center; }
         }
     </style>
 </head>
 <body>
 
+    <!-- REDES SOCIAIS FLUTUANTES -->
     <div class="floating-social">
         <a href="https://www.instagram.com/comaanrs/" target="_blank" class="floating-btn" style="background: #E1306C;" title="Siga no Instagram">
             <i class="fab fa-instagram"></i>
@@ -352,6 +387,7 @@
         </a>
     </div>
 
+    <!-- HEADER -->
     <header>
         <div class="logo">
             <img src="image_7b033a.png" alt="Logo COMAAN">
@@ -361,10 +397,11 @@
             <a href="#sobre">Sobre</a>
             <a href="#ministerios">Ministérios</a>
             <a href="#midia">Mídia</a>
-            <a href="#doe" class="btn" style="padding:10px 20px; font-size:12px;">Contribuir</a>
+            <button onclick="openModal('pix-modal')" class="btn" style="padding:10px 20px; font-size:12px;">Contribuir</button>
         </nav>
     </header>
 
+    <!-- HERO -->
     <section class="hero">
         <div class="hero-content">
             <h1>Conectando Vidas e<br>famílias ao propósito de Deus</h1>
@@ -377,6 +414,7 @@
         </div>
     </section>
 
+    <!-- SOBRE -->
     <section id="sobre">
         <h2 class="section-title">Quem Somos</h2>
         <p class="section-subtitle">Uma igreja vibrante fundamentada na palavra e na comunhão dos santos.</p>
@@ -402,6 +440,7 @@
         </div>
     </section>
 
+    <!-- MINISTÉRIOS / PROGRAMAÇÃO -->
     <section id="ministerios" style="background:#111;">
         <h2 class="section-title">Nossos Ministérios</h2>
         <p class="section-subtitle">Conheça as nossas frentes de atuação e programações semanais.</p>
@@ -424,14 +463,14 @@
                     <h3>Escola do Sacerdócio Real</h3>
                     <p>Programa de formação e edificação espiritual voltado para o crescimento no conhecimento de Deus e a consolidação da identidade cristã como filhos.</p>
                 </div>
-                <span class="future-link"><i class="fas fa-lock"></i> Matrículas Breve</span>
+                <button onclick="openRegisterModal('Escola do Sacerdócio Real')" class="future-link"><i class="fas fa-edit"></i> Quero Participar</button>
             </div>
             <div class="card">
                 <div>
                     <h3>Escola de Ester</h3>
                     <p>Formando e consolidando a real identidade das Rainhas e filhas de Deus.</p>
                 </div>
-                <span class="future-link"><i class="fas fa-lock"></i> Inscrições Breve</span>
+                <button onclick="openRegisterModal('Escola de Ester')" class="future-link"><i class="fas fa-edit"></i> Quero Participar</button>
             </div>
             <div class="card">
                 <div>
@@ -448,6 +487,7 @@
         </div>
     </section>
 
+    <!-- SEÇÃO MÍDIA E REDES SOCIAIS -->
     <section id="midia" class="social-section">
         <h2 class="section-title">Acompanhe a COMAAN</h2>
         <p class="section-subtitle">Fique por dentro das novidades no Instagram ou assista às pregações e transmissões de cultos gravados no YouTube.</p>
@@ -462,16 +502,83 @@
         </div>
     </section>
 
+    <!-- FOOTER -->
     <footer>
         <p style="font-size:24px; margin-bottom:10px; color: var(--yellow); font-family: 'Playfair Display', serif;">COMAAN</p>
         <p style="font-size: 14px; opacity: 0.8; margin-bottom: 20px;">Casa de Oração Missão Apostólica Antioquia</p>
         <p style="font-size: 15px; font-style: italic; max-width: 500px; margin: 0 auto 30px; opacity: 0.7;">"Conectando Vidas e famílias ao propósito de Deus."</p>
         
         <p style="opacity:0.4; font-size: 12px;">© 2026 • Todos os direitos reservados</p>
+        <!-- Link de Parceria do Ecossistema EU+ Atualizado para Rastreabilidade -->
         <p style="margin-top:10px; font-size:12px; opacity:0.5;">
-            Desenvolvido em parceria com <strong>EU⁺ Missão</strong>
+            Desenvolvido com excelência por 
+            <a href="https://eumaisempresa.github.io" target="_blank" style="color: var(--yellow); text-decoration: none; font-weight: bold; border-bottom: 1px dotted var(--yellow);">
+                Grupo EU⁺ Missão
+            </a>
         </p>
     </footer>
 
+    <!-- MODAL PIX (CONTRIBUIÇÃO) -->
+    <div id="pix-modal" class="modal-overlay" onclick="closeModal('pix-modal')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal('pix-modal')">&times;</span>
+            <h3 style="color: var(--yellow); margin-bottom: 15px;"><i class="fas fa-heart"></i> Contribuição Voluntária</h3>
+            <p style="font-size: 14px; margin-bottom: 25px; opacity: 0.8;">Sua contribuição apoia a manutenção de missões, obras sociais e o avanço da palavra.</p>
+            
+            <div style="background: #222; padding: 20px; border-radius: 6px; border: 1px dashed rgba(255,237,0,0.3); margin-bottom: 20px;">
+                <p style="font-size: 12px; color: #888; text-transform: uppercase;">Chave CNPJ / PIX</p>
+                <p id="pix-key" style="font-size: 18px; font-weight: bold; margin: 5px 0 15px; color: white;">00.000.000/0001-00</p>
+                <button onclick="copyPix()" class="btn" style="padding: 10px 20px; font-size: 12px; width: 100%;">Copiar Chave PIX</button>
+            </div>
+            <p style="font-size: 12px; opacity: 0.5;">Casa de Oração Missão Apostólica Antioquia</p>
+        </div>
+    </div>
+
+    <!-- MODAL DE INSCRIÇÃO NOS MINISTÉRIOS -->
+    <div id="register-modal" class="modal-overlay" onclick="closeModal('register-modal')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal('register-modal')">&times;</span>
+            <h3 id="modal-dept-title" style="color: var(--yellow); margin-bottom: 15px;">Inscrição</h3>
+            <p style="font-size: 14px; margin-bottom: 20px; opacity: 0.8;">Preencha seus dados para que a liderança do ministério entre em contato com você.</p>
+            
+            <form onsubmit="sendRegistration(event)">
+                <input type="hidden" id="modal-dept-input">
+                <div style="text-align: left;">
+                    <label style="font-size: 13px; color: #aaa;">Seu Nome:</label>
+                    <input type="text" class="modal-input" required placeholder="Digite seu nome completo">
+                    
+                    <label style="font-size: 13px; color: #aaa;">Seu WhatsApp:</label>
+                    <input type="tel" class="modal-input" required placeholder="(00) 99999-9999">
+                </div>
+                <button type="submit" class="btn" style="width: 100%; padding: 12px;">Enviar Pré-Inscrição</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS DE INTERAÇÃO -->
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        function openRegisterModal(deptName) {
+            document.getElementById('modal-dept-title').innerText = 'Participar da ' + deptName;
+            document.getElementById('modal-dept-input').value = deptName;
+            openModal('register-modal');
+        }
+        function copyPix() {
+            var keyText = document.getElementById('pix-key').innerText;
+            navigator.clipboard.writeText(keyText);
+            alert('Chave PIX copiada com sucesso! Cole no aplicativo do seu banco.');
+        }
+        function sendRegistration(e) {
+            e.preventDefault();
+            var dept = document.getElementById('modal-dept-input').value;
+            alert('Pré-inscrição para ' + dept + ' simulada com sucesso! No próximo estágio de inteligência, esses dados serão salvos direto no banco do Painel Administrativo.');
+            closeModal('register-modal');
+        }
+    </script>
 </body>
 </html>
