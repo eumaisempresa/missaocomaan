@@ -1,1 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escola Sacerdócio Real — COMAAN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --gold-dark: #AA7C11;
+            --deep-blue: #0A192F;
+            --electric-blue: #00D2FF;
+            --black: #070708;
+            --gray-dark: #121214;
+            --gray-light: #1A1A1E;
+            --text-muted: #A0A0AA;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: #F4F4F5;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(7, 7, 8, 0.95);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            padding: 160px 5% 80px;
+            text-align: center;
+            background: radial-gradient(circle at center, #16161a 0%, var(--black) 100%);
+            position: relative;
+        }
+
+        .hero-logo {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            object-fit: cover;
+        }
+
+        .hero subtitle {
+            display: block;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 700;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .hero p {
+            font-size: clamp(16px, 2.2vw, 20px);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* CTA BUTTONS ROW */
+        .cta-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+            color: black;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-student {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-student:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #25D366;
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            filter: brightness(1.1);
+        }
+
+        /* HIGHLIGHT CARDS */
+        .highlights-section {
+            padding: 40px 5%;
+            background: var(--gray-dark);
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .highlight-card {
+            background: var(--gray-light);
+            padding: 30px;
+            border-radius: 8px;
+            border-left: 4px solid var(--electric-blue);
+        }
+
+        .highlight-card h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--electric-blue);
+            margin-bottom: 10px;
+        }
+
+        .highlight-card p {
+            font-size: 15px;
+            color: #E4E4E7;
+        }
+
+        /* INCLUSIONS SECTION */
+        .inclusion-section {
+            padding: 80px 5%;
+            background: linear-gradient(180deg, var(--black) 0%, #0d0d11 100%);
+            text-align: center;
+        }
+
+        .inclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1100px;
+            margin: 50px auto 0;
+        }
+
+        .inclusion-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 12px;
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inclusion-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+        }
+
+        .inclusion-box h3 {
+            font-size: 28px;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .kit-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            list-style: none;
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .kit-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+        }
+
+        .kit-list li i {
+            color: var(--gold);
+        }
+
+        /* STRUCTURAL CONTENT */
+        .content-section {
+            padding: 100px 5%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .section-header::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: var(--gold);
+            margin: 20px auto 0;
+        }
+
+        .chapter {
+            margin-bottom: 60px;
+        }
+
+        .chapter h3 {
+            font-size: 22px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 10px;
+        }
+
+        .chapter p {
+            color: #D4D4D8;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .points-list {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        .points-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 15px;
+            color: #E4E4E7;
+        }
+
+        .points-list li::before {
+            content: '•';
+            position: absolute;
+            left: 5px;
+            color: var(--gold);
+            font-size: 20px;
+            top: -2px;
+        }
+
+        .points-list strong {
+            color: white;
+        }
+
+        blockquote {
+            background: var(--gray-dark);
+            border-left: 3px solid var(--gold);
+            padding: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .sentences-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .sentence-card {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.03);
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-style: italic;
+            border-left: 2px solid rgba(212, 175, 55, 0.4);
+        }
+
+        /* FINAL CALL TO ACTION */
+        .final-cta {
+            padding: 80px 5%;
+            text-align: center;
+            background: var(--gray-dark);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .final-cta h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .final-cta p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #050507;
+            padding: 40px 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.02);
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <a href="/missaocomaan/index.html" class="logo">
+            COMAAN
+        </a>
+        <a href="/missaocomaan/index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar à Home</a>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <img src="logo-sacerdocio.jpg" alt="Logo Sacerdócio Real" class="hero-logo">
+        <subtitle>Ministração de Ensino</subtitle>
+        <h1>Escola Sacerdócio Real</h1>
+        <p>“Conectando vidas e famílias ao propósito de DEUS”</p>
+        
+        <div class="cta-container">
+            <a href="https://docs.google.com/forms/d/1DptjlfCEGnJH-772lV6DFk_tS8NdURNIpRy-fUqfZDk/edit?usp=drivesdk" target="_blank" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Cadastro Obrigatório
+            </a>
+            
+            <!-- LINK AJUSTADO PARA ÁREA DO ESTUDANTE -->
+            <a href="/missaocomaan/sacerdocioreal/estudante.html" class="btn btn-student">
+                <i class="fas fa-user-graduate"></i> Área do Estudante
+            </a>
+            
+            <a href="https://wa.me/51900000000" target="_blank" class="btn btn-secondary">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- PILARES EXTRAÍDOS -->
+    <section class="highlights-section">
+        <div class="highlights-grid">
+            <div class="highlight-card">
+                <h4>Propósito Essencial</h4>
+                <p>Ferramenta concedida por Deus para trazer cura e transformação total para a vida de todo homem cristão.</p>
+            </div>
+            <div class="highlight-card">
+                <h4>Duração e Formato</h4>
+                <p>Curso estruturado com duração de 4 meses, com aulas modulares e encontros dinâmicos realizados uma vez por semana.</p>
+            </div>
+            <div class="highlight-card">
+                <h4>Tratamento Integral</h4>
+                <p>Uma jornada profunda desenhada para tratar o homem a partir da sua alma, passando pelo seu espírito e refletindo a Cristo em seu corpo.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- INCLUSOS / BENEFÍCIOS -->
+    <section class="inclusion-section">
+        <h2 class="font-serif">Benefícios Exclusivos do Aluno</h2>
+        <p style="color: var(--text-muted); margin-top: 10px;">Tudo o que está preparado para dar suporte à sua caminhada de ativação.</p>
+        
+        <div class="inclusion-grid">
+            <div class="inclusion-box">
+                <h3>Kit do Aluno Incluso</h3>
+                <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 14px;">Você receberá um conjunto completo de ferramentas logo no início das aulas:</p>
+                <ul class="kit-list">
+                    <li><i class="fas fa-tshirt"></i> Camiseta Oficial</li>
+                    <li><i class="fas fa-pen"></i> Caneta Personalizada</li>
+                    <li><i class="fas fa-book"></i> Caderno de Estudos</li>
+                    <li><i class="fas fa-bottle-water"></i> Squeeze Térmica</li>
+                    <li><i class="fas fa-bag-shopping"></i> Ecobag Ecológica</li>
+                </ul>
+            </div>
+            
+            <div class="inclusion-box" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <h3>Formatura Inclusa</h3>
+                <p style="color: #E4E4E7; max-width: 400px; font-size: 15px; line-height: 1.6;">
+                    Ao concluir todos os módulos da escola, a celebração e a cerimônia de consagração e formatura já estão totalmente cobertas e asseguradas, sem taxas adicionais.
+                </p>
+                <i class="fas fa-graduation-cap" style="font-size: 48px; color: var(--gold); margin-top: 25px; opacity: 0.8;"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- MATÉRIA / ESTRUTURA DE MINISTRAÇÃO -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Estrutura de Ministração</h2>
+            <p style="color: var(--gold); font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">Tema: A Vocação, o Alinhamento e o Impacto na Geografia</p>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 5px;">Bases: 1 Pedro 2:9 | Apocalipse 1:5-6 | Levítico 8</p>
+        </div>
+
+        <!-- CAPÍTULO I -->
+        <div class="chapter">
+            <h3><span>I.</span> O Fundamento Bíblico do Chamado</h3>
+            <p>O sacerdócio não é um cargo institucional ou funcional, é uma identidade de propriedade exclusiva.</p>
+            <ul class="points-list">
+                <li><strong>A Identidade da Geração Eleita:</strong> "Vós sois geração eleita, sacerdócio real, nação santa, povo de propriedade exclusiva de Deus..." (1 Pedro 2:9).</li>
+                <li><strong>A Redenção pelo Sangue:</strong> Jesus nos amou, nos libertou e nos constituiu como reino e sacerdotes para servir ao Pai (Apocalipse 1:5-6).</li>
+                <li><strong>O Governo Terreno:</strong> Fomos comprados para Deus de toda tribo e nação para reinarmos sobre a terra através do serviço sacerdotal (Apocalipse 5:9-10).</li>
+            </ul>
+        </div>
+
+        <!-- CAPÍTULO II -->
+        <div class="chapter">
+            <h3><span>II.</span> O Escopo e as Funções do Sacerdote</h3>
+            <p>O chamado sacerdotal visa preparar e ativar o homem para testemunhar o caráter de Deus em sua família, na sociedade e na igreja local.</p>
+            <ul class="points-list">
+                <li><strong>Ministrar ao Coração de Deus:</strong> A prioridade absoluta é o Altar, não o público ou os holofotes.</li>
+                <li><strong>Rompimento de Ciclos:</strong> Quebrar pecados, iniquidades e maldições generacionais históricas.</li>
+                <li><strong>Governo Territorial:</strong> Mudar a "geografia" e o ambiente espiritual do local onde vive.</li>
+                <li><strong>Zelo e Dedicação:</strong> Trazer a realidade visível dos Céus para a terra através do serviço contínuo.</li>
+            </ul>
+            blockquote>
+                <strong>Os Pilares do Testemunho:</strong><br>
+                1. Reciclagem constante | 2. Profundidade Bíblica | 3. Encorajamento mútuo.
+            </blockquote>
+        </div>
+
+        <!-- CAPÍTULO III -->
+        <div class="chapter">
+            <h3><span>III.</span> Autoridade e Posicionamento na Geografia</h3>
+            <p style="font-style: italic; color: var(--gold);">"A santidade do sacerdote determina o que é permitido no ambiente."</p>
+            <ul class="points-list">
+                <li><strong>A Lei da Autoridade:</strong> "Tem mais autoridade por uma geografia quem mais ama ela." A autoridade legítima nasce do amor e do serviço sacrificial àquele território.</li>
+                <li><strong>O Testemunho como Pregação:</strong> Antes da fala, a santidade deve ser expandida de forma prática. É a nossa vocação respondendo ao caos do mundo.</li>
+                <li><strong>A Reação Divina:</strong> Deus não reage a sentimentos superficiais; Ele reage de forma direta à Sua Palavra e ao cumprimento fiel dela.</li>
+                <li><strong>O Perigo do Ativismo:</strong> É possível esquecer Jesus e a comunhão íntima dentro dos próprios compromissos da igreja. Deus confia naqueles que se restringem unicamente por amor a Ele.</li>
+            </ul>
+        </div>
+
+        <!-- CAPÍTULO IV -->
+        <div class="chapter">
+            <h3><span>IV.</span> Conexão Apostólica e o Rigor de Levítico 8</h3>
+            <p>O desenvolvimento apostólico e o alinhamento sacerdotal são esferas inseparáveis.</p>
+            <ul class="points-list">
+                <li><strong>Realidade Celestial:</strong> O acesso real à glória de Deus se desenvolve com um fundamento apostólico conectado à intimidade do sacerdote.</li>
+                <li><strong>O Choque de Levítico 8:</strong> A consagração descrita na Lei afronta a sensibilidade humana. Ela nos cura imediatamente de noções "românticas" ou superficiais sobre o sacerdócio.</li>
+                <li><strong>O Peso do Pecado:</strong> O sangue posicionado na orelha, no polegar e no pé revela que alguém precisa morrer para que a provisão divina seja liberada.</li>
+                <li><strong>Morte para a Vida:</strong> Ter um encontro com a glória exige entrega radical; refletir essa glória exige a morte do "eu". Todo sacerdote morre para sua vida própria para refletir a vida dos Céus.</li>
+            </ul>
+        </div>
+
+        <!-- CAPÍTULO V -->
+        <div class="chapter">
+            <h3><span>V.</span> Alinhamento Prático (Sentenças de Poder)</h3>
+            <div class="sentences-grid">
+                <div class="sentence-card">"Eu preciso ser a porta de acesso de Deus para esta geografia."</div>
+                <div class="sentence-card">"A comunhão não se revela no 'sim', mas na obediência convicta aos 'nãos' de Deus."</div>
+                <div class="sentence-card">"Se o dinheiro pauta sua oração, seu deus é Mamon; se a necessidade pauta sua devoção, você está vulnerável ao inimigo."</div>
+                <div class="sentence-card">"O socorro vem após o alimento no propósito."</div>
+                <div class="sentence-card">"Devemos ser uma parada obrigatória para Deus."</div>
+            </div>
+        </div>
+
+        <!-- CONCLUSÃO -->
+        <div class="chapter" style="margin-top: 40px;">
+            <h3 style="border: none;">Conclusão: O Desafio da Humilhação</h3>
+            <p>
+                O sacerdócio real não é um papel de prestígio ou status atrás de um púlpito; é um chamado severo de responsabilidade que não pode ser conduzido de forma leviana. A humilhação voluntária ocupa o lugar central nesse desenvolvimento.
+            </p>
+            <p style="font-weight: 600; color: white; text-align: center; margin-top: 30px; font-size: 18px;">
+                Até que ponto estamos dispostos a ser levados pela Palavra?
+            </p>
+        </div>
+    </section>
+
+    <!-- FINAL CALL TO ACTION -->
+    <section class="final-cta">
+        <h2>Ative a sua Vocação Territorial</h2>
+        <p>Não conduza o chamado de forma leviana. Faça parte do plano soberano e assuma o governo da sua geografia.</p>
+        <div class="cta-container">
+            <a href="https://docs.google.com/forms/d/1DptjlfCEGnJH-772lV6DFk_tS8NdURNIpRy-fUqfZDk/edit?usp=drivesdk" target="_blank" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Inscrever-se Agora na Escola
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 COMAAN — Casa de Oração Missão Apostólica Antioquia</p>
+        <p style="margin-top: 5px; opacity: 0.5;">Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+</html>
 
