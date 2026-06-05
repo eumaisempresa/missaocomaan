@@ -5,34 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COMAAN — Casa de Oração Missão Apostólica Antioquia</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --yellow: #FFED00;
             --black: #0F0F0F;
-            --gray: #222222;
+            --gray: #1A1A1A;
+            --light-gray: #222222;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Inter', sans-serif;
-            background: #0F0F0F;
+            background: var(--black);
             color: white;
             line-height: 1.6;
         }
 
+        /* HEADER */
         header {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            background: rgba(15,15,15,0.95);
+            z-index: 1000;
+            background: rgba(15, 15, 15, 0.95);
             backdrop-filter: blur(12px);
-            z-index: 100;
-            padding: 20px 5%;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(255,237,0,0.2);
+            align-items: center;
+            padding: 15px 5%;
+            border-bottom: 1px solid rgba(255, 237, 0, 0.15);
         }
 
         .logo {
@@ -40,190 +45,394 @@
             align-items: center;
             gap: 12px;
             font-weight: 700;
-            font-size: 28px;
+            font-size: 24px;
             color: var(--yellow);
         }
 
+        .logo img {
+            height: 45px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--yellow);
+        }
+
+        /* HERO */
         .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://via.placeholder.com/1920x1080/FFED00/0F0F0F?text=COMAAN') center/cover;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://via.placeholder.com/1920x1080/0F0F0F/0F0F0F') center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            position: relative;
+            padding-top: 100px;
         }
 
         .hero-content {
-            max-width: 800px;
+            max-width: 900px;
             padding: 0 20px;
         }
 
         .hero h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(48px, 8vw, 92px);
-            line-height: 1.05;
-            margin-bottom: 24px;
+            font-size: clamp(36px, 6vw, 72px);
+            line-height: 1.15;
+            margin-bottom: 15px;
         }
 
         .hero p {
-            font-size: 22px;
-            margin-bottom: 40px;
-            opacity: 0.9;
+            font-size: clamp(16px, 2.5vw, 20px);
+            margin-bottom: 35px;
+            opacity: 0.85;
+            color: #E0E0E0;
         }
 
+        /* COMPONENTES GERAIS */
         .btn {
             display: inline-block;
-            padding: 18px 48px;
+            padding: 14px 36px;
             background: var(--yellow);
             color: black;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 14px;
+            letter-spacing: 1.5px;
+            font-size: 13px;
             border-radius: 4px;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            border: 2px solid var(--yellow);
         }
 
         .btn:hover {
-            transform: scale(1.05);
-            background: white;
+            transform: translateY(-2px);
+            background: transparent;
+            color: var(--yellow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin-left: 10px;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--yellow);
+            color: var(--yellow);
+            background: transparent;
+            transform: translateY(-2px);
         }
 
         section {
-            padding: 120px 5%;
+            padding: 100px 5%;
         }
 
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 42px;
+            font-size: 38px;
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 10px;
             color: var(--yellow);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            opacity: 0.7;
+            font-size: 16px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
         .card {
-            background: #1A1A1A;
-            padding: 40px;
+            background: var(--gray);
+            padding: 35px;
             border-radius: 8px;
-            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            background: #222;
+            transform: translateY(-5px);
+            background: var(--light-gray);
+            border-color: rgba(255, 237, 0, 0.2);
         }
 
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 15px;
+            color: #CCCCCC;
+            margin-bottom: 20px;
+        }
+
+        /* BADGES PARA DESENVOLVIMENTO FUTURO */
+        .future-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #888888;
+            background: rgba(255,255,255,0.05);
+            padding: 6px 14px;
+            border-radius: 20px;
+            align-self: flex-start;
+            text-decoration: none;
+            cursor: not-allowed;
+        }
+
+        /* CONECTE-SE (REDES SOCIAIS) */
+        .social-section {
+            background: #141414;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .instagram-btn {
+            background: #E1306C;
+            color: white;
+        }
+
+        .youtube-btn {
+            background: #FF0000;
+            color: white;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            filter: brightness(1.1);
+        }
+
+        /* BARRA LATERAL FIXA DE REDES SOCIAIS */
+        .floating-social {
+            position: fixed;
+            right: 20px;
+            bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 999;
+        }
+
+        .floating-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* FOOTER */
         footer {
             background: #0A0A0A;
-            padding: 80px 5% 40px;
+            padding: 60px 5% 30px;
             text-align: center;
-            border-top: 1px solid rgba(255,237,0,0.2);
+            border-top: 1px solid rgba(255,237,0,0.1);
         }
 
-        .euplus-badge {
-            background: rgba(42,124,74,0.2);
-            color: #4A9C6A;
-            padding: 8px 20px;
-            border-radius: 30px;
-            display: inline-block;
-            margin-top: 30px;
-            font-size: 13px;
+        @media (max-width: 768px) {
+            nav { display: none; } /* Ocultação básica para focar no conteúdo direto em mobile */
+            section { padding: 70px 5%; }
         }
     </style>
 </head>
 <body>
 
+    <!-- REDES SOCIAIS FLUTUANTES -->
+    <div class="floating-social">
+        <a href="https://www.instagram.com/comaanrs/" target="_blank" class="floating-btn" style="background: #E1306C;" title="Siga no Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://youtube.com/@comaan?si=7CA2LwQ1BRvb2vgx" target="_blank" class="floating-btn" style="background: #FF0000;" title="Assista no YouTube">
+            <i class="fab fa-youtube"></i>
+        </a>
+    </div>
+
     <!-- HEADER -->
-    <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background: #0b0b0b; display: flex; justify-content: space-between; align-items: center; padding: 10px 4%; box-sizing: border-box;">
-        <div class="logo" style="display: flex; align-items: center; gap: 12px; color: var(--yellow, #fff; font-weight: bold; font-size: 24px;">
-            <!-- Substituído o emoji pela foto oficial do logo -->
-            <img src="image_7b033a.png" alt="Logo COMAAN" style="height: 45px; width: auto; object-fit: contain;">
+    <header>
+        <div class="logo">
+            <img src="image_7b033a.png" alt="Logo COMAAN">
             COMAAN
         </div>
-        <nav style="display: flex; align-items: center;">
-            <a href="#sobre" style="color:white; margin:0 20px; text-decoration:none;">Sobre</a>
-            <a href="#ministerios" style="color:white; margin:0 20px; text-decoration:none;">Ministérios</a>
-            <a href="#midia" style="color:white; margin:0 20px; text-decoration:none;">Mídia</a>
-            <a href="#doe" class="btn" style="padding:12px 28px; font-size:13px; background: var(--yellow); color: black; font-weight: bold; text-decoration: none; border-radius: 4px;">Contribuir</a>
+        <nav>
+            <a href="#sobre">Sobre</a>
+            <a href="#ministerios">Ministérios</a>
+            <a href="#midia">Mídia</a>
+            <a href="#doe" class="btn" style="padding:10px 20px; font-size:12px;">Contribuir</a>
         </nav>
     </header>
 
     <!-- HERO -->
-    <!-- Adicionado o padding-top de 100px para empurrar o texto para baixo do header fixo e garantir que não corte -->
-    <section class="hero" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding-top: 100px; box-sizing: border-box;">
-        <div class="hero-content" style="text-align: center; max-width: 900px; margin: 0 auto; padding: 0 20px;">
-            <!-- Ajustado o line-height para a fonte robusta não encavalar e responsividade no font-size -->
-            <h1 style="font-size: clamp(32px, 5vw, 64px); line-height: 1.2; margin-bottom: 20px;">Conectando Vidas e<br>famílias ao propósito de Deus</h1>
-
-            <!-- SOBRE -->
-    <section id="sobre">
-        <h2 class="section-title">Quem Somos</h2>
-        <div class="grid">
-            <div class="card">
-                <h3 style="color:var(--yellow); margin-bottom:16px;">Nossa Casa</h3>
-                <p>Somos uma comunidade cristã que ama intensamente a JESUS, que valoriza a oração, a comunhão, o partir do pão, o discipulado e o avanço do evangelho através de missões.</p>
-            </div>
-            <div class="card">
-                <h3 style="color:var(--yellow); margin-bottom:16px;">Nossa Missão</h3>
-                <p>Levar o Evangelho com autenticidade, formando discípulos com identidade cristocêntrica para impactar suas famílias, cidades e nações.</p>
-            </div>
-            <div class="card">
-                <h3 style="color:var(--yellow); margin-bottom:16px;">Nossos Valores</h3>
-                <p>Adoração • Oração • Comunhão • Missão • Discipulado • Excelência e Testemunho</p>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Conectando Vidas e<br>famílias ao propósito de Deus</h1>
+            <p>Casa de Oração Missão Apostólica Antioquia • Sapiranga • Rio Grande do Sul</p>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px;">
+                <a href="#sobre" class="btn">Conheça a COMAAN</a>
+                <a href="https://youtube.com/@comaan?si=7CA2LwQ1BRvb2vgx" target="_blank" class="btn btn-outline"><i class="fab fa-youtube"></i> Cultos Ao Vivo</a>
             </div>
         </div>
     </section>
 
-    <!-- PORTFÓLIO DE PRODUTOS FUTUROS (EU+ Missão) -->
-    <section style="background:#111;">
-        <h2 class="section-title">COMAAN</h2>
-        <p style="text-align:center; max-width:700px; margin:0 auto 60px; opacity:0.8;">
-            Conheça as nossas programações:
-        </p>
+    <!-- SOBRE -->
+    <section id="sobre">
+        <h2 class="section-title">Quem Somos</h2>
+        <p class="section-subtitle">Uma igreja vibrante fundamentada na palavra e na comunhão dos santos.</p>
         <div class="grid">
             <div class="card">
-                <h3>Comunidade de Homens Biblicos</h3>
-                <p>Comunidade formação homens bíblicos.</p>
+                <div>
+                    <h3 style="color:var(--yellow); margin-bottom:16px;"><i class="fas fa-church"></i> Nossa Casa</h3>
+                    <p>Somos uma comunidade cristã que ama intensamente a JESUS, que valoriza a oração, a comunhão, o partir do pão, o discipulado e o avanço do evangelho através de missões.</p>
+                </div>
             </div>
             <div class="card">
-                <h3>Sala de Oração</h3>
-                <p>Orando pelas famílias, cidades e propósitos.</p>
+                <div>
+                    <h3 style="color:var(--yellow); margin-bottom:16px;"><i class="fas fa-bullhorn"></i> Nossa Missão</h3>
+                    <p>Levar o Evangelho com autenticidade, formando discípulos com identidade cristocêntrica para impactar suas famílias, cidades e nações.</p>
+                </div>
             </div>
             <div class="card">
-                <h3>Escola do Sacerdócio Real</h3>
-                <p>Programa de formação e edificação espiritual voltado para o crescimento no conhecimento de Deus e a consolidação da identidade cristã como filhos.</p>
-                  </div>
+                <div>
+                    <h3 style="color:var(--yellow); margin-bottom:16px;"><i class="fas fa-heart"></i> Nossos Valores</h3>
+                    <p>Adoração • Oração • Comunhão • Missão • Discipulado • Excelência e Testemunho</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MINISTÉRIOS / PROGRAMAÇÃO -->
+    <section id="ministerios" style="background:#111;">
+        <h2 class="section-title">Nossos Ministérios</h2>
+        <p class="section-subtitle">Conheça as nossas frentes de atuação e programações semanais.</p>
+        
+        <div class="grid">
             <div class="card">
-                <h3>Escola de Ester</h3>
-                <p>Formando a identidade das Rainhas filhas de Deus.</p>
+                <div>
+                    <h3>Comunidade de Homens Bíblicos</h3>
+                    <p>Comunidade voltada para a formação de homens fundamentados nos princípios bíblicos.</p>
+                </div>
             </div>
             <div class="card">
-                <h3>Culto de Varões</h3>
-                <p>Formando a identidade de homens de Deus.</p>
+                <div>
+                    <h3>Sala de Oração</h3>
+                    <p>Clamor contínuo orando pelas famílias, cidades e propósitos divinos na terra.</p>
+                </div>
             </div>
-               <div class="card">
-                <h3>Casa Kids Antioquia </h3>
-                <p>Nosso filhos são a herança do Senhor.</p>
+            <div class="card">
+                <div>
+                    <h3>Escola do Sacerdócio Real</h3>
+                    <p>Programa de formação e edificação espiritual voltado para o crescimento no conhecimento de Deus e a consolidação da identidade cristã como filhos.</p>
+                </div>
+                <!-- Link futuro reservado -->
+                <span class="future-link"><i class="fas fa-lock"></i> Matrículas Breve</span>
             </div>
-            <div style="text-align:center; margin-top:50px;">
-                                       <p style="font-size:28px; margin-bottom:20px;">Conectando Vidas e famílias ao propósito de Deus.</p>   
+            <div class="card">
+                <div>
+                    <h3>Escola de Ester</h3>
+                    <p>Formando e consolidando a real identidade das Rainhas e filhas de Deus.</p>
+                </div>
+                <!-- Link futuro reservado -->
+                <span class="future-link"><i class="fas fa-lock"></i> Inscrições Breve</span>
+            </div>
+            <div class="card">
+                <div>
+                    <h3>Culto de Varões</h3>
+                    <p>Reuniões de edificação formando e fortalecendo a identidade de homens de Deus.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    <h3>Casa Kids Antioquia</h3>
+                    <p>Evangelização e cuidado infantil. Nossos filhos são a herança do Senhor.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO MÍDIA E REDES SOCIAIS (INCORPORADA) -->
+    <section id="midia" class="social-section">
+        <h2 class="section-title">Acompanhe a COMAAN</h2>
+        <p class="section-subtitle">Fique por dentro das novidades no Instagram ou assista às pregações e transmissões de cultos gravados no YouTube.</p>
+        
+        <div class="social-buttons">
+            <a href="https://www.instagram.com/comaanrs/" target="_blank" class="social-btn instagram-btn">
+                <i class="fab fa-instagram"></i> Acessar Instagram
+            </a>
+            <a href="https://youtube.com/@comaan?si=7CA2LwQ1BRvb2vgx" target="_blank" class="social-btn youtube-btn">
+                <i class="fab fa-youtube"></i> Inscrever-se no YouTube
+            </a>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer>
-        <p style="font-size:28px; margin-bottom:20px;">COMAAN</p>
-        <p>Casa de Oração Missão Apostólica Antioquia</p>
-        <p style="margin-top:30px; opacity:0.6;">© 2026 • Todos os direitos reservados</p>
-        <p style="margin-top:10px; font-size:13px; opacity:0.5;">
+        <p style="font-size:24px; margin-bottom:10px; color: var(--yellow); font-family: 'Playfair Display', serif;">COMAAN</p>
+        <p style="font-size: 14px; opacity: 0.8; margin-bottom: 20px;">Casa de Oração Missão Apostólica Antioquia</p>
+        <p style="font-size: 15px; font-style: italic; max-width: 500px; margin: 0 auto 30px; opacity: 0.7;">"Conectando Vidas e famílias ao propósito de Deus."</p>
+        
+        <p style="opacity:0.4; font-size: 12px;">© 2026 • Todos os direitos reservados</p>
+        <p style="margin-top:10px; font-size:12px; opacity:0.5;">
             Desenvolvido em parceria com <strong>EU⁺ Missão</strong>
         </p>
     </footer>
