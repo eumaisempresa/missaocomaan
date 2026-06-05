@@ -10,6 +10,7 @@
     <style>
         :root {
             --yellow: #FFED00;
+            --soft-yellow: #E6D500; /* Tom de amarelo mais suave e elegante */
             --black: #0F0F0F;
             --gray: #1A1A1A;
             --light-gray: #222222;
@@ -170,26 +171,28 @@
             transform: translateY(-2px);
         }
 
-        .btn-discreet {
+        /* Botão Ofertar: Amarelo suave preenchido abaixo do bloco principal */
+        .btn-soft-donation {
             display: inline-block;
-            padding: 12px 30px;
-            background: transparent;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 500;
+            padding: 12px 32px;
+            background: var(--soft-yellow);
+            color: black;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             font-size: 12px;
             border-radius: 4px;
             text-decoration: none;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 2px solid var(--soft-yellow);
             cursor: pointer;
         }
 
-        .btn-discreet:hover {
-            border-color: var(--yellow);
-            color: var(--yellow);
-            background: rgba(255, 237, 0, 0.02);
+        .btn-soft-donation:hover {
+            transform: translateY(-2px);
+            background: transparent;
+            color: var(--soft-yellow);
+            box-shadow: 0 4px 15px rgba(230, 213, 0, 0.2);
         }
 
         section { padding: 100px 5%; }
@@ -374,7 +377,7 @@
 
         .modal-close:hover { color: white; }
 
-        /* FOOTER E DESTAQUE GRUPO EU+ MISSÃO */
+        /* FOOTER */
         footer {
             background: #0A0A0A;
             padding: 70px 5% 40px;
@@ -416,7 +419,7 @@
         @media (max-width: 768px) {
             nav { display: none; }
             section { padding: 70px 5%; }
-            .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; gap: 12px; }
+            .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; gap: 14px; }
             .hero-buttons a, .hero-buttons button { width: 100%; text-align: center; }
         }
     </style>
@@ -459,14 +462,13 @@
             <h1>Conectando Vidas e<br>famílias ao propósito de Deus</h1>
             <p>Casa de Oração Missão Apostólica Antioquia • Sapiranga • Rio Grande do Sul</p>
             
-            <!-- ALINHAMENTO ESTRUTURADO DE ACORDO COM AS DIRETRIZES DO CLIENTE -->
             <div class="hero-buttons" style="display: flex; justify-content: center; flex-direction: column; align-items: center; gap: 14px;">
                 <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; width: 100%;">
                     <a href="https://wa.me/5551981659360" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp"></i> Contato via WhatsApp</a>
                     <a href="https://www.youtube.com/@comaan" target="_blank" class="btn-outline"><i class="fab fa-youtube"></i> Cultos Ao Vivo</a>
                 </div>
-                <!-- Ofertar posicionado de forma mais discreta, abaixo das mídias principais -->
-                <button onclick="openModal('pix-modal')" class="btn-discreet"><i class="fas fa-heart"></i> Ofertar / Contribuir</button>
+                <!-- Ofertar abaixo dos vídeos, mas preservando o preenchimento em tom amarelo suave -->
+                <button onclick="openModal('pix-modal')" class="btn-soft-donation"><i class="fas fa-heart"></i> Ofertar / Contribuir</button>
             </div>
         </div>
     </section>
@@ -520,14 +522,16 @@
                     <h3>Escola do Sacerdócio Real</h3>
                     <p>Programa de formação e edificação espiritual voltado para o crescimento no conhecimento de Deus e a consolidação da identidade cristã como filhos.</p>
                 </div>
-                <a href="escola-sacerdocio.html" class="future-link"><i class="fas fa-arrow-right"></i> Quero Participar</a>
+                <!-- Link interno parametrizado -->
+                <a href="/sacerdocioreal/index.html" class="future-link"><i class="fas fa-arrow-right"></i> Quero Participar</a>
             </div>
             <div class="card">
                 <div>
                     <h3>Escola de Ester</h3>
                     <p>Formando e consolidando a real identidade das Rainhas e filhas de Deus.</p>
                 </div>
-                <a href="escola-ester.html" class="future-link"><i class="fas fa-arrow-right"></i> Quero Participar</a>
+                <!-- Link interno parametrizado -->
+                <a href="/escoladeester/index.html" class="future-link"><i class="fas fa-arrow-right"></i> Quero Participar</a>
             </div>
             <div class="card">
                 <div>
@@ -537,9 +541,11 @@
             </div>
             <div class="card">
                 <div>
-                    <h3>Casa Kids Antioquia</h3>
+                    <h3>Turminha da Bênção</h3>
                     <p>Evangelização e cuidado infantil. Nossos filhos são a herança do Senhor.</p>
                 </div>
+                <!-- Link interno parametrizado para a nova estrutura Kids -->
+                <a href="/turminhadabencao/index.html" class="future-link"><i class="fas fa-arrow-right"></i> Conhecer</a>
             </div>
         </div>
     </section>
@@ -570,7 +576,6 @@
         
         <p style="opacity:0.4; font-size: 12px;">© 2026 • Todos os direitos reservados</p>
         
-        <!-- DESTAQUE EXECUTIVO DO GRUPO EU+ MISSÃO ATUALIZADO COM O REPOSITÓRIO EXATO -->
         <div class="brand-governance">
             <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank">
                 <i class="fas fa-shield-alt"></i> Desenvolvido por Grupo EU⁺ Missão
