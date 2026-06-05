@@ -125,18 +125,52 @@
             color: var(--yellow);
         }
 
+        /* QUADRADO INSTAGRAM (HERO) */
+        .btn-instagram {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: #E1306C;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 13px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid #E1306C;
+        }
+
+        .btn-instagram:hover {
+            transform: translateY(-2px);
+            background: transparent;
+            color: #E1306C;
+            box-shadow: 0 5px 15px rgba(225, 48, 108, 0.3);
+        }
+
         .btn-outline {
+            display: inline-block;
+            padding: 14px 36px;
             background: transparent;
             color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 13px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.3s ease;
             border: 2px solid rgba(255, 255, 255, 0.2);
-            margin-left: 10px;
         }
 
         .btn-outline:hover {
-            border-color: var(--yellow);
-            color: var(--yellow);
+            border-color: #FF0000;
+            color: #FF0000;
             background: transparent;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
         }
 
         section {
@@ -292,24 +326,32 @@
         }
 
         @media (max-width: 768px) {
-            nav { display: none; } /* Ocultação básica para focar no conteúdo direto em mobile */
+            nav { display: none; }
             section { padding: 70px 5%; }
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            .hero-buttons a {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- REDES SOCIAIS FLUTUANTES -->
     <div class="floating-social">
         <a href="https://www.instagram.com/comaanrs/" target="_blank" class="floating-btn" style="background: #E1306C;" title="Siga no Instagram">
             <i class="fab fa-instagram"></i>
         </a>
-        <a href="https://youtube.com/@comaan?si=7CA2LwQ1BRvb2vgx" target="_blank" class="floating-btn" style="background: #FF0000;" title="Assista no YouTube">
+        <a href="https://www.youtube.com/@comaan" target="_blank" class="floating-btn" style="background: #FF0000;" title="Assista no YouTube">
             <i class="fab fa-youtube"></i>
         </a>
     </div>
 
-    <!-- HEADER -->
     <header>
         <div class="logo">
             <img src="image_7b033a.png" alt="Logo COMAAN">
@@ -323,19 +365,18 @@
         </nav>
     </header>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-content">
             <h1>Conectando Vidas e<br>famílias ao propósito de Deus</h1>
             <p>Casa de Oração Missão Apostólica Antioquia • Sapiranga • Rio Grande do Sul</p>
-            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px;">
+            <div class="hero-buttons" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; align-items: center;">
                 <a href="#sobre" class="btn">Conheça a COMAAN</a>
-                <a href="https://youtube.com/@comaan?si=7CA2LwQ1BRvb2vgx" target="_blank" class="btn btn-outline"><i class="fab fa-youtube"></i> Cultos Ao Vivo</a>
+                <a href="https://www.instagram.com/comaanrs/" target="_blank" class="btn-instagram"><i class="fab fa-instagram"></i> Siga-nos no Instagram</a>
+                <a href="https://www.youtube.com/@comaan" target="_blank" class="btn-outline"><i class="fab fa-youtube"></i> Cultos Ao Vivo</a>
             </div>
         </div>
     </section>
 
-    <!-- SOBRE -->
     <section id="sobre">
         <h2 class="section-title">Quem Somos</h2>
         <p class="section-subtitle">Uma igreja vibrante fundamentada na palavra e na comunhão dos santos.</p>
@@ -361,7 +402,6 @@
         </div>
     </section>
 
-    <!-- MINISTÉRIOS / PROGRAMAÇÃO -->
     <section id="ministerios" style="background:#111;">
         <h2 class="section-title">Nossos Ministérios</h2>
         <p class="section-subtitle">Conheça as nossas frentes de atuação e programações semanais.</p>
@@ -384,7 +424,6 @@
                     <h3>Escola do Sacerdócio Real</h3>
                     <p>Programa de formação e edificação espiritual voltado para o crescimento no conhecimento de Deus e a consolidação da identidade cristã como filhos.</p>
                 </div>
-                <!-- Link futuro reservado -->
                 <span class="future-link"><i class="fas fa-lock"></i> Matrículas Breve</span>
             </div>
             <div class="card">
@@ -392,7 +431,6 @@
                     <h3>Escola de Ester</h3>
                     <p>Formando e consolidando a real identidade das Rainhas e filhas de Deus.</p>
                 </div>
-                <!-- Link futuro reservado -->
                 <span class="future-link"><i class="fas fa-lock"></i> Inscrições Breve</span>
             </div>
             <div class="card">
@@ -410,7 +448,6 @@
         </div>
     </section>
 
-    <!-- SEÇÃO MÍDIA E REDES SOCIAIS (INCORPORADA) -->
     <section id="midia" class="social-section">
         <h2 class="section-title">Acompanhe a COMAAN</h2>
         <p class="section-subtitle">Fique por dentro das novidades no Instagram ou assista às pregações e transmissões de cultos gravados no YouTube.</p>
@@ -419,13 +456,12 @@
             <a href="https://www.instagram.com/comaanrs/" target="_blank" class="social-btn instagram-btn">
                 <i class="fab fa-instagram"></i> Acessar Instagram
             </a>
-            <a href="https://youtube.com/@comaan?si=7CA2LwQ1BRvb2vgx" target="_blank" class="social-btn youtube-btn">
+            <a href="https://www.youtube.com/@comaan" target="_blank" class="social-btn youtube-btn">
                 <i class="fab fa-youtube"></i> Inscrever-se no YouTube
             </a>
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <p style="font-size:24px; margin-bottom:10px; color: var(--yellow); font-family: 'Playfair Display', serif;">COMAAN</p>
         <p style="font-size: 14px; opacity: 0.8; margin-bottom: 20px;">Casa de Oração Missão Apostólica Antioquia</p>
