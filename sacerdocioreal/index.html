@@ -9,23 +9,23 @@
     
     <style>
         :root {
-            --gold: #D4AF37;
-            --gold-light: #F3E5AB;
-            --gold-dark: #AA7C11;
-            --deep-blue: #0A192F;
-            --electric-blue: #00D2FF;
-            --black: #070708;
-            --gray-dark: #121214;
-            --gray-light: #1A1A1E;
-            --text-muted: #A0A0AA;
+            --royal-gold: #E5C158; /* Ouro Real Principal */
+            --royal-gold-light: #F4DF9E; /* Ouro Brilhante para Realces */
+            --royal-gold-dark: #A3822B; /* Ouro Envelhecido para Gradientes */
+            --royal-silver: #CBD5E1; /* Prata Real Secundário */
+            --royal-silver-dark: #64748B; /* Prata de Contraste */
+            --imperial-white: #F8FAFC; /* Branco Nobre para Textos */
+            --black-throne: #0A0A0C; /* Fundo Escuro Absoluto */
+            --gray-temple: #141418; /* Elementos de Fundo Secundários */
+            --text-muted: #94A3B8; /* Texto Atenuado */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--black);
-            color: #F4F4F5;
+            background: var(--black-throne);
+            color: var(--imperial-white);
             line-height: 1.6;
         }
 
@@ -39,20 +39,20 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-            background: rgba(7, 7, 8, 0.95);
+            background: rgba(10, 10, 12, 0.95);
             backdrop-filter: blur(12px);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 5%;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(229, 193, 88, 0.2);
         }
 
         .logo {
             font-family: 'Playfair Display', serif;
             font-size: 20px;
             font-weight: 700;
-            color: var(--gold);
+            color: var(--royal-gold);
             text-decoration: none;
             letter-spacing: 1px;
         }
@@ -61,27 +61,27 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: white;
+            color: var(--royal-silver);
             text-decoration: none;
             font-size: 13px;
             font-weight: 500;
             padding: 8px 16px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(203, 213, 225, 0.2);
             border-radius: 4px;
             transition: all 0.3s;
         }
 
         .btn-back:hover {
-            border-color: var(--gold);
-            color: var(--gold);
-            background: rgba(212, 175, 55, 0.05);
+            border-color: var(--royal-gold);
+            color: var(--royal-gold);
+            background: rgba(229, 193, 88, 0.05);
         }
 
         /* HERO SECTION */
         .hero {
             padding: 160px 5% 80px;
             text-align: center;
-            background: radial-gradient(circle at center, #16161a 0%, var(--black) 100%);
+            background: radial-gradient(circle at center, #1b1b22 0%, var(--black-throne) 100%);
             position: relative;
         }
 
@@ -90,8 +90,8 @@
             height: 160px;
             margin: 0 auto 30px;
             border-radius: 50%;
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            border: 2px solid var(--royal-gold);
+            box-shadow: 0 0 35px rgba(229, 193, 88, 0.25);
             object-fit: cover;
         }
 
@@ -100,7 +100,7 @@
             font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 3px;
-            color: var(--gold);
+            color: var(--royal-gold);
             margin-bottom: 15px;
             font-weight: 600;
         }
@@ -108,16 +108,17 @@
         .hero h1 {
             font-size: clamp(36px, 6vw, 64px);
             font-weight: 700;
-            color: white;
+            color: var(--royal-gold-light);
             line-height: 1.1;
             margin-bottom: 25px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .hero p {
             font-size: clamp(16px, 2.2vw, 20px);
             max-width: 800px;
             margin: 0 auto 40px;
-            color: var(--text-muted);
+            color: var(--royal-silver);
             font-style: italic;
         }
 
@@ -147,45 +148,49 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
-            color: black;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+            background: linear-gradient(135deg, var(--royal-gold-dark) 0%, var(--royal-gold) 100%);
+            color: #0A0A0C;
+            box-shadow: 0 4px 15px rgba(229, 193, 88, 0.2);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 6px 20px rgba(229, 193, 88, 0.4);
             filter: brightness(1.1);
         }
 
         .btn-student {
-            background: rgba(255, 255, 255, 0.06);
-            color: white;
-            border: 1px solid rgba(212, 175, 55, 0.4);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--royal-silver);
+            border: 1px solid rgba(229, 193, 88, 0.3);
         }
 
         .btn-student:hover {
-            background: rgba(212, 175, 55, 0.1);
-            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.08);
+            border-color: var(--royal-gold);
+            color: var(--imperial-white);
             transform: translateY(-2px);
         }
 
         .btn-secondary {
-            background: #25D366;
-            color: white;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+            background: transparent;
+            color: var(--royal-silver);
+            border: 1px solid rgba(203, 213, 225, 0.3);
         }
 
         .btn-secondary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-            filter: brightness(1.1);
+            background: rgba(203, 213, 225, 0.05);
+            border-color: var(--royal-silver);
+            color: var(--imperial-white);
         }
 
         /* HIGHLIGHT CARDS */
         .highlights-section {
             padding: 40px 5%;
-            background: var(--gray-dark);
+            background: var(--gray-temple);
+            border-top: 1px solid rgba(229, 193, 88, 0.1);
+            border-bottom: 1px solid rgba(229, 193, 88, 0.1);
         }
 
         .highlights-grid {
@@ -197,29 +202,30 @@
         }
 
         .highlight-card {
-            background: var(--gray-light);
+            background: rgba(255,255,255,0.01);
             padding: 30px;
             border-radius: 8px;
-            border-left: 4px solid var(--electric-blue);
+            border-left: 4px solid var(--royal-gold);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
         }
 
         .highlight-card h4 {
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--electric-blue);
+            color: var(--royal-gold);
             margin-bottom: 10px;
         }
 
         .highlight-card p {
             font-size: 15px;
-            color: #E4E4E7;
+            color: var(--royal-silver);
         }
 
         /* INCLUSIONS SECTION */
         .inclusion-section {
             padding: 80px 5%;
-            background: linear-gradient(180deg, var(--black) 0%, #0d0d11 100%);
+            background: linear-gradient(180deg, var(--black-throne) 0%, #111115 100%);
             text-align: center;
         }
 
@@ -232,8 +238,8 @@
         }
 
         .inclusion-box {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(212, 175, 55, 0.1);
+            background: var(--gray-temple);
+            border: 1px solid rgba(229, 193, 88, 0.15);
             border-radius: 12px;
             padding: 40px 30px;
             position: relative;
@@ -244,12 +250,12 @@
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+            background: linear-gradient(90deg, var(--royal-gold-dark), var(--royal-gold));
         }
 
         .inclusion-box h3 {
             font-size: 28px;
-            color: var(--gold);
+            color: var(--royal-gold);
             margin-bottom: 20px;
         }
 
@@ -268,10 +274,11 @@
             align-items: center;
             gap: 10px;
             font-size: 15px;
+            color: var(--royal-silver);
         }
 
         .kit-list li i {
-            color: var(--gold);
+            color: var(--royal-gold);
         }
 
         /* STRUCTURAL CONTENT */
@@ -288,7 +295,7 @@
 
         .section-header h2 {
             font-size: 36px;
-            color: white;
+            color: var(--royal-gold-light);
             margin-bottom: 15px;
         }
 
@@ -297,7 +304,7 @@
             display: block;
             width: 60px;
             height: 2px;
-            background: var(--gold);
+            background: var(--royal-gold);
             margin: 20px auto 0;
         }
 
@@ -307,17 +314,17 @@
 
         .chapter h3 {
             font-size: 22px;
-            color: var(--gold);
+            color: var(--royal-gold);
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(229, 193, 88, 0.15);
             padding-bottom: 10px;
         }
 
         .chapter p {
-            color: #D4D4D8;
+            color: var(--royal-silver);
             margin-bottom: 20px;
             font-size: 16px;
         }
@@ -331,29 +338,30 @@
             position: relative;
             padding-left: 25px;
             margin-bottom: 15px;
-            color: #E4E4E7;
+            color: var(--royal-silver);
         }
 
         .points-list li::before {
             content: '•';
             position: absolute;
             left: 5px;
-            color: var(--gold);
+            color: var(--royal-gold);
             font-size: 20px;
             top: -2px;
         }
 
         .points-list strong {
-            color: white;
+            color: var(--imperial-white);
         }
 
         blockquote {
-            background: var(--gray-dark);
-            border-left: 3px solid var(--gold);
+            background: var(--gray-temple);
+            border-left: 3px solid var(--royal-gold);
             padding: 20px;
             margin: 30px 0;
             font-style: italic;
             border-radius: 0 8px 8px 0;
+            color: var(--royal-silver);
         }
 
         .sentences-grid {
@@ -365,24 +373,26 @@
 
         .sentence-card {
             background: rgba(255,255,255,0.01);
-            border: 1px solid rgba(255,255,255,0.03);
+            border: 1px solid rgba(229,193,88,0.1);
             padding: 15px 20px;
             border-radius: 6px;
             font-style: italic;
-            border-left: 2px solid rgba(212, 175, 55, 0.4);
+            border-left: 2px solid var(--royal-gold);
+            color: var(--royal-silver);
         }
 
         /* FINAL CALL TO ACTION */
         .final-cta {
             padding: 80px 5%;
             text-align: center;
-            background: var(--gray-dark);
-            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            background: var(--gray-temple);
+            border-top: 1px solid rgba(229, 193, 88, 0.2);
         }
 
         .final-cta h2 {
             font-size: 32px;
             margin-bottom: 20px;
+            color: var(--royal-gold-light);
         }
 
         .final-cta p {
@@ -393,12 +403,12 @@
 
         /* FOOTER */
         footer {
-            background: #050507;
+            background: #060608;
             padding: 40px 5%;
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.02);
+            border-top: 1px solid rgba(229,193,88,0.05);
             font-size: 13px;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.3);
         }
     </style>
 </head>
@@ -420,17 +430,18 @@
         <p>“Conectando vidas e famílias ao propósito de DEUS”</p>
         
         <div class="cta-container">
-            <a href="https://docs.google.com/forms/d/1DptjlfCEGnJH-772lV6DFk_tS8NdURNIpRy-fUqfZDk/edit?usp=drivesdk" target="_blank" class="btn btn-primary">
-                <i class="fas fa-edit"></i> Cadastro Obrigatório
+            <!-- BOTÃO ALTERADO: SEJA NOSSO ALUNO & LINK APONTANDO PARA ALUNO/INDEX.HTML -->
+            <a href="/missaocomaan/sacerdocioreal/aluno/index.html" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Seja Nosso Aluno
             </a>
             
-            <!-- LINK AJUSTADO PARA ÁREA DO ESTUDANTE -->
             <a href="/missaocomaan/sacerdocioreal/estudante.html" class="btn btn-student">
                 <i class="fas fa-user-graduate"></i> Área do Estudante
             </a>
             
-            <a href="https://wa.me/51900000000" target="_blank" class="btn btn-secondary">
-                <i class="fab fa-whatsapp"></i> WhatsApp
+            <!-- LINK DO WHATSAPP ATUALIZADO COM O NÚMERO CORRETO DA IGREJA -->
+            <a href="https://wa.me/5551981659360" target="_blank" class="btn btn-secondary">
+                <i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp da Igreja
             </a>
         </div>
     </section>
@@ -455,7 +466,7 @@
 
     <!-- INCLUSOS / BENEFÍCIOS -->
     <section class="inclusion-section">
-        <h2 class="font-serif">Benefícios Exclusivos do Aluno</h2>
+        <h2 class="font-serif" style="color: var(--royal-gold);">Benefícios Exclusivos do Aluno</h2>
         <p style="color: var(--text-muted); margin-top: 10px;">Tudo o que está preparado para dar suporte à sua caminhada de ativação.</p>
         
         <div class="inclusion-grid">
@@ -473,19 +484,19 @@
             
             <div class="inclusion-box" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 <h3>Formatura Inclusa</h3>
-                <p style="color: #E4E4E7; max-width: 400px; font-size: 15px; line-height: 1.6;">
+                <p style="color: var(--royal-silver); max-width: 400px; font-size: 15px; line-height: 1.6;">
                     Ao concluir todos os módulos da escola, a celebração e a cerimônia de consagração e formatura já estão totalmente cobertas e asseguradas, sem taxas adicionais.
                 </p>
-                <i class="fas fa-graduation-cap" style="font-size: 48px; color: var(--gold); margin-top: 25px; opacity: 0.8;"></i>
+                <i class="fas fa-graduation-cap" style="font-size: 48px; color: var(--royal-gold); margin-top: 25px; opacity: 0.9;"></i>
             </div>
         </div>
     </section>
 
-    <!-- MATÉRIA / ESTRUTURA DE MINISTRAÇÃO -->
+    <!-- MATÉRIA / TÍTULO ALTERADO PARA: NOSSA POSIÇÃO EM CRISTO -->
     <section class="content-section">
         <div class="section-header">
-            <h2>Estrutura de Ministração</h2>
-            <p style="color: var(--gold); font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">Tema: A Vocação, o Alinhamento e o Impacto na Geografia</p>
+            <h2>Nossa Posição em Cristo</h2>
+            <p style="color: var(--royal-gold); font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">Tema: A Vocação, o Alinhamento e o Impacto na Geografia</p>
             <p style="color: var(--text-muted); font-size: 13px; margin-top: 5px;">Bases: 1 Pedro 2:9 | Apocalipse 1:5-6 | Levítico 8</p>
         </div>
 
@@ -508,9 +519,9 @@
                 <li><strong>Ministrar ao Coração de Deus:</strong> A prioridade absoluta é o Altar, não o público ou os holofotes.</li>
                 <li><strong>Rompimento de Ciclos:</strong> Quebrar pecados, iniquidades e maldições generacionais históricas.</li>
                 <li><strong>Governo Territorial:</strong> Mudar a "geografia" e o ambiente espiritual do local onde vive.</li>
-                <li><strong>Zelo e Dedicação:</strong> Trazer a realidade visível dos Céus para a terra através do serviço contínuo.</li>
+                <li><strong>Zelo e Dedicação:</strong> Trazer a reality visível dos Céus para a terra através do serviço contínuo.</li>
             </ul>
-            blockquote>
+            <blockquote>
                 <strong>Os Pilares do Testemunho:</strong><br>
                 1. Reciclagem constante | 2. Profundidade Bíblica | 3. Encorajamento mútuo.
             </blockquote>
@@ -519,7 +530,7 @@
         <!-- CAPÍTULO III -->
         <div class="chapter">
             <h3><span>III.</span> Autoridade e Posicionamento na Geografia</h3>
-            <p style="font-style: italic; color: var(--gold);">"A santidade do sacerdote determina o que é permitido no ambiente."</p>
+            <p style="font-style: italic; color: var(--royal-gold);">"A santidade do sacerdote determina o que é permitido no ambiente."</p>
             <ul class="points-list">
                 <li><strong>A Lei da Autoridade:</strong> "Tem mais autoridade por uma geografia quem mais ama ela." A autoridade legítima nasce do amor e do serviço sacrificial àquele território.</li>
                 <li><strong>O Testemunho como Pregação:</strong> Antes da fala, a santidade deve ser expandida de forma prática. É a nossa vocação respondendo ao caos do mundo.</li>
@@ -552,13 +563,13 @@
             </div>
         </div>
 
-        <!-- CONCLUSÃO -->
+        <!-- CONCLUSÃO / TEXTO MODIFICADO PARA REMETER À PERDA DO POTENCIAL DE FILHOS DE DEUS -->
         <div class="chapter" style="margin-top: 40px;">
             <h3 style="border: none;">Conclusão: O Desafio da Humilhação</h3>
             <p>
-                O sacerdócio real não é um papel de prestígio ou status atrás de um púlpito; é um chamado severo de responsabilidade que não pode ser conduzido de forma leviana. A humilhação voluntária ocupa o lugar central nesse desenvolvimento.
+                O sacerdócio real não é um papel de prestígio ou status atrás de um púlpito; é um chamado severo de responsabilidade que não pode ser negligenciado. Tratar essa vocação com superficialidade ou distração sabota o destino eterno do homem, resultando na perda dolorosa do potencial pleno que Deus depositou em nós como Seus filhos legítimos. A humilhação voluntária ocupa o lugar central nesse desenvolvimento.
             </p>
-            <p style="font-weight: 600; color: white; text-align: center; margin-top: 30px; font-size: 18px;">
+            <p style="font-weight: 600; color: var(--royal-gold-light); text-align: center; margin-top: 30px; font-size: 18px;">
                 Até que ponto estamos dispostos a ser levados pela Palavra?
             </p>
         </div>
@@ -567,10 +578,11 @@
     <!-- FINAL CALL TO ACTION -->
     <section class="final-cta">
         <h2>Ative a sua Vocação Territorial</h2>
-        <p>Não conduza o chamado de forma leviana. Faça parte do plano soberano e assuma o governo da sua geografia.</p>
+        <p>Não desperdice a herança e o projeto que o Pai designou para você. Faça parte do plano soberano e assuma o governo da sua geografia.</p>
         <div class="cta-container">
-            <a href="https://docs.google.com/forms/d/1DptjlfCEGnJH-772lV6DFk_tS8NdURNIpRy-fUqfZDk/edit?usp=drivesdk" target="_blank" class="btn btn-primary">
-                <i class="fas fa-edit"></i> Inscrever-se Agora na Escola
+            <!-- ALINHADO COM O PRIMEIRO BOTÃO DE MATRÍCULA -->
+            <a href="/missaocomaan/sacerdocioreal/aluno/index.html" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Quero me Tornar Aluno
             </a>
         </div>
     </section>
@@ -583,4 +595,3 @@
 
 </body>
 </html>
-
