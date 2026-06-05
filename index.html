@@ -142,31 +142,28 @@
 <body>
 
     <!-- HEADER -->
-    <header>
-        <div class="logo">
-            <span style="background:var(--yellow); color:black; padding:4px 10px; border-radius:50%;">🏠</span>
+    <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background: #0b0b0b; display: flex; justify-content: space-between; align-items: center; padding: 10px 4%; box-sizing: border-box;">
+        <div class="logo" style="display: flex; align-items: center; gap: 12px; color: var(--yellow, #fff; font-weight: bold; font-size: 24px;">
+            <!-- Substituído o emoji pela foto oficial do logo -->
+            <img src="image_7b033a.png" alt="Logo COMAAN" style="height: 45px; width: auto; object-fit: contain;">
             COMAAN
         </div>
-        <nav>
+        <nav style="display: flex; align-items: center;">
             <a href="#sobre" style="color:white; margin:0 20px; text-decoration:none;">Sobre</a>
             <a href="#ministerios" style="color:white; margin:0 20px; text-decoration:none;">Ministérios</a>
             <a href="#midia" style="color:white; margin:0 20px; text-decoration:none;">Mídia</a>
-            <a href="#doe" class="btn" style="padding:12px 28px; font-size:13px;">Contribuir</a>
+            <a href="#doe" class="btn" style="padding:12px 28px; font-size:13px; background: var(--yellow); color: black; font-weight: bold; text-decoration: none; border-radius: 4px;">Contribuir</a>
         </nav>
     </header>
 
     <!-- HERO -->
-    <section class="hero">
-        <div class="hero-content">
+    <!-- Adicionado o padding-top de 100px para empurrar o texto para baixo do header fixo e garantir que não corte -->
+    <section class="hero" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding-top: 100px; box-sizing: border-box;">
+        <div class="hero-content" style="text-align: center; max-width: 900px; margin: 0 auto; padding: 0 20px;">
+            <!-- Ajustado o line-height para a fonte robusta não encavalar e responsividade no font-size -->
+            <h1 style="font-size: clamp(32px, 5vw, 64px); line-height: 1.2; margin-bottom: 20px;">Conectando Vidas e<br>famílias ao propósito de Deus</h1>
 
-            
-            <h1>Conectando Vidas e<br>famílias ao propósito de Deus</h1>
-            <p>Casa de Oração Missão Apostólica Antioquia • Sapiranga • Rio Grande do Sul</p>
-            <a href="#sobre" class="btn">Conheça a COMAAN</a>
-        </div>
-    </section>
-
-    <!-- SOBRE -->
+            <!-- SOBRE -->
     <section id="sobre">
         <h2 class="section-title">Quem Somos</h2>
         <div class="grid">
@@ -217,7 +214,7 @@
                 <p>Nosso filhos são a herança do Senhor.</p>
             </div>
             <div style="text-align:center; margin-top:50px;">
-              <p style="font-size:28px; margin-bottom:20px;">Conectando Vidas e famílias ao propósito de Deus.</p>   
+                                       <p style="font-size:28px; margin-bottom:20px;">Conectando Vidas e famílias ao propósito de Deus.</p>   
         </div>
     </section>
 
