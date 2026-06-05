@@ -126,12 +126,12 @@
             color: var(--yellow);
         }
 
-        .btn-instagram {
+        .btn-whatsapp {
             display: inline-flex;
             align-items: center;
             gap: 10px;
             padding: 14px 28px;
-            background: #E1306C;
+            background: #25D366;
             color: white;
             font-weight: 600;
             text-transform: uppercase;
@@ -140,13 +140,13 @@
             border-radius: 4px;
             text-decoration: none;
             transition: all 0.3s ease;
-            border: 2px solid #E1306C;
+            border: 2px solid #25D366;
         }
 
-        .btn-instagram:hover {
+        .btn-whatsapp:hover {
             transform: translateY(-2px);
             background: transparent;
-            color: #E1306C;
+            color: #25D366;
         }
 
         .btn-outline {
@@ -247,7 +247,7 @@
         .social-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 20px;
             flex-wrap: wrap;
         }
@@ -256,16 +256,17 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 12px 28px;
+            padding: 12px 24px;
             border-radius: 4px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             transition: all 0.3s ease;
         }
 
         .instagram-btn { background: #E1306C; color: white; }
         .youtube-btn { background: #FF0000; color: white; }
+        .facebook-btn { background: #1877F2; color: white; }
 
         .social-btn:hover {
             transform: translateY(-3px);
@@ -379,11 +380,14 @@
 
     <!-- REDES SOCIAIS FLUTUANTES -->
     <div class="floating-social">
+        <a href="https://wa.me/5551981659360" target="_blank" class="floating-btn" style="background: #25D366;" title="Fale no WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
         <a href="https://www.instagram.com/comaanrs/" target="_blank" class="floating-btn" style="background: #E1306C;" title="Siga no Instagram">
             <i class="fab fa-instagram"></i>
         </a>
-        <a href="https://www.youtube.com/@comaan" target="_blank" class="floating-btn" style="background: #FF0000;" title="Assista no YouTube">
-            <i class="fab fa-youtube"></i>
+        <a href="https://www.facebook.com/share/1C1HyWCH3h/" target="_blank" class="floating-btn" style="background: #1877F2;" title="Curta no Facebook">
+            <i class="fab fa-facebook-f"></i>
         </a>
     </div>
 
@@ -407,8 +411,8 @@
             <h1>Conectando Vidas e<br>famílias ao propósito de Deus</h1>
             <p>Casa de Oração Missão Apostólica Antioquia • Sapiranga • Rio Grande do Sul</p>
             <div class="hero-buttons" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; align-items: center;">
+                <a href="https://wa.me/5551981659360" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp"></i> Contato via WhatsApp</a>
                 <a href="#sobre" class="btn">Conheça a COMAAN</a>
-                <a href="https://www.instagram.com/comaanrs/" target="_blank" class="btn-instagram"><i class="fab fa-instagram"></i> Siga-nos no Instagram</a>
                 <a href="https://www.youtube.com/@comaan" target="_blank" class="btn-outline"><i class="fab fa-youtube"></i> Cultos Ao Vivo</a>
             </div>
         </div>
@@ -490,14 +494,17 @@
     <!-- SEÇÃO MÍDIA E REDES SOCIAIS -->
     <section id="midia" class="social-section">
         <h2 class="section-title">Acompanhe a COMAAN</h2>
-        <p class="section-subtitle">Fique por dentro das novidades no Instagram ou assista às pregações e transmissões de cultos gravados no YouTube.</p>
+        <p class="section-subtitle">Fique por dentro das novidades e assista às transmissões de cultos gravados.</p>
         
         <div class="social-buttons">
             <a href="https://www.instagram.com/comaanrs/" target="_blank" class="social-btn instagram-btn">
-                <i class="fab fa-instagram"></i> Acessar Instagram
+                <i class="fab fa-instagram"></i> Instagram
             </a>
             <a href="https://www.youtube.com/@comaan" target="_blank" class="social-btn youtube-btn">
-                <i class="fab fa-youtube"></i> Inscrever-se no YouTube
+                <i class="fab fa-youtube"></i> YouTube
+            </a>
+            <a href="https://www.facebook.com/share/1C1HyWCH3h/" target="_blank" class="social-btn facebook-btn">
+                <i class="fab fa-facebook-f"></i> Facebook
             </a>
         </div>
     </section>
@@ -509,7 +516,6 @@
         <p style="font-size: 15px; font-style: italic; max-width: 500px; margin: 0 auto 30px; opacity: 0.7;">"Conectando Vidas e famílias ao propósito de Deus."</p>
         
         <p style="opacity:0.4; font-size: 12px;">© 2026 • Todos os direitos reservados</p>
-        <!-- Link de Parceria do Ecossistema EU+ Atualizado para Rastreabilidade -->
         <p style="margin-top:10px; font-size:12px; opacity:0.5;">
             Desenvolvido com excelência por 
             <a href="https://eumaisempresa.github.io" target="_blank" style="color: var(--yellow); text-decoration: none; font-weight: bold; border-bottom: 1px dotted var(--yellow);">
@@ -534,23 +540,23 @@
         </div>
     </div>
 
-    <!-- MODAL DE INSCRIÇÃO NOS MINISTÉRIOS -->
+    <!-- MODAL DE INSCRIÇÃO (SISTEMA DE JORNADA - FUNDAÇÃO DIGITAL) -->
     <div id="register-modal" class="modal-overlay" onclick="closeModal('register-modal')">
         <div class="modal-card" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeModal('register-modal')">&times;</span>
             <h3 id="modal-dept-title" style="color: var(--yellow); margin-bottom: 15px;">Inscrição</h3>
-            <p style="font-size: 14px; margin-bottom: 20px; opacity: 0.8;">Preencha seus dados para que a liderança do ministério entre em contato com você.</p>
+            <p style="font-size: 14px; margin-bottom: 20px; opacity: 0.8;">Inicie sua jornada de conexão ministerial e crescimento institucional.</p>
             
             <form onsubmit="sendRegistration(event)">
                 <input type="hidden" id="modal-dept-input">
                 <div style="text-align: left;">
                     <label style="font-size: 13px; color: #aaa;">Seu Nome:</label>
-                    <input type="text" class="modal-input" required placeholder="Digite seu nome completo">
+                    <input type="text" id="user-name" class="modal-input" required placeholder="Digite seu nome completo">
                     
                     <label style="font-size: 13px; color: #aaa;">Seu WhatsApp:</label>
-                    <input type="tel" class="modal-input" required placeholder="(00) 99999-9999">
+                    <input type="tel" id="user-phone" class="modal-input" required placeholder="(00) 99999-9999">
                 </div>
-                <button type="submit" class="btn" style="width: 100%; padding: 12px;">Enviar Pré-Inscrição</button>
+                <button type="submit" class="btn" style="width: 100%; padding: 12px;">Iniciar Jornada</button>
             </form>
         </div>
     </div>
@@ -564,7 +570,7 @@
             document.getElementById(id).classList.remove('active');
         }
         function openRegisterModal(deptName) {
-            document.getElementById('modal-dept-title').innerText = 'Participar da ' + deptName;
+            document.getElementById('modal-dept-title').innerText = 'Ingressar na ' + deptName;
             document.getElementById('modal-dept-input').value = deptName;
             openModal('register-modal');
         }
@@ -573,11 +579,25 @@
             navigator.clipboard.writeText(keyText);
             alert('Chave PIX copiada com sucesso! Cole no aplicativo do seu banco.');
         }
+        
+        // Mapeamento de Camada 2: Geração de Memória e Rastreabilidade de Jornada
+        let fakeIdCounter = 1;
         function sendRegistration(e) {
             e.preventDefault();
-            var dept = document.getElementById('modal-dept-input').value;
-            alert('Pré-inscrição para ' + dept + ' simulada com sucesso! No próximo estágio de inteligência, esses dados serão salvos direto no banco do Painel Administrativo.');
+            const dept = document.getElementById('modal-dept-input').value;
+            const name = document.getElementById('user-name').value;
+            const phone = document.getElementById('user-phone').value;
+            const formattedId = "PES-" + String(fakeIdCounter).padStart(4, '0');
+            
+            // Simulação de entrada no pipeline estratégico
+            console.log(`[Fundação Digital] Novo Registro: ${formattedId} | Nome: ${name} | WhatsApp: ${phone} | Destino: ${dept} | Status: Novo`);
+            
+            alert(`Jornada Iniciada, ${name}!\n\nSeu registro foi indexado como [${formattedId}] na trilha da ${dept}.\nA liderança institucional foi notificada para transicionar seu status para "Contatado".`);
+            
+            fakeIdCounter++;
             closeModal('register-modal');
+            document.getElementById('user-name').value = '';
+            document.getElementById('user-phone').value = '';
         }
     </script>
 </body>
