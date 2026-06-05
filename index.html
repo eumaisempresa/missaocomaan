@@ -170,6 +170,28 @@
             transform: translateY(-2px);
         }
 
+        .btn-discreet {
+            display: inline-block;
+            padding: 12px 30px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+        }
+
+        .btn-discreet:hover {
+            border-color: var(--yellow);
+            color: var(--yellow);
+            background: rgba(255, 237, 0, 0.02);
+        }
+
         section { padding: 100px 5%; }
 
         .section-title {
@@ -305,7 +327,7 @@
             transform: scale(1.1) translateY(-3px); 
         }
 
-        /* MODAIS / JANELAS FLUTUANTES (AJUSTADO PARA MOBILE) */
+        /* MODAIS / JANELAS FLUTUANTES */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -436,10 +458,15 @@
         <div class="hero-content">
             <h1>Conectando Vidas e<br>famílias ao propósito de Deus</h1>
             <p>Casa de Oração Missão Apostólica Antioquia • Sapiranga • Rio Grande do Sul</p>
-            <div class="hero-buttons" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; align-items: center;">
-                <a href="https://wa.me/5551981659360" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp"></i> Contato via WhatsApp</a>
-                <button onclick="openModal('pix-modal')" class="btn"><i class="fas fa-heart"></i> Ofertar / Contribuir</button>
-                <a href="https://www.youtube.com/@comaan" target="_blank" class="btn-outline"><i class="fab fa-youtube"></i> Cultos Ao Vivo</a>
+            
+            <!-- ALINHAMENTO ESTRUTURADO DE ACORDO COM AS DIRETRIZES DO CLIENTE -->
+            <div class="hero-buttons" style="display: flex; justify-content: center; flex-direction: column; align-items: center; gap: 14px;">
+                <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; width: 100%;">
+                    <a href="https://wa.me/5551981659360" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp"></i> Contato via WhatsApp</a>
+                    <a href="https://www.youtube.com/@comaan" target="_blank" class="btn-outline"><i class="fab fa-youtube"></i> Cultos Ao Vivo</a>
+                </div>
+                <!-- Ofertar posicionado de forma mais discreta, abaixo das mídias principais -->
+                <button onclick="openModal('pix-modal')" class="btn-discreet"><i class="fas fa-heart"></i> Ofertar / Contribuir</button>
             </div>
         </div>
     </section>
@@ -543,14 +570,15 @@
         
         <p style="opacity:0.4; font-size: 12px;">© 2026 • Todos os direitos reservados</p>
         
+        <!-- DESTAQUE EXECUTIVO DO GRUPO EU+ MISSÃO ATUALIZADO COM O REPOSITÓRIO EXATO -->
         <div class="brand-governance">
-            <a href="https://eumaisempresa.github.io" target="_blank">
-                <i class="fas fa-shield-alt"></i> Soluções por Grupo EU⁺ Missão
+            <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank">
+                <i class="fas fa-shield-alt"></i> Desenvolvido por Grupo EU⁺ Missão
             </a>
         </div>
     </footer>
 
-    <!-- MODAL PIX (TOTALMENTE INTEGRADO E CORRIGIDO PARA MOBILE) -->
+    <!-- MODAL PIX -->
     <div id="pix-modal" class="modal-overlay" onclick="closeModal('pix-modal')">
         <div class="modal-card" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeModal('pix-modal')">&times;</span>
