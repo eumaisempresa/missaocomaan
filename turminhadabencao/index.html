@@ -13,7 +13,6 @@
             --forest-green: #2E7D32;
             --grass-light: #4CAF50;
             --sun-yellow: #FFD700;
-            --sun-dark: #FFB300;
             --navy: #0A192F;
             --gray-bg: #172A45;
             --card-bg: #112240;
@@ -33,282 +32,119 @@
         /* HEADER */
         header {
             position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
+            top: 0; width: 100%; z-index: 1000;
             background: rgba(10, 25, 47, 0.95);
             backdrop-filter: blur(12px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             padding: 20px 5%;
             border-bottom: 1px solid rgba(30, 144, 255, 0.15);
         }
 
         .logo {
             font-family: 'Montserrat', sans-serif;
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--sun-yellow);
-            text-decoration: none;
-            letter-spacing: 0.5px;
+            font-size: 18px; font-weight: 800;
+            color: var(--sun-yellow); text-decoration: none;
         }
 
         .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 4px;
+            display: inline-flex; align-items: center; gap: 8px;
+            color: white; text-decoration: none; font-size: 13px; font-weight: 600;
+            padding: 8px 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
             transition: all 0.3s;
         }
 
         .btn-back:hover {
-            border-color: var(--sky-blue);
-            color: var(--sky-blue);
+            border-color: var(--sky-blue); color: var(--sky-blue);
             background: rgba(30, 144, 255, 0.05);
         }
 
         /* HERO SECTION */
         .hero {
-            padding: 160px 5% 60px;
-            text-align: center;
+            padding: 160px 5% 60px; text-align: center;
             background: radial-gradient(circle at center, #17375E 0%, var(--navy) 100%);
         }
 
         .badge-edition {
-            display: inline-block;
-            background: var(--sun-yellow);
-            color: var(--navy);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 12px;
-            font-weight: 900;
-            padding: 4px 14px;
-            border-radius: 50px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
+            display: inline-block; background: var(--sun-yellow); color: var(--navy);
+            font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900;
+            padding: 4px 14px; border-radius: 50px; text-transform: uppercase;
+            margin-bottom: 20px; letter-spacing: 1px;
         }
 
         .hero h1 {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(34px, 6vw, 56px);
-            font-weight: 900;
-            color: var(--text-light);
-            line-height: 1.1;
-            margin-bottom: 20px;
+            font-size: clamp(34px, 6vw, 56px); font-weight: 900;
+            color: var(--text-light); line-height: 1.1; margin-bottom: 20px;
             text-transform: uppercase;
-            letter-spacing: -0.5px;
         }
 
-        .hero h1 span {
-            color: var(--sun-yellow);
-            display: block;
-            font-size: clamp(40px, 7vw, 68px);
-        }
+        .hero h1 span { color: var(--sun-yellow); display: block; font-size: clamp(40px, 7vw, 68px); }
 
-        /* BALÃO DE CHAMADA (DO POSTER) */
         .speech-bubble {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(30, 144, 255, 0.2);
-            padding: 25px 20px;
-            border-radius: 16px;
-            max-width: 600px;
-            margin: 20px auto 0;
-            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(30, 144, 255, 0.2);
+            padding: 25px 20px; border-radius: 16px; max-width: 600px; margin: 20px auto 0;
         }
 
-        .speech-bubble h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--sun-yellow);
-            margin-bottom: 8px;
-        }
+        .speech-bubble h2 { font-family: 'Montserrat', sans-serif; font-size: 20px; color: var(--sun-yellow); margin-bottom: 8px; }
 
-        .speech-bubble p {
-            font-size: 15px;
-            color: var(--text-light);
-            font-weight: 500;
-        }
+        /* CONTENT SECTION */
+        .content-section { padding: 40px 5%; max-width: 800px; margin: 0 auto; }
 
-        /* HIGHLIGHT CARDS */
-        .highlights-section {
-            padding: 30px 5%;
-            background: var(--gray-bg);
-        }
+        .section-header { text-align: center; margin-bottom: 30px; }
+        .section-header h2 { font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 800; }
+        .section-header::after { content: ''; display: block; width: 40px; height: 3px; background: var(--sun-yellow); margin: 12px auto 0; }
 
-        .highlights-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .highlight-card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 8px;
-            border-left: 4px solid var(--sky-blue);
-        }
-
-        .highlight-card h4 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--sky-blue);
-            margin-bottom: 8px;
-        }
-
-        .highlight-card p {
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        /* EXPANDABLE ESTRUTURA (DETAILS) */
-        .content-section {
-            padding: 60px 5%;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .section-header h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 28px;
-            font-weight: 800;
-            color: white;
-        }
-
-        .section-header::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 3px;
-            background: var(--sun-yellow);
-            margin: 15px auto 0;
-        }
-
-        details {
+        /* CARDS DE DOWNLOAD E ESCALA */
+        .tool-card {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            margin-bottom: 14px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        details[open] {
-            border-color: rgba(30, 144, 255, 0.4);
-        }
-
-        summary {
-            padding: 18px 20px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-light);
-            cursor: pointer;
-            list-style: none;
+            padding: 25px;
+            margin-bottom: 20px;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            user-select: none;
-            outline: none;
+            gap: 15px;
+            transition: all 0.3s;
         }
 
-        summary::-webkit-details-marker { display: none; }
-
-        summary::after {
-            content: '\f078';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 13px;
-            color: var(--text-muted);
-            transition: transform 0.3s ease;
+        @media(min-width: 576px) {
+            .tool-card { flex-direction: row; align-items: center; }
+            .tool-card .info { flex: 1; }
+            .tool-card .action { flex-shrink: 0; }
         }
 
-        details[open] summary::after {
-            transform: rotate(180deg);
-            color: var(--sun-yellow);
+        .tool-card:hover { border-color: rgba(30, 144, 255, 0.3); }
+        .tool-card h3 { font-family: 'Montserrat', sans-serif; font-size: 18px; color: white; margin-bottom: 5px; }
+        .tool-card p { color: var(--text-muted); font-size: 14px; }
+
+        /* BOTÕES ACTION */
+        .btn-action {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600;
+            text-decoration: none; transition: all 0.3s; width: 100%; text-align: center;
         }
 
-        .details-wrapper {
-            padding: 0 20px 20px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.02);
-            padding-top: 15px;
-        }
+        @media(min-width: 576px) { .btn-action { width: auto; } }
 
-        .volunteer-list { list-style: none; }
+        .btn-blue { background: var(--sky-blue); color: white; }
+        .btn-blue:hover { filter: brightness(1.1); }
         
-        .volunteer-list li {
-            padding: 10px 0;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-        }
-
-        .volunteer-list li:last-child { border-bottom: none; }
-        .volunteer-list li span { color: var(--text-muted); }
-        .volunteer-list li strong { color: var(--sky-blue); font-weight: 600; }
+        .btn-gold { background: rgba(255, 215, 0, 0.1); color: var(--sun-yellow); border: 1px solid rgba(255, 215, 0, 0.2); }
+        .btn-gold:hover { background: var(--sun-yellow); color: var(--navy); }
 
         /* PARENT BOX (REGRAS) */
         .parent-info-box {
-            background: rgba(46, 125, 50, 0.15);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 25px;
+            background: rgba(46, 125, 50, 0.15); border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 8px; padding: 20px; margin-top: 30px;
         }
 
-        .parent-info-box h3 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 16px;
-            color: var(--grass-light);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .parent-info-box h3 { font-family: 'Montserrat', sans-serif; font-size: 16px; color: var(--grass-light); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .parent-info-box ul { list-style: none; }
-        .parent-info-box li {
-            font-size: 14px;
-            color: #E2E8F0;
-            margin-bottom: 8px;
-            position: relative;
-            padding-left: 20px;
-        }
+        .parent-info-box li { font-size: 14px; color: #E2E8F0; margin-bottom: 8px; padding-left: 20px; position: relative; }
+        .parent-info-box li::before { content: '➔'; position: absolute; left: 0; color: var(--grass-light); }
 
-        .parent-info-box li::before {
-            content: '➔';
-            position: absolute;
-            left: 0;
-            color: var(--grass-light);
-        }
-
-        /* FOOTER */
-        footer {
-            background: #060D1A;
-            padding: 30px 5%;
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.02);
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+        footer { background: #060D1A; padding: 30px 5%; text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 40px; }
     </style>
 </head>
 <body>
@@ -324,64 +160,57 @@
         <div class="badge-edition">Edição 1</div>
         <h1>Turminha da <span>Bênção</span></h1>
         
-        <!-- ELEMENTO INSPIRADO NO POSTER -->
         <div class="speech-bubble">
             <h2>Um novo amigo está chegando!</h2>
             <p>Venha aprender sobre fé, amizade e o amor de Deus!</p>
         </div>
     </section>
 
-    <!-- HIGHLIGHTS -->
-    <section class="highlights-section">
-        <div class="highlights-grid">
-            <div class="highlight-card">
-                <h4>Evangelização Infantil</h4>
-                <p>Princípios bíblicos ensinados de forma dinâmica, relevante e focada no desenvolvimento espiritual dos pequenos.</p>
-            </div>
-            <div class="highlight-card">
-                <h4>Ambiente Seguro</h4>
-                <p>Estrutura totalmente monitorada e cuidada por voluntários capacitados para que os pais cultuem com total tranquilidade.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- EXPANDABLE CONTENT -->
+    <!-- CONTENT SECTION -->
     <section class="content-section">
+        
+        <!-- MATERIAIS DE APOIO -->
         <div class="section-header">
-            <h2>Gestão do Ministério</h2>
+            <h2>Recursos e Atividades</h2>
         </div>
 
-        <!-- ESCALAS -->
-        <details>
-            <summary>Escala de Voluntários — Próximo Culto</summary>
-            <div class="details-wrapper">
-                <ul class="volunteer-list">
-                    <li><span>Líder da Sala:</span> <strong>Tia Sarah</strong></li>
-                    <li><span>Berçário (0 a 3 anos):</span> <strong>Tia Amanda e Tia Clara</strong></li>
-                    <li><span>Kids (4 a 8 anos):</span> <strong>Tia Rebeca e Tio Lucas</strong></li>
-                    <li><span>Apoio Geral:</span> <strong>Tio Mateus</strong></li>
-                </ul>
+        <!-- CARD DO PDF (Substitua 'material-aula-1.pdf' pelo nome real do seu arquivo) -->
+        <div class="tool-card">
+            <div class="info">
+                <h3>Revista Digital — Edição 1</h3>
+                <p>Conteúdo oficial com a história "Um novo amigo está chegando", dinâmicas e atividades para fixação.</p>
             </div>
-        </details>
-
-        <details>
-            <summary>Escala de Voluntários — Domingo Sequente</summary>
-            <div class="details-wrapper">
-                <ul class="volunteer-list">
-                    <li><span>Líder da Sala:</span> <strong>Tia Michelle</strong></li>
-                    <li><span>Berçário (0 a 3 anos):</span> <strong>Tia Débora e Tia Letícia</strong></li>
-                    <li><span>Kids (4 a 8 anos):</span> <strong>Tia Julia e Tio Samuel</strong></li>
-                    <li><span>Apoio Geral:</span> <strong>Tio Pedro</strong></li>
-                </ul>
+            <div class="action">
+                <a href="material-aula-1.pdf" download class="btn-action btn-blue">
+                    <i class="fas fa-file-download"></i> Baixar PDF
+                </a>
             </div>
-        </details>
+        </div>
 
-        <!-- ORIENTAÇÕES COM ESTILO INTEGRADO -->
+        <!-- ÁREA DA ESCALA INTELIGENTE -->
+        <div class="section-header" style="margin-top: 50px;">
+            <h2>Painel do Voluntário</h2>
+        </div>
+
+        <!-- CARD DE ESCALA LINKADA (Mude o href para o link do Drive, Foto ou Planilha das escalas) -->
+        <div class="tool-card">
+            <div class="info">
+                <h3>Escala de Servidores</h3>
+                <p>Consulte os dias, salas e equipes de apoio designadas para este mês.</p>
+            </div>
+            <div class="action">
+                <a href="https://link-da-sua-escala-ou-imagem.com" target="_blank" class="btn-action btn-gold">
+                    <i class="fas fa-calendar-alt"></i> Ver Escala Atualizada
+                </a>
+            </div>
+        </div>
+
+        <!-- ORIENTAÇÕES -->
         <div class="parent-info-box">
             <h3><i class="fas fa-shield-halved"></i> Diretrizes e Protocolo de Segurança</h3>
             <ul>
-                <li><strong>Check-in Obrigatório:</strong> Entrada permitida a partir de 15 minutos antes do início do culto.</li>
-                <li><strong>Comunicação Restritiva:</strong> Informe aos voluntários qualquer alergia ou restrição alimentar no ato da entrega.</li>
+                <li><strong>Check-in Obrigatório:</strong> Entrada permitida a partir de 15 minutes antes do início do culto.</li>
+                <li><strong>Comunicação Restritiva:</strong> Inform aos voluntários qualquer alergia ou restrição alimentar no ato da entrega.</li>
                 <li><strong>Retirada Controlada:</strong> A liberação da criança é feita estritamente mediante a identificação correspondente dos pais.</li>
             </ul>
         </div>
