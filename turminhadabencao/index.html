@@ -4,169 +4,357 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turminha da Bênção — COMAAN</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --sky-blue: #00B4D8;
-            --apple-green: #70E000;
-            --sunny-yellow: #FFD000;
-            --bubblegum-pink: #FF85A2;
-            --dark-blue: #03045E;
+            --sky-blue: #1E90FF;
+            --forest-green: #2E7D32;
+            --grass-light: #4CAF50;
+            --sun-yellow: #FFD700;
+            --sun-dark: #FFB300;
+            --navy: #0A192F;
+            --gray-bg: #172A45;
+            --card-bg: #112240;
+            --text-light: #F8FAFC;
+            --text-muted: #94A3B8;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Quicksand', sans-serif;
-            background: #F0F8FF;
-            color: var(--dark-blue);
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text-light);
             line-height: 1.6;
         }
 
         /* HEADER */
         header {
             position: fixed;
-            top: 0; width: 100%; z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            border-bottom: 1px solid rgba(30, 144, 255, 0.15);
         }
 
         .logo {
-            font-family: 'Fredoka One', cursive;
-            font-size: 20px;
-            color: var(--sky-blue);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--sun-yellow);
             text-decoration: none;
+            letter-spacing: 0.5px;
         }
 
         .btn-back {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: var(--dark-blue);
-            text-decoration: none; font-size: 13px; font-weight: 700;
-            padding: 8px 16px; border: 2px solid var(--sky-blue); border-radius: 20px;
-            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            transition: all 0.3s;
         }
 
         .btn-back:hover {
-            background: var(--sky-blue);
-            color: white;
+            border-color: var(--sky-blue);
+            color: var(--sky-blue);
+            background: rgba(30, 144, 255, 0.05);
         }
 
         /* HERO SECTION */
         .hero {
-            padding: 140px 5% 60px;
+            padding: 160px 5% 60px;
             text-align: center;
-            background: linear-gradient(180deg, #E0F2FE 0%, #F0F8FF 100%);
+            background: radial-gradient(circle at center, #17375E 0%, var(--navy) 100%);
+        }
+
+        .badge-edition {
+            display: inline-block;
+            background: var(--sun-yellow);
+            color: var(--navy);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 900;
+            padding: 4px 14px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
         }
 
         .hero h1 {
-            font-family: 'Fredoka One', cursive;
-            font-size: clamp(32px, 5vw, 52px);
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(34px, 6vw, 56px);
+            font-weight: 900;
+            color: var(--text-light);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .hero h1 span {
+            color: var(--sun-yellow);
+            display: block;
+            font-size: clamp(40px, 7vw, 68px);
+        }
+
+        /* BALÃO DE CHAMADA (DO POSTER) */
+        .speech-bubble {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(30, 144, 255, 0.2);
+            padding: 25px 20px;
+            border-radius: 16px;
+            max-width: 600px;
+            margin: 20px auto 0;
+            backdrop-filter: blur(5px);
+        }
+
+        .speech-bubble h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--sun-yellow);
+            margin-bottom: 8px;
+        }
+
+        .speech-bubble p {
+            font-size: 15px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* HIGHLIGHT CARDS */
+        .highlights-section {
+            padding: 30px 5%;
+            background: var(--gray-bg);
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .highlight-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--sky-blue);
+        }
+
+        .highlight-card h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             color: var(--sky-blue);
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 0px #FFF;
+            margin-bottom: 8px;
         }
 
-        .hero p {
-            font-size: 18px; color: #48CAE4; font-weight: 600; max-width: 600px; margin: 0 auto;
+        .highlight-card p {
+            font-size: 14px;
+            color: var(--text-muted);
         }
 
-        /* CONTAINER PRINCIPAL */
-        .container { padding: 40px 5%; max-width: 800px; margin: 0 auto; }
-
-        .card-baby {
-            background: white; border-radius: 20px; padding: 25px;
-            box-shadow: 0 8px 24px rgba(0,180,216,0.08); margin-bottom: 25px;
-            border-bottom: 5px solid var(--sky-blue);
+        /* EXPANDABLE ESTRUTURA (DETAILS) */
+        .content-section {
+            padding: 60px 5%;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .card-baby h3 {
-            font-family: 'Fredoka One', cursive; color: var(--sky-blue); margin-bottom: 15px;
-            display: flex; align-items: center; gap: 10px;
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        /* ESTRUTURA EXPANDÍVEL (ABRE E FECHA / SANFONA) */
+        .section-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .section-header::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--sun-yellow);
+            margin: 15px auto 0;
+        }
+
         details {
-            background: white; border-radius: 16px; margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden;
-            border: 2px solid transparent;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 14px;
+            overflow: hidden;
             transition: all 0.3s ease;
         }
 
-        details[open] { border-color: var(--apple-green); }
+        details[open] {
+            border-color: rgba(30, 144, 255, 0.4);
+        }
 
         summary {
-            padding: 18px 20px; font-weight: 700; font-size: 16px;
-            color: var(--dark-blue); cursor: pointer; list-style: none;
-            display: flex; justify-content: space-between; align-items: center;
-            outline: none;
+            padding: 18px 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-light);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             user-select: none;
+            outline: none;
         }
 
         summary::-webkit-details-marker { display: none; }
 
         summary::after {
-            content: '\f107'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
-            color: var(--apple-green); transition: transform 0.3s;
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
         }
 
-        details[open] summary::after { transform: rotate(180deg); }
+        details[open] summary::after {
+            transform: rotate(180deg);
+            color: var(--sun-yellow);
+        }
 
-        .details-content { padding: 0 20px 20px; background: #FAFAFA; padding-top: 15px; }
+        .details-wrapper {
+            padding: 0 20px 20px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            padding-top: 15px;
+        }
 
         .volunteer-list { list-style: none; }
+        
         .volunteer-list li {
-            padding: 8px 0; border-bottom: 1px dashed #DDD;
-            display: flex; justify-content: space-between; font-size: 15px;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
         }
 
         .volunteer-list li:last-child { border-bottom: none; }
-        .volunteer-list li strong { color: var(--sky-blue); }
+        .volunteer-list li span { color: var(--text-muted); }
+        .volunteer-list li strong { color: var(--sky-blue); font-weight: 600; }
+
+        /* PARENT BOX (REGRAS) */
+        .parent-info-box {
+            background: rgba(46, 125, 50, 0.15);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .parent-info-box h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            color: var(--grass-light);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .parent-info-box ul { list-style: none; }
+        .parent-info-box li {
+            font-size: 14px;
+            color: #E2E8F0;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .parent-info-box li::before {
+            content: '➔';
+            position: absolute;
+            left: 0;
+            color: var(--grass-light);
+        }
 
         /* FOOTER */
-        footer { text-align: center; padding: 40px 5%; font-size: 14px; color: #90E0EF; font-weight: 600; }
+        footer {
+            background: #060D1A;
+            padding: 30px 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.02);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
     </style>
 </head>
 <body>
 
     <!-- HEADER -->
     <header>
-        <a href="/missaocomaan/index.html" class="logo">🧒 Turminha da Bênção</a>
+        <a href="/missaocomaan/index.html" class="logo">COMAAN</a>
         <a href="/missaocomaan/index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar à Home</a>
     </header>
 
     <!-- HERO -->
     <section class="hero">
-        <h1>Herança do Senhor</h1>
-        <p>Evangelização, cuidado infantil e diversão no propósito!</p>
+        <div class="badge-edition">Edição 1</div>
+        <h1>Turminha da <span>Bênção</span></h1>
+        
+        <!-- ELEMENTO INSPIRADO NO POSTER -->
+        <div class="speech-bubble">
+            <h2>Um novo amigo está chegando!</h2>
+            <p>Venha aprender sobre fé, amizade e o amor de Deus!</p>
+        </div>
     </section>
 
-    <div class="container">
-        <!-- ORIENTAÇÕES AOS PAIS -->
-        <div class="card-baby">
-            <h3><i class="fas fa-info-circle"></i> Orientações aos Pais</h3>
-            <p style="font-size:15px; color:#555; margin-bottom:12px;">Para garantir a segurança de todos os pequenos, atente-se às regrinhas:</p>
-            <ul style="padding-left:20px; font-size:14px; color:#555; list-style-type: none;">
-                <li style="margin-bottom:8px;"><i class="fas fa-check" style="color: var(--apple-green); margin-right: 8px;"></i><strong>Check-in:</strong> Traga a criança 15 minutos antes do início do culto.</li>
-                <li style="margin-bottom:8px;"><i class="fas fa-check" style="color: var(--apple-green); margin-right: 8px;"></i><strong>Identificação:</strong> Comunique à tia responsável qualquer restrição alimentar ou alergia.</li>
-                <li style="margin-bottom:8px;"><i class="fas fa-check" style="color: var(--apple-green); margin-right: 8px;"></i><strong>Retirada:</strong> A criança só será liberada mediante a presença dos pais portando a senha correspondente.</li>
-            </ul>
+    <!-- HIGHLIGHTS -->
+    <section class="highlights-section">
+        <div class="highlights-grid">
+            <div class="highlight-card">
+                <h4>Evangelização Infantil</h4>
+                <p>Princípios bíblicos ensinados de forma dinâmica, relevante e focada no desenvolvimento espiritual dos pequenos.</p>
+            </div>
+            <div class="highlight-card">
+                <h4>Ambiente Seguro</h4>
+                <p>Estrutura totalmente monitorada e cuidada por voluntários capacitados para que os pais cultuem com total tranquilidade.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPANDABLE CONTENT -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Gestão do Ministério</h2>
         </div>
 
-        <!-- ESCALAS EM FORMATO SANFONA -->
-        <h2 style="font-family:'Fredoka One', cursive; margin: 30px 0 15px; font-size:22px; text-align:center; color:var(--apple-green);">
-            <i class="fas fa-calendar-alt"></i> Escala de Voluntários
-        </h2>
-
+        <!-- ESCALAS -->
         <details>
-            <summary>Domingo — Próximo Culto</summary>
-            <div class="details-content">
+            <summary>Escala de Voluntários — Próximo Culto</summary>
+            <div class="details-wrapper">
                 <ul class="volunteer-list">
                     <li><span>Líder da Sala:</span> <strong>Tia Sarah</strong></li>
                     <li><span>Berçário (0 a 3 anos):</span> <strong>Tia Amanda e Tia Clara</strong></li>
@@ -177,8 +365,8 @@
         </details>
 
         <details>
-            <summary>Domingo — Sequente</summary>
-            <div class="details-content">
+            <summary>Escala de Voluntários — Domingo Sequente</summary>
+            <div class="details-wrapper">
                 <ul class="volunteer-list">
                     <li><span>Líder da Sala:</span> <strong>Tia Michelle</strong></li>
                     <li><span>Berçário (0 a 3 anos):</span> <strong>Tia Débora e Tia Letícia</strong></li>
@@ -187,11 +375,21 @@
                 </ul>
             </div>
         </details>
-    </div>
+
+        <!-- ORIENTAÇÕES COM ESTILO INTEGRADO -->
+        <div class="parent-info-box">
+            <h3><i class="fas fa-shield-halved"></i> Diretrizes e Protocolo de Segurança</h3>
+            <ul>
+                <li><strong>Check-in Obrigatório:</strong> Entrada permitida a partir de 15 minutos antes do início do culto.</li>
+                <li><strong>Comunicação Restritiva:</strong> Informe aos voluntários qualquer alergia ou restrição alimentar no ato da entrega.</li>
+                <li><strong>Retirada Controlada:</strong> A liberação da criança é feita estritamente mediante a identificação correspondente dos pais.</li>
+            </ul>
+        </div>
+    </section>
 
     <!-- FOOTER -->
     <footer>
-        <p>© 2026 COMAAN Kids — Todos os direitos reservados</p>
+        <p>© 2026 COMAAN — Casa do Oleiro — Missão Apostólica Antioquia</p>
     </footer>
 
 </body>
