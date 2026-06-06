@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Estudante — Sacerdócio Real</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-dark: #AA7C11;
+            --black: #070708;
+            --gray-dark: #121214;
+            --gray-light: #1A1A1E;
+            --text-muted: #A0A0AA;
+            --error: #EF4444;
+            --success: #10B981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: #F4F4F5;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--gray-dark);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+            display: none;
+        }
+
+        .btn-logout:hover {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        /* TELA DE LOGIN */
+        .login-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--gray-dark);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            padding: 40px 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .login-card i.lock-icon {
+            font-size: 40px;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .login-card h2 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 10px;
+        }
+
+        .login-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            background: var(--gray-light);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--gold);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+            border: none;
+            border-radius: 6px;
+            color: black;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            filter: brightness(1.1);
+        }
+
+        #login-error {
+            color: var(--error);
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* CONTEÚDO PRIVADO (PAINEL DO ALUNO) */
+        .portal-container {
+            display: none; /* Escondido por padrão */
+            max-width: 1000px;
+            width: 100%;
+            margin: 40px auto;
+            padding: 0 5%;
+            flex: 1;
+        }
+
+        .welcome-box {
+            background: linear-gradient(135deg, #121214 0%, #1A1A1E 100%);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 4px solid var(--gold);
+            margin-bottom: 30px;
+        }
+
+        .welcome-box h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        /* NAVEGAÇÃO POR ABAS (TABS) */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* GRID DE MATERIAIS / AULAS */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .content-card {
+            background: var(--gray-dark);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .content-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .content-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .content-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-download:hover {
+            background: var(--gold);
+            color: black;
+        }
+
+        .notice-box {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .notice-box h4 {
+            color: var(--success);
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--gray-dark);
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.02);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <a href="/missaocomaan/index.html" class="logo">COMAAN Intel</a>
+        <button id="logout-btn" class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+    </header>
+
+    <!-- TELA DE LOGIN -->
+    <div id="login-screen" class="login-container">
+        <div class="login-card">
+            <i class="fas fa-user-shield lock-icon"></i>
+            <h2>Área do Aluno</h2>
+            <p>Insira a chave de acesso da sua turma para entrar.</p>
+            
+            <div class="input-group">
+                <label for="class-password">Chave de Acesso</label>
+                <input type="password" id="class-password" placeholder="Digite a senha aqui..." onkeypress="handleKeyPress(event)">
+            </div>
+            
+            <button class="btn-login" onclick="validateLogin()">Acessar Painel</button>
+            <div id="login-error">Chave de acesso incorreta. Tente novamente!</div>
+        </div>
+    </div>
+
+    <!-- PORTAL PRIVADO (CONTEÚDO APÓS LOGIN) -->
+    <div id="portal-screen" class="portal-container">
+        <div class="welcome-box">
+            <h1>Bem-vindo, Sacerdote!</h1>
+            <p style="color: var(--text-muted); font-size: 14px;">Aqui você encontra os materiais complementares e gravações da Escola Sacerdócio Real.</p>
+        </div>
+
+        <!-- ABAS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'materiais')"><i class="fas fa-file-pdf"></i> Materiais de Apoio</button>
+            <button class="tab-btn" onclick="switchTab(event, 'gravacoes')"><i class="fas fa-video"></i> Aulas Gravadas</button>
+            <button class="tab-btn" onclick="switchTab(event, 'avisos')"><i class="fas fa-bullhorn"></i> Quadro de Avisos</button>
+        </div>
+
+        <!-- CONTEÚDO DA ABA: MATERIAIS -->
+        <div id="materiais" class="tab-content active">
+            <div class="content-grid">
+                <!-- Card de Exemplo 1 -->
+                <div class="content-card">
+                    <div>
+                        <h3>Apostila — Capítulo I</h3>
+                        <p>O Fundamento Bíblico do Chamado e a Identidade de Propriedade Exclusiva.</p>
+                    </div>
+                    <a href="#" class="btn-download"><i class="fas fa-cloud-download-alt"></i> Baixar PDF</a>
+                </div>
+                <!-- Card de Exemplo 2 -->
+                <div class="content-card">
+                    <div>
+                        <h3>Formulário de Autoavaliação</h3>
+                        <p>Exercício prático de alinhamento e mapeamento da sua geografia atual.</p>
+                    </div>
+                    <a href="#" class="btn-download"><i class="fas fa-external-link-alt"></i> Abrir Exercício</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO DA ABA: GRAVAÇÕES -->
+        <div id="gravacoes" class="tab-content">
+            <div class="content-grid">
+                <div class="content-card">
+                    <div>
+                        <h3>Gravação — Aula Inaugural</h3>
+                        <p>Alinhamento de expectativas, introdução ao ecossistema e ativação do altar.</p>
+                    </div>
+                    <a href="#" class="btn-download"><i class="fas fa-play"></i> Assistir Aula</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO DA ABA: AVISOS -->
+        <div id="avisos" class="tab-content">
+            <div class="notice-box">
+                <h4>⚠️ Atenção ao Prazo do Módulo 1</h4>
+                <p style="font-size: 14px; color: #D4D4D8; margin-top: 5px;">
+                    Lembrem-se de realizar a leitura do Capítulo I e o preenchimento do formulário de autoavaliação até o próximo encontro semanal.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 EU Missão — Powered by COMAAN Inteligência</p>
+    </footer>
+
+    <!-- LÓGICA EM JAVASCRIPT -->
+    <script>
+        // Definição da senha de acesso da turma
+        const MASTER_PASSWORD = "SACERDOCIO2026";
+
+        // Verifica se o aluno já estava logado antes (mantém sessão ativa ao atualizar)
+        window.onload = function() {
+            if (localStorage.getItem("sacerdocio_logged") === "true") {
+                showPortal();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                validateLogin();
+            }
+        }
+
+        function validateLogin() {
+            const inputPass = document.getElementById("class-password").value;
+            const errorDiv = document.getElementById("login-error");
+
+            if (inputPass === MASTER_PASSWORD) {
+                localStorage.setItem("sacerdocio_logged", "true");
+                errorDiv.style.display = "none";
+                showPortal();
+            } else {
+                errorDiv.style.display = "block";
+                document.getElementById("class-password").value = "";
+            }
+        }
+
+        function showPortal() {
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("portal-screen").style.display = "block";
+            document.getElementById("logout-btn").style.display = "block";
+        }
+
+        function logout() {
+            localStorage.removeItem("sacerdocio_logged");
+            document.getElementById("class-password").value = "";
+            document.getElementById("login-screen").style.display = "flex";
+            document.getElementById("portal-screen").style.display = "none";
+            document.getElementById("logout-btn").style.display = "none";
+        }
+
+        // Alternador de Abas
+        function switchTab(event, tabId) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let content of tabContents) {
+                content.classList.remove("active");
+            }
+
+            const tabButtons = document.getElementsByClassName("tab-btn");
+            for (let btn of tabButtons) {
+                btn.classList.remove("active");
+            }
+
+            document.getElementById(tabId).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
