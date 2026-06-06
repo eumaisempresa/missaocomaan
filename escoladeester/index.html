@@ -1,1 +1,443 @@
-Aguarde
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escola de Ester — COMAAN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --rose-gold: #B76E79;
+            --wine: #58111A;
+            --wine-light: #7D1E2A;
+            --gold: #D4AF37;
+            --black: #0B0708;
+            --gray-dark: #161011;
+            --gray-light: #23191B;
+            --text-muted: #D1C4C6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: #F5F2F3;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(11, 7, 8, 0.95);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            border-bottom: 1px solid rgba(183, 110, 121, 0.15);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--rose-gold);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            border-color: var(--rose-gold);
+            color: var(--rose-gold);
+            background: rgba(183, 110, 121, 0.05);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            padding: 160px 5% 80px;
+            text-align: center;
+            background: radial-gradient(circle at center, #231215 0%, var(--black) 100%);
+        }
+
+        .hero-logo {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            border: 2px solid var(--rose-gold);
+            box-shadow: 0 0 30px rgba(183, 110, 121, 0.2);
+            object-fit: cover;
+        }
+
+        .hero subtitle {
+            display: block;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--rose-gold);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 700;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .hero p {
+            font-size: clamp(16px, 2.2vw, 20px);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* CTA BUTTONS */
+        .cta-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--wine-light) 0%, var(--rose-gold) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(183, 110, 121, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(183, 110, 121, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-student {
+            background: rgba(255, 255, 255, 0.06);
+            color: white;
+            border: 1px solid rgba(183, 110, 121, 0.4);
+        }
+
+        .btn-student:hover {
+            background: rgba(183, 110, 121, 0.1);
+            border-color: var(--rose-gold);
+            transform: translateY(-2px);
+        }
+
+        /* HIGHLIGHT CARDS */
+        .highlights-section {
+            padding: 40px 5%;
+            background: var(--gray-dark);
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .highlight-card {
+            background: var(--gray-light);
+            padding: 30px;
+            border-radius: 8px;
+            border-left: 4px solid var(--rose-gold);
+        }
+
+        .highlight-card h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--rose-gold);
+            margin-bottom: 10px;
+        }
+
+        .highlight-card p {
+            font-size: 15px;
+            color: #E4E4E7;
+        }
+
+        /* EXPANDABLE CONTENT (DETAILS) */
+        .content-section {
+            padding: 80px 5%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .section-header::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: var(--rose-gold);
+            margin: 20px auto 0;
+        }
+
+        details {
+            background: var(--gray-dark);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        details[open] {
+            border-color: rgba(183, 110, 121, 0.4);
+            background: rgba(35, 25, 27, 0.6);
+        }
+
+        summary {
+            padding: 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--rose-gold);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            outline: none;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+
+        summary::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 14px;
+            color: #888;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+            color: var(--rose-gold);
+        }
+
+        .details-wrapper {
+            padding: 0 20px 24px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            padding-top: 20px;
+        }
+
+        .details-wrapper p {
+            color: #E4E4E7;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .points-list { list-style: none; }
+        .points-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+            color: #D4D4D8;
+            font-size: 15px;
+        }
+
+        .points-list li::before {
+            content: '♥';
+            position: absolute;
+            left: 5px;
+            color: var(--rose-gold);
+            font-size: 16px;
+            top: 0;
+        }
+
+        /* FINAL CTA */
+        .final-cta {
+            padding: 80px 5%;
+            text-align: center;
+            background: var(--gray-dark);
+            border-top: 1px solid rgba(183, 110, 121, 0.15);
+        }
+
+        footer {
+            background: #060404;
+            padding: 40px 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.02);
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <a href="/missaocomaan/index.html" class="logo">COMAAN</a>
+        <a href="/missaocomaan/index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar à Home</a>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <img src="logo-ester.jpg" alt="Logo Escola de Ester" class="hero-logo">
+        <subtitle>Ministração e Identidade Feminina</subtitle>
+        <h1>Escola de Ester</h1>
+        <p>“Formando e consolidando a real identidade das Rainhas e filhas de Deus”</p>
+        
+        <div class="cta-container">
+            <!-- LINK DO FORMULÁRIO CONFIGURADO -->
+            <a href="https://docs.google.com/forms/d/1DptjlfCEGnJH-772lV6DFk_tS8NdURNIpRy-fUqfZDk/viewform?edit_requested=true" target="_blank" class="btn btn-primary">
+                <i class="fas fa-crown"></i> Quero me tornar aluna
+            </a>
+            <a href="/missaocomaan/escoladeester/estudante.html" class="btn btn-student">
+                <i class="fas fa-user-graduate"></i> Área da Aluna
+            </a>
+        </div>
+    </section>
+
+    <!-- HIGHLIGHTS -->
+    <section class="highlights-section">
+        <div class="highlights-grid">
+            <div class="highlight-card">
+                <h4>Ativação de Identidade</h4>
+                <p>Uma jornada profunda voltada para restaurar, curar e consolidar o posicionamento da mulher segundo o coração de Deus.</p>
+            </div>
+            <div class="highlight-card">
+                <h4>Beleza e Propósito</h4>
+                <p>Muito além da estética: o desenvolvimento do caráter e da sabedoria para governar e influenciar sua geração.</p>
+            </div>
+            <div class="highlight-card">
+                <h4>Cultura do Reino</h4>
+                <p>Aulas dinâmicas focadas em princípios práticos de posicionamento familiar, espiritual e social.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPANDABLE ESTRUTURA -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Módulos de Formação</h2>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 5px;">Toque nos módulos abaixo para expandir os detalhes:</p>
+        </div>
+
+        <details>
+            <summary>Módulo 1: A Cura do Coração e das Emoções</summary>
+            <div class="details-wrapper">
+                <p>O primeiro passo para o palácio é a cura do passado. Ninguém governa enquanto for escrava de feridas emocionais.</p>
+                <ul class="points-list">
+                    <li>Rompimento com rejeições e traumas geracionais.</li>
+                    <li>A transição de órfã para filha legítima do Rei.</li>
+                    <li>Restaurando a autoimagem através dos olhos de Cristo.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>Módulo 2: O Preparo na Câmara das Mulheres</summary>
+            <div class="details-wrapper">
+                <p>O tempo do óleo de mirra e dos bálsamos doces. O processo de desenvolvimento da paciência, constância e caráter aprovado.</p>
+                <ul class="points-list">
+                    <li>A importância do tempo de preparo e submissão ao processo.</li>
+                    <li>Desenvolvendo uma vida secreta de oração e intimidade.</li>
+                    <li>Sabedoria prática e inteligência emocional no cotidiano.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>Módulo 3: Posicionamento e Graça Diante do Rei</summary>
+            <div class="details-wrapper">
+                <p>A entrada no palácio exige vestes adequadas, honra e protocolo espiritual. Aprendendo a governar através da intercessão.</p>
+                <ul class="points-list">
+                    <li>A força da mansidão e o poder do silêncio sábio.</li>
+                    <li>Como se posicionar e conquistar favor em ambientes de crise.</li>
+                    <li>O papel da mulher como coluna espiritual do lar.</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>Módulo 4: O Decreto de Vitória e o Legado</summary>
+            <div class="details-wrapper">
+                <p>"E quem sabe se para conjuntura como esta não vieste ao reino?". Ativando o jejum, a coragem e salvando sua geografia.</p>
+                <ul class="points-list">
+                    <li>Intercessão de alto nível e guerra espiritual estratégica.</li>
+                    <li>Quebrando decretos de morte contra a família e os filhos.</li>
+                    <li>A manifestação pública do propósito e o legado para as próximas gerações.</li>
+                </ul>
+            </div>
+        </details>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta">
+        <h2>Para uma Conjuntura como Esta</h2>
+        <p>Chegou a hora de sair dos bastidores e assumir o posicionamento real que Deus desenhou para você.</p>
+        <div class="cta-container" style="margin-top: 30px;">
+            <a href="https://docs.google.com/forms/d/1DptjlfCEGnJH-772lV6DFk_tS8NdURNIpRy-fUqfZDk/viewform?edit_requested=true" target="_blank" class="btn btn-primary">
+                <i class="fas fa-crown"></i> Quero me tornar aluna
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 COMAAN — Casa de Oração Missão Apostólica Antioquia</p>
+    </footer>
+
+</body>
+</html>
+
