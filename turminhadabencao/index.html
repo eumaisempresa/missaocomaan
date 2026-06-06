@@ -4,419 +4,195 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turminha da Bênção — COMAAN</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --yellow: #FFED00;
-            --blue: #2A7BFF;
-            --pink: #E1306C;
-            --green: #25D366;
-            --black: #0F0F0F;
-            --gray: #1A1A1A;
-            --light-gray: #222222;
+            --sky-blue: #00B4D8;
+            --apple-green: #70E000;
+            --sunny-yellow: #FFD000;
+            --bubblegum-pink: #FF85A2;
+            --dark-blue: #03045E;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--black);
-            color: white;
+            font-family: 'Quicksand', sans-serif;
+            background: #F0F8FF;
+            color: var(--dark-blue);
             line-height: 1.6;
-        }
-
-        h1, h2, h3, .comic-title {
-            font-family: 'Fredoka', sans-serif;
         }
 
         /* HEADER */
         header {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(15, 15, 15, 0.95);
-            backdrop-filter: blur(12px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            top: 0; width: 100%; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            display: flex; justify-content: space-between; align-items: center;
             padding: 15px 5%;
-            border-bottom: 1px solid rgba(255, 237, 0, 0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 24px;
-            color: var(--yellow);
+            font-family: 'Fredoka One', cursive;
+            font-size: 20px;
+            color: var(--sky-blue);
             text-decoration: none;
-        }
-
-        .logo img {
-            height: 45px;
-            width: auto;
         }
 
         .btn-back {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 8px 16px;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-
-        .btn-back:hover {
-            border-color: var(--yellow);
-            color: var(--yellow);
-            background: rgba(255, 237, 0, 0.05);
-        }
-
-        /* HERO JUNIOR */
-        .hero-kids {
-            padding: 140px 5% 60px;
-            text-align: center;
-            background: radial-gradient(circle at top, #1c1c1c 0%, var(--black) 70%);
-        }
-
-        .hero-kids h1 {
-            font-size: clamp(32px, 5vw, 56px);
-            color: var(--yellow);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
-        }
-
-        .hero-kids p {
-            font-size: clamp(16px, 2vw, 20px);
-            max-width: 700px;
-            margin: 0 auto 30px;
-            color: #E0E0E0;
-            opacity: 0.9;
-        }
-
-        .kids-badge-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-family: 'Fredoka', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            color: black;
-            text-transform: uppercase;
-        }
-
-        /* SEÇÃO AVENTURAS (GIBIS) */
-        .adventures-section {
-            padding: 60px 5% 100px;
-        }
-
-        .section-title {
-            font-size: 36px;
-            text-align: center;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 50px;
-            color: #AAA;
-            font-size: 16px;
-        }
-
-        .comic-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-        }
-
-        .comic-card {
-            background: var(--gray);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.05);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .comic-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .comic-card.m-blue:hover { border-color: var(--blue); }
-        .comic-card.m-pink:hover { border-color: var(--pink); }
-        .comic-card.m-yellow:hover { border-color: var(--yellow); }
-
-        .comic-cover-placeholder {
-            height: 220px;
-            background: #222;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .comic-cover-placeholder i {
-            font-size: 50px;
-            margin-bottom: 10px;
-            opacity: 0.7;
-        }
-
-        .comic-tag {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: black;
-            color: var(--yellow);
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .comic-body {
-            padding: 25px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .comic-body h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .comic-body p {
-            font-size: 14px;
-            color: #BBB;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .lessons-list {
-            margin-bottom: 25px;
-            padding-left: 0;
-            list-style: none;
-        }
-
-        .lessons-list li {
-            font-size: 13px;
-            color: #DDD;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .lessons-list li i {
-            font-size: 11px;
-        }
-
-        .btn-comic {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            cursor: pointer;
-            width: 100%;
-            border: none;
-        }
-
-        .btn-blue { background: var(--blue); color: white; }
-        .btn-blue:hover { filter: brightness(1.1); transform: translateY(-2px); }
-
-        .btn-pink { background: var(--pink); color: white; }
-        .btn-pink:hover { filter: brightness(1.1); transform: translateY(-2px); }
-
-        .btn-yellow { background: var(--yellow); color: black; }
-        .btn-yellow:hover { filter: brightness(1.1); transform: translateY(-2px); }
-
-        /* FOOTER */
-        footer {
-            background: #0A0A0A;
-            padding: 60px 5% 40px;
-            text-align: center;
-            border-top: 1px solid rgba(255,237,0,0.1);
-        }
-
-        .brand-governance {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .brand-governance a {
-            color: var(--yellow);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 24px;
-            border: 1px solid rgba(255, 237, 0, 0.3);
-            border-radius: 4px;
-            background: rgba(255, 237, 0, 0.02);
+            color: var(--dark-blue);
+            text-decoration: none; font-size: 13px; font-weight: 700;
+            padding: 8px 16px; border: 2px solid var(--sky-blue); border-radius: 20px;
             transition: all 0.3s ease;
         }
 
-        .brand-governance a:hover {
-            background: var(--yellow);
-            color: black;
-            box-shadow: 0 0 15px rgba(255, 237, 0, 0.4);
+        .btn-back:hover {
+            background: var(--sky-blue);
+            color: white;
         }
 
-        @media (max-width: 768px) {
-            .hero-kids { padding-top: 110px; }
-            .comic-grid { grid-template-columns: 1fr; }
+        /* HERO SECTION */
+        .hero {
+            padding: 140px 5% 60px;
+            text-align: center;
+            background: linear-gradient(180deg, #E0F2FE 0%, #F0F8FF 100%);
         }
+
+        .hero h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(32px, 5vw, 52px);
+            color: var(--sky-blue);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 0px #FFF;
+        }
+
+        .hero p {
+            font-size: 18px; color: #48CAE4; font-weight: 600; max-width: 600px; margin: 0 auto;
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .container { padding: 40px 5%; max-width: 800px; margin: 0 auto; }
+
+        .card-baby {
+            background: white; border-radius: 20px; padding: 25px;
+            box-shadow: 0 8px 24px rgba(0,180,216,0.08); margin-bottom: 25px;
+            border-bottom: 5px solid var(--sky-blue);
+        }
+
+        .card-baby h3 {
+            font-family: 'Fredoka One', cursive; color: var(--sky-blue); margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        /* ESTRUTURA EXPANDÍVEL (ABRE E FECHA / SANFONA) */
+        details {
+            background: white; border-radius: 16px; margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        details[open] { border-color: var(--apple-green); }
+
+        summary {
+            padding: 18px 20px; font-weight: 700; font-size: 16px;
+            color: var(--dark-blue); cursor: pointer; list-style: none;
+            display: flex; justify-content: space-between; align-items: center;
+            outline: none;
+            user-select: none;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+
+        summary::after {
+            content: '\f107'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            color: var(--apple-green); transition: transform 0.3s;
+        }
+
+        details[open] summary::after { transform: rotate(180deg); }
+
+        .details-content { padding: 0 20px 20px; background: #FAFAFA; padding-top: 15px; }
+
+        .volunteer-list { list-style: none; }
+        .volunteer-list li {
+            padding: 8px 0; border-bottom: 1px dashed #DDD;
+            display: flex; justify-content: space-between; font-size: 15px;
+        }
+
+        .volunteer-list li:last-child { border-bottom: none; }
+        .volunteer-list li strong { color: var(--sky-blue); }
+
+        /* FOOTER */
+        footer { text-align: center; padding: 40px 5%; font-size: 14px; color: #90E0EF; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <!-- HEADER -->
     <header>
-        <a href="/" class="logo">
-            <img src="../image_7b033a.png" alt="Logo COMAAN">
-            COMAAN
-        </a>
-        <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar à Home</a>
+        <a href="/missaocomaan/index.html" class="logo">🧒 Turminha da Bênção</a>
+        <a href="/missaocomaan/index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar à Home</a>
     </header>
 
-    <!-- HERO KIDS -->
-    <section class="hero-kids">
-        <h1>Turminha da Bênção</h1>
-        <p>Venha aprender sobre fé, amizade e o amor de Deus com histórias divertidas e cheias de aventuras!</p>
-        
-        <div class="kids-badge-container">
-            <span class="badge" style="background: var(--yellow);">✨ Deus nos Ama</span>
-            <span class="badge" style="background: var(--blue); color: white;">🤝 Amizade Verdadeira</span>
-            <span class="badge" style="background: var(--pink); color: white;">🛡️ A Fé Transforma</span>
-        </div>
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Herança do Senhor</h1>
+        <p>Evangelização, cuidado infantil e diversão no propósito!</p>
     </section>
 
-    <!-- SEÇÃO HISTÓRIAS -->
-    <section class="adventures-section">
-        <h2 class="section-title">Nossas Aventuras</h2>
-        <p class="section-subtitle">Acompanhe as lições preciosas que o Pastor Tiagão e toda a turminha têm preparado para você!</p>
-        
-        <div class="comic-grid">
-            
-            <!-- CARD 1: UM NOVO AMIGO -->
-            <div class="comic-card m-yellow">
-                <div class="comic-cover-placeholder" style="background: linear-gradient(135deg, #1f1d03 0%, #3a3602 100%);">
-                    <span class="comic-tag">Edição 1</span>
-                    <i class="fas fa-book-open" style="color: var(--yellow);"></i>
-                    <span style="font-family: 'Fredoka'; font-size: 18px; color: var(--yellow);">Um Novo Amigo Estará Chegando!</span>
-                </div>
-                <div class="comic-body">
-                    <div>
-                        <h3>A História de Otávio</h3>
-                        <p>Otávio era um menino muito tímido e sozinho, até que encontrou amigos corajosos que mostraram o verdadeiro significado do amor e da proteção baseados em Jesus.</p>
-                        <ul class="lessons-list">
-                            <li><i class="fas fa-check-circle" style="color: var(--yellow);"></i> Vencer a timidez e o isolamento</li>
-                            <li><i class="fas fa-check-circle" style="color: var(--yellow);"></i> Honestidade (A devolução do dinheiro do lanche)</li>
-                            <li><i class="fas fa-check-circle" style="color: var(--yellow);"></i> Jesus deu a vida por nós na cruz</li>
-                        </ul>
-                    </div>
-                    <button class="btn-comic btn-yellow"><i class="fas fa-download"></i> Baixar Gibi Completo</button>
-                </div>
-            </div>
-
-            <!-- CARD 2: MIGS & MIGS -->
-            <div class="comic-card m-blue">
-                <div class="comic-cover-placeholder" style="background: linear-gradient(135deg, #05183a 0%, #0d2e66 100%);">
-                    <span class="comic-tag">Migs & Migs</span>
-                    <i class="fas fa-soccer-ball" style="color: var(--blue);"></i>
-                    <span style="font-family: 'Fredoka'; font-size: 18px; color: var(--blue);">A Final de Baixo de Chuva</span>
-                </div>
-                <div class="comic-body">
-                    <div>
-                        <h3>Miguel e a Turma do Futebol</h3>
-                        <p>Mesmo quando o campinho fecha para obras na Páscoa ou quando cai aquele temporal no dia da grande final, a turma aprende que desistir nunca é uma opção quando confiamos em Deus.</p>
-                        <ul class="lessons-list">
-                            <li><i class="fas fa-check-circle" style="color: var(--blue);"></i> Depois da tristeza sempre vem a alegria</li>
-                            <li><i class="fas fa-check-circle" style="color: var(--blue);"></i> Celebração e significado da Páscoa</li>
-                            <li><i class="fas fa-check-circle" style="color: var(--blue);"></i> Perseverança: A vitória vem no último segundo</li>
-                        </ul>
-                    </div>
-                    <button class="btn-comic btn-blue"><i class="fas fa-download"></i> Baixar Histórias de Futebol</button>
-                </div>
-            </div>
-
-            <!-- CARD 3: MANU & ELISINHA -->
-            <div class="comic-card m-pink">
-                <div class="comic-cover-placeholder" style="background: linear-gradient(135deg, #330415 0%, #5c0b2b 100%);">
-                    <span class="comic-tag">Irmãs Criativas</span>
-                    <i class="fas fa-child-dress" style="color: var(--pink);"></i>
-                    <span style="font-family: 'Fredoka'; font-size: 18px; color: var(--pink);">Dedicação, Fé e Dança</span>
-                </div>
-                <div class="comic-body">
-                    <div>
-                        <h3>Manu & Elisinha</h3>
-                        <p>Acompanhe a rotina intensa das meninas no Jazz, Balé e Artes Marciais. Elas mostram como a meditação diária na Palavra renova as forças para vencer qualquer desafio complicado.</p>
-                        <ul class="lessons-list">
-                            <li><i class="fas fa-check-circle" style="color: var(--pink);"></i> Marcos 9:23 - Tudo é possível ao que crê</li>
-                            <li><i class="fas fa-check-circle" style="color: var(--pink);"></i> O sermão vivo: Servir à família dentro de casa</li>
-                            <li><i class="fas fa-check-circle" style="color: var(--pink);"></i> Oração dos pais fortalecendo os filhos</li>
-                        </ul>
-                    </div>
-                    <button class="btn-comic btn-pink"><i class="fas fa-download"></i> Baixar Diário das Meninas</button>
-                </div>
-            </div>
-
+    <div class="container">
+        <!-- ORIENTAÇÕES AOS PAIS -->
+        <div class="card-baby">
+            <h3><i class="fas fa-info-circle"></i> Orientações aos Pais</h3>
+            <p style="font-size:15px; color:#555; margin-bottom:12px;">Para garantir a segurança de todos os pequenos, atente-se às regrinhas:</p>
+            <ul style="padding-left:20px; font-size:14px; color:#555; list-style-type: none;">
+                <li style="margin-bottom:8px;"><i class="fas fa-check" style="color: var(--apple-green); margin-right: 8px;"></i><strong>Check-in:</strong> Traga a criança 15 minutos antes do início do culto.</li>
+                <li style="margin-bottom:8px;"><i class="fas fa-check" style="color: var(--apple-green); margin-right: 8px;"></i><strong>Identificação:</strong> Comunique à tia responsável qualquer restrição alimentar ou alergia.</li>
+                <li style="margin-bottom:8px;"><i class="fas fa-check" style="color: var(--apple-green); margin-right: 8px;"></i><strong>Retirada:</strong> A criança só será liberada mediante a presença dos pais portando a senha correspondente.</li>
+            </ul>
         </div>
-    </section>
+
+        <!-- ESCALAS EM FORMATO SANFONA -->
+        <h2 style="font-family:'Fredoka One', cursive; margin: 30px 0 15px; font-size:22px; text-align:center; color:var(--apple-green);">
+            <i class="fas fa-calendar-alt"></i> Escala de Voluntários
+        </h2>
+
+        <details>
+            <summary>Domingo — Próximo Culto</summary>
+            <div class="details-content">
+                <ul class="volunteer-list">
+                    <li><span>Líder da Sala:</span> <strong>Tia Sarah</strong></li>
+                    <li><span>Berçário (0 a 3 anos):</span> <strong>Tia Amanda e Tia Clara</strong></li>
+                    <li><span>Kids (4 a 8 anos):</span> <strong>Tia Rebeca e Tio Lucas</strong></li>
+                    <li><span>Apoio Geral:</span> <strong>Tio Mateus</strong></li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>Domingo — Sequente</summary>
+            <div class="details-content">
+                <ul class="volunteer-list">
+                    <li><span>Líder da Sala:</span> <strong>Tia Michelle</strong></li>
+                    <li><span>Berçário (0 a 3 anos):</span> <strong>Tia Débora e Tia Letícia</strong></li>
+                    <li><span>Kids (4 a 8 anos):</span> <strong>Tia Julia e Tio Samuel</strong></li>
+                    <li><span>Apoio Geral:</span> <strong>Tio Pedro</strong></li>
+                </ul>
+            </div>
+        </details>
+    </div>
 
     <!-- FOOTER -->
     <footer>
-        <p style="font-size:24px; margin-bottom:10px; color: var(--yellow); font-family: 'Playfair Display', serif;">COMAAN</p>
-        <p style="font-size: 13px; opacity: 0.6; margin-bottom: 20px;">"Instrui a criança no caminho em que deve andar, e até quando envelhecer não se desviará dele." — Provérbios 22:6</p>
-        
-        <div class="brand-governance">
-            <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank">
-                <i class="fas fa-shield-alt"></i> Desenvolvido por Grupo EU⁺ Missão
-            </a>
-        </div>
+        <p>© 2026 COMAAN Kids — Todos os direitos reservados</p>
     </footer>
 
 </body>
 </html>
-
