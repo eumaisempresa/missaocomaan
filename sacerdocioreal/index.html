@@ -40,10 +40,35 @@
             overflow-x: hidden;
         }
 
+        /* --- BARRA DE NAVEGAÇÃO / VOLTAR --- */
+        .top-nav {
+            background-color: #090a0c;
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-medium);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            color: var(--white);
+        }
+
         /* --- LAYOUT HEADER & LOGO --- */
         header {
             background: linear-gradient(180deg, #090a0c 0%, var(--dark-bg) 100%);
-            padding: 50px 20px;
+            padding: 40px 20px 50px 20px;
             text-align: center;
             border-bottom: 2px solid rgba(212, 175, 55, 0.15);
         }
@@ -136,9 +161,8 @@
             border-radius: 0 var(--radius) var(--radius) 0;
             margin: 35px 0;
             box-shadow: var(--shadow);
-            border-top: 1px solid rgba(212, 175, 55, 0.05);
-            border-right: 1px solid rgba(212, 175, 55, 0.05);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.05);
+            border-left-width: 0;
         }
 
         .highlight-box h3 {
@@ -204,7 +228,7 @@
             border: none;
             padding: 22px;
             font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
@@ -224,7 +248,6 @@
             transition: transform 0.3s ease;
         }
 
-        /* Estado ativo do botão quando aberto */
         .accordion-wrapper.active .accordion-icon {
             transform: rotate(180deg);
         }
@@ -235,7 +258,6 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        /* Janela de conteúdo colapsável */
         .accordion-content {
             max-height: 0;
             overflow: hidden;
@@ -424,6 +446,12 @@
 </head>
 <body>
 
+    <div class="top-nav">
+        <a href="https://eumaisempresa.github.io/missaocomaan/index.html" class="btn-back">
+            ← Voltar para a Página Principal
+        </a>
+    </div>
+
     <header>
         <div class="logo-container">
             <img src="imagens/logo-sacerdocio.jpg" class="logo-img" alt="Escola Sacerdócio Real">
@@ -441,8 +469,8 @@
             <p>Através de uma abordagem de alto impacto e espiritualmente fundamentada, o curso atua diretamente na reconstrução da identidade masculina, no fortalecimento emocional e na ativação do propósito ministerial e familiar de cada aluno que passa pelas nossas salas.</p>
 
             <div class="highlight-box">
-                <h3>Estrutura do Curso</h3>
-                <p style="margin:0; font-size:1rem;">O curso tem a duração exata de <strong>4 meses</strong>. As aulas são totalmente estruturadas de forma modular, com encontros dinâmicos que acontecem apenas <strong>uma vez por semana</strong>, facilitando a absorção do conteúdo e a aplicação prática.</p>
+                <h3>Formato das Aulas</h3>
+                <p style="margin:0; font-size:1rem;">As aulas são totalmente estruturadas de forma modular, com encontros dinâmicos semanais planejados estrategicamente para facilitar a absorção do conteúdo e a aplicação prática imediata.</p>
             </div>
 
             <h2>Pilares do Aprendizado</h2>
@@ -472,14 +500,14 @@
 
         <div class="accordion-wrapper" id="formAccordion">
             <button class="accordion-trigger" onclick="toggleAccordion()">
-                Quero me Inscrever / Abrir Ficha
+                Iniciar Triagem Obrigatória Pré-Inscrição
                 <span class="accordion-icon">▼</span>
             </button>
             
             <div class="accordion-content">
                 <div class="form-interior">
                     <h3>Ficha de Triagem Masculina</h3>
-                    <p class="subtitle">Preencha com atenção todos os campos abaixo para processar sua vaga no sistema de ensino.</p>
+                    <p class="subtitle">Atenção: A triagem é obrigatória para habilitar a realização da sua inscrição presencial.</p>
                     
                     <form id="sacerdocioForm">
                         <div class="form-group">
@@ -588,11 +616,11 @@
 
                         <div class="form-group">
                             <label for="motivo">Qual o motivo que está fazendo a escola?</label>
-                            <textarea id="motivo" rows="4" required placeholder="Compartilhe brevemente o seu objetivo profissional, familiar ou espiritual..."></textarea>
+                            <textarea id="motivo" rows="4" required placeholder="Compartilhe brevemente o seu objetivo pessoal, familiar ou espiritual..."></textarea>
                         </div>
 
                         <button type="submit" class="btn-submit">
-                            Concluir e Enviar via WhatsApp
+                            Enviar Triagem para o WhatsApp
                         </button>
                     </form>
                 </div>
@@ -610,7 +638,6 @@
     </footer>
 
     <script>
-        // Função do Accordion (Abrir e Fechar o formulário)
         function toggleAccordion() {
             const wrapper = document.getElementById('formAccordion');
             wrapper.classList.toggle('active');
@@ -642,7 +669,6 @@
             }
         }
 
-        // Interceptador e transmissor do formulário para o WhatsApp Masculino
         document.getElementById('sacerdocioForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -677,7 +703,7 @@
                 if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
             }
 
-            let msg = `*NOVA INSCRIÇÃO: SACERDÓCIO REAL*\n`;
+            let msg = `*SOLICITAÇÃO DE TRIAGEM: SACERDÓCIO REAL*\n`;
             msg += `-------------------------------------------\n\n`;
             msg += `*NOME COMPLETO:* ${nome}\n`;
             msg += `*NÚMERO DO WHATSAPP:* ${whatsapp}\n`;
