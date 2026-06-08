@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- RESET & VARIÁVEIS RESISTENTES --- */
+        /* --- RESET & VARIÁVEIS --- */
         * {
             margin: 0;
             padding: 0;
@@ -48,21 +48,10 @@
         .logo-container {
             max-width: 280px;
             margin: 0 auto 20px auto;
-            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px dashed rgba(255, 255, 255, 0.4);
-            border-radius: var(--radius);
-            padding: 10px;
-        }
-
-        .logo-placeholder {
-            font-family: 'Cinzel', serif;
-            font-size: 14px;
-            letter-spacing: 2px;
-            color: var(--text-light);
-            text-transform: uppercase;
+            padding: 0;
         }
 
         .logo-img {
@@ -178,30 +167,90 @@
             font-size: 1.1rem;
         }
 
-        /* --- BOX DE INSCRIÇÃO (FORMULÁRIO) --- */
-        .form-box {
+        /* --- SISTEMA SANFONA (ACCORDION) DO FORMULÁRIO --- */
+        .accordion-wrapper {
             background: var(--white);
             border-radius: var(--radius);
-            padding: 40px 30px;
             box-shadow: var(--shadow);
             border: 1px solid rgba(227, 163, 179, 0.3);
+            overflow: hidden;
         }
 
-        .form-box h3 {
+        .accordion-trigger {
+            width: 100%;
+            background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+            color: var(--white);
+            border: none;
+            padding: 20px;
             font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15);
+        }
+
+        .accordion-trigger:hover {
+            filter: brightness(1.08);
+        }
+
+        .accordion-icon {
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Estado ativo do botão quando aberto */
+        .accordion-wrapper.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-wrapper.active .accordion-trigger {
+            background: var(--rose-bg-gradient);
+        }
+
+        /* Janela de conteúdo colapsável */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+        }
+
+        .accordion-wrapper.active .accordion-content {
+            max-height: 3000px; /* Margem de segurança para expansão suave */
+            transition: max-height 0.8s cubic-bezier(1, 0, 1, 0);
+        }
+
+        .form-interior {
+            padding: 40px 30px;
+            border-top: 1px solid rgba(227, 163, 179, 0.2);
+        }
+
+        @media (max-width: 480px) {
+            .form-interior {
+                padding: 25px 20px;
+            }
+        }
+
+        .form-interior h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
             color: var(--rose-deep);
             text-align: center;
             margin-bottom: 10px;
         }
 
-        .form-box .subtitle {
+        .form-interior .subtitle {
             text-align: center;
             font-size: 0.9rem;
             color: #8c6870;
             margin-bottom: 30px;
         }
 
+        /* --- COMPONENTES INTERNOS DO FORMULÁRIO --- */
         .form-group {
             margin-bottom: 22px;
         }
@@ -288,7 +337,7 @@
 
         button.btn-submit {
             width: 100%;
-            background: var(--rose-bg-gradient);
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
             color: var(--white);
             border: none;
             padding: 16px;
@@ -296,7 +345,7 @@
             font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(156, 83, 100, 0.3);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
             transition: all 0.3s ease;
             margin-top: 10px;
             display: flex;
@@ -307,11 +356,11 @@
 
         button.btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(156, 83, 100, 0.4);
+            box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
             filter: brightness(1.05);
         }
 
-        /* --- RODAPÉ ATUALIZADO --- */
+        /* --- RODAPÉ --- */
         footer {
             background: #2b1419;
             color: #a68d93;
@@ -346,7 +395,7 @@
 
     <header>
         <div class="logo-container">
-            <div class="logo-placeholder">[ Espaço para o Logo ]</div>
+            <img src="imagens/logo-escola-de-ester.png" class="logo-img" alt="Escola de Ester">
         </div>
         <h1>Escola de Ester</h1>
         <p>Gerada no Coração de Deus</p>
@@ -386,167 +435,133 @@
             </div>
         </div>
 
-        <div class="form-box">
-            <h3>Ficha de Triagem</h3>
-            <p class="subtitle">Preencha os dados abaixo para iniciar sua inscrição. Suas respostas serão enviadas de forma segura para o nosso atendimento.</p>
+        <div class="accordion-wrapper" id="formAccordion">
+            <button class="accordion-trigger" onclick="toggleAccordion()">
+                Quero me Inscrever / Abrir Ficha
+                <span class="accordion-icon">▼</span>
+            </button>
             
-            <form id="esterForm">
-                
-                <div class="form-group">
-                    <label for="nome">Nome Completo:</label>
-                    <input type="text" id="nome" required placeholder="Digite seu nome completo">
-                </div>
-
-                <div class="form-group">
-                    <label for="whatsapp">Número do WhatsApp:</label>
-                    <input type="text" id="whatsapp" required placeholder="(00) 00000-0000">
-                </div>
-
-                <div class="form-group">
-                    <label for="nascimento">Data de Nascimento:</label>
-                    <input type="date" id="nascimento" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Estado Civil:</label>
-                    <div class="radio-group">
-                        <div class="radio-option">
-                            <input type="radio" id="civil_solteiro" name="estado_civil" value="Solteiro" required>
-                            <label for="civil_solteiro">Solteira</label>
+            <div class="accordion-content">
+                <div class="form-interior">
+                    <h3>Ficha de Triagem</h3>
+                    <p class="subtitle">Preencha com atenção todos os campos abaixo para processar sua vaga no sistema.</p>
+                    
+                    <form id="esterForm">
+                        <div class="form-group">
+                            <label for="nome">Nome Completo:</label>
+                            <input type="text" id="nome" required placeholder="Digite seu nome completo">
                         </div>
-                        <div class="radio-option">
-                            <input type="radio" id="civil_casado" name="estado_civil" value="Casado">
-                            <label for="civil_casado">Casada</label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" id="civil_divorciado" name="estado_civil" value="Divorciado">
-                            <label for="civil_divorciado">Divorciada</label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" id="civil_viuvo" name="estado_civil" value="Viúvo">
-                            <label for="civil_viuvo">Viúva</label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" id="civil_uniao" name="estado_civil" value="União Estável">
-                            <label for="civil_uniao">União Estável</label>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="endereco">Qual o seu endereço?</label>
-                    <input type="text" id="endereco" required placeholder="Rua, número, bairro e cidade">
-                </div>
-
-                <div class="form-group">
-                    <label for="responsavel">Nome da Esposa / Responsável:</label>
-                    <span style="font-size:0.75rem; color:#8c6870; display:block; margin-top:-5px; margin-bottom:5px;">(Caso não tenha, pode ser do Pai, Mãe, Filho ou Amigo/a)</span>
-                    <input type="text" id="responsavel" required placeholder="Nome do contato de referência">
-                </div>
-
-                <div class="form-group">
-                    <label for="whatsapp_responsavel">WhatsApp da Pessoa Mencionada Acima:</label>
-                    <input type="text" id="whatsapp_responsavel" required placeholder="(00) 00000-0000">
-                </div>
-
-                <div class="form-group">
-                    <label>Quantos Filhos Possui?</label>
-                    <div class="radio-group">
-                        <div class="radio-option">
-                            <input type="radio" id="filhos_0" name="filhos" value="Nenhum" required>
-                            <label for="filhos_0">Nenhum</label>
+                        <div class="form-group">
+                            <label for="whatsapp">Número do WhatsApp:</label>
+                            <input type="text" id="whatsapp" required placeholder="(51) 90000-0000">
                         </div>
-                        <div class="radio-option">
-                            <input type="radio" id="filhos_1" name="filhos" value="Um">
-                            <label for="filhos_1">1 Filho</label>
+
+                        <div class="form-group">
+                            <label for="nascimento">Data de Nascimento:</label>
+                            <input type="date" id="nascimento" required>
                         </div>
-                        <div class="radio-option">
-                            <input type="radio" id="filhos_2" name="filhos" value="Dois">
-                            <label for="filhos_2">2 Filhos</label>
+
+                        <div class="form-group">
+                            <label>Estado Civil:</label>
+                            <div class="radio-group">
+                                <div class="radio-option"><input type="radio" id="civil_solteiro" name="estado_civil" value="Solteiro" required><label for="civil_solteiro">Solteira</label></div>
+                                <div class="radio-option"><input type="radio" id="civil_casado" name="estado_civil" value="Casado"><label for="civil_casado">Casada</label></div>
+                                <div class="radio-option"><input type="radio" id="civil_divorciado" name="estado_civil" value="Divorciado"><label for="civil_divorciado">Divorciada</label></div>
+                                <div class="radio-option"><input type="radio" id="civil_viuvo" name="estado_civil" value="Viúvo"><label for="civil_viuvo">Viúva</label></div>
+                                <div class="radio-option"><input type="radio" id="civil_uniao" name="estado_civil" value="União Estável"><label for="civil_uniao">União Estável</label></div>
+                            </div>
                         </div>
-                        <div class="radio-option">
-                            <input type="radio" id="filhos_3" name="filhos" value="Três">
-                            <label for="filhos_3">3 Filhos</label>
+
+                        <div class="form-group">
+                            <label for="endereco">Qual o seu endereço?</label>
+                            <input type="text" id="endereco" required placeholder="Rua, número, bairro e cidade">
                         </div>
-                        <div class="radio-option">
-                            <input type="radio" id="filhos_4" name="filhos" value="Quatro ou mais">
-                            <label for="filhos_4">4 ou mais</label>
+
+                        <div class="form-group">
+                            <label for="responsavel">Nome da Esposa / Responsável:</label>
+                            <span style="font-size:0.75rem; color:#8c6870; display:block; margin-top:-5px; margin-bottom:5px;">(Caso não tenha, pode ser do Pai, Mãe, Filho ou Amigo/a)</span>
+                            <input type="text" id="responsavel" required placeholder="Nome do contato de referência">
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="camiseta">Tamanho da sua Camiseta:</label>
-                    <select id="camiseta" required>
-                        <option value="" disabled selected>Selecione o tamanho</option>
-                        <option value="PP">PP</option>
-                        <option value="P">P</option>
-                        <option value="M">M</option>
-                        <option value="G">G</option>
-                        <option value="GG">GG</option>
-                        <option value="G1">G1</option>
-                        <option value="G2">G2</option>
-                        <option value="G3">G3</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="religiao">Qual a sua Religião?</label>
-                    <input type="text" id="religiao" required placeholder="Ex: Evangélica, Católica, etc.">
-                </div>
-
-                <div class="form-group">
-                    <label>Frequenta Alguma Igreja?</label>
-                    <div class="radio-group" style="grid-template-columns: 1fr 1fr;">
-                        <div class="radio-option">
-                            <input type="radio" id="igreja_sim" name="frequenta_igreja" value="Sim" required onchange="toggleIgrejaField(true)">
-                            <label for="igreja_sim">Sim</label>
+                        <div class="form-group">
+                            <label for="whatsapp_responsavel">WhatsApp da Pessoa Mencionada Acima:</label>
+                            <input type="text" id="whatsapp_responsavel" required placeholder="(00) 00000-0000">
                         </div>
-                        <div class="radio-option">
-                            <input type="radio" id="igreja_nao" name="frequenta_igreja" value="Não" onchange="toggleIgrejaField(false)">
-                            <label for="igreja_nao">Não</label>
+
+                        <div class="form-group">
+                            <label>Quantos Filhos Possui?</label>
+                            <div class="radio-group">
+                                <div class="radio-option"><input type="radio" id="filhos_0" name="filhos" value="Nenhum" required><label for="filhos_0">Nenhum</label></div>
+                                <div class="radio-option"><input type="radio" id="filhos_1" name="filhos" value="Um"><label for="filhos_1">1 Filho</label></div>
+                                <div class="radio-option"><input type="radio" id="filhos_2" name="filhos" value="Dois"><label for="filhos_2">2 Filhos</label></div>
+                                <div class="radio-option"><input type="radio" id="filhos_3" name="filhos" value="Três"><label for="filhos_3">3 Filhos</label></div>
+                                <div class="radio-option"><input type="radio" id="filhos_4" name="filhos" value="Quatro ou mais"><label for="filhos_4">4 ou mais</label></div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group conditional" id="nome_igreja_container">
-                    <label for="nome_igreja">Qual o nome da igreja onde frequenta?</label>
-                    <input type="text" id="nome_igreja" placeholder="Digite o nome da comunidade/igreja">
-                </div>
-
-                <div class="form-group">
-                    <label for="como_conheceu">Como conheceu a escola?</label>
-                    <input type="text" id="como_conheceu" required placeholder="Ex: Instagram, Amiga, Igreja...">
-                </div>
-
-                <div class="form-group">
-                    <label>Já fez a Escola de Ester antes?</label>
-                    <div class="radio-group" style="grid-template-columns: 1fr 1fr;">
-                        <div class="radio-option">
-                            <input type="radio" id="fez_sim" name="ja_fez" value="Sim" required onchange="toggleAnoField(true)">
-                            <label for="fez_sim">Sim</label>
+                        <div class="form-group">
+                            <label for="camiseta">Tamanho da sua Camiseta:</label>
+                            <select id="camiseta" required>
+                                <option value="" disabled selected>Selecione o tamanho</option>
+                                <option value="PP">PP</option>
+                                <option value="P">P</option>
+                                <option value="M">M</option>
+                                <option value="G">G</option>
+                                <option value="GG">GG</option>
+                                <option value="G1">G1</option>
+                                <option value="G2">G2</option>
+                                <option value="G3">G3</option>
+                            </select>
                         </div>
-                        <div class="radio-option">
-                            <input type="radio" id="fez_nao" name="ja_fez" value="Não" onchange="toggleAnoField(false)">
-                            <label for="fez_nao">Não</label>
+
+                        <div class="form-group">
+                            <label for="religiao">Qual a sua Religião?</label>
+                            <input type="text" id="religiao" required placeholder="Ex: Evangélica, Católica...">
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group conditional" id="ano_escola_container">
-                    <label for="ano_escola">Em qual ano você realizou o curso?</label>
-                    <input type="text" id="ano_escola" placeholder="Ex: 2022">
-                </div>
+                        <div class="form-group">
+                            <label>Frequenta Alguma Igreja?</label>
+                            <div class="radio-group" style="grid-template-columns: 1fr 1fr;">
+                                <div class="radio-option"><input type="radio" id="igreja_sim" name="frequenta_igreja" value="Sim" required onchange="toggleIgrejaField(true)"><label for="igreja_sim">Sim</label></div>
+                                <div class="radio-option"><input type="radio" id="igreja_nao" name="frequenta_igreja" value="Não" onchange="toggleIgrejaField(false)"><label for="igreja_nao">Não</label></div>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label for="motivo">Qual o motivo que está fazendo a escola?</label>
-                    <textarea id="motivo" rows="4" required placeholder="Compartilhe brevemente o seu objetivo ou o que busca alcançar..."></textarea>
-                </div>
+                        <div class="form-group conditional" id="nome_igreja_container">
+                            <label for="nome_igreja">Qual o nome da igreja onde frequenta?</label>
+                            <input type="text" id="nome_igreja" placeholder="Digite o nome da igreja">
+                        </div>
 
-                <button type="submit" class="btn-submit">
-                    Concluir e Enviar via WhatsApp
-                </button>
-            </form>
+                        <div class="form-group">
+                            <label for="como_conheceu">Como conheceu a escola?</label>
+                            <input type="text" id="como_conheceu" required placeholder="Ex: Instagram, Amiga, Cartaz...">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Já fez a Escola de Ester antes?</label>
+                            <div class="radio-group" style="grid-template-columns: 1fr 1fr;">
+                                <div class="radio-option"><input type="radio" id="fez_sim" name="ja_fez" value="Sim" required onchange="toggleAnoField(true)"><label for="fez_sim">Sim</label></div>
+                                <div class="radio-option"><input type="radio" id="fez_nao" name="ja_fez" value="Não" onchange="toggleAnoField(false)"><label for="fez_nao">Não</label></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group conditional" id="ano_escola_container">
+                            <label for="ano_escola">Em qual ano você realizou o curso?</label>
+                            <input type="text" id="ano_escola" placeholder="Ex: 2024">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="motivo">Qual o motivo que está fazendo a escola?</label>
+                            <textarea id="motivo" rows="4" required placeholder="Compartilhe brevemente o seu objetivo..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-submit">
+                            Concluir e Enviar via WhatsApp
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -554,13 +569,18 @@
     <footer>
         <p>&copy; 2026 Escola de Ester. Todos os direitos reservados.</p>
         <p style="font-size:0.75rem; margin-top:5px; color:#704f56;">Cura, Restauração e Edificação para a Plenitude</p>
-        
         <div class="footer-credits">
             Projeto desenvolvido por <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" rel="noopener noreferrer">EU+ Missão</a>
         </div>
     </footer>
 
     <script>
+        // Função do Accordion (Abrir e Fechar o formulário)
+        function toggleAccordion() {
+            const wrapper = document.getElementById('formAccordion');
+            wrapper.classList.toggle('active');
+        }
+
         function toggleIgrejaField(show) {
             const container = document.getElementById('nome_igreja_container');
             const input = document.getElementById('nome_igreja');
@@ -587,6 +607,7 @@
             }
         }
 
+        // Interceptador e transmissor do formulário para o WhatsApp
         document.getElementById('esterForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -604,8 +625,8 @@
             const estadoCivilEl = document.querySelector('input[name="estado_civil"]:checked');
             const estadoCivil = estadoCivilEl ? estadoCivilEl.value : '';
 
-            const filhosEl = document.querySelector('input[name="filhos"]:checked');
-            const filhos = filhosEl ? filhosEl.value : '';
+            const iconsFilhosEl = document.querySelector('input[name="filhos"]:checked');
+            const filhos = iconsFilhosEl ? iconsFilhosEl.value : '';
 
             const frequentaIgrejaEl = document.querySelector('input[name="frequenta_igreja"]:checked');
             const frequentaIgreja = frequentaIgrejaEl ? frequentaIgrejaEl.value : '';
@@ -621,38 +642,37 @@
                 if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
             }
 
-            let mensagemText = `*NOVA INSCRIÇÃO: ESCOLA DE ESTER*\n`;
-            mensagemText += `-------------------------------------------\n\n`;
-            mensagemText += `*NOME COMPLETO:* ${nome}\n`;
-            mensagemText += `*NÚMERO DO WHATSAPP:* ${whatsapp}\n`;
-            mensagemText += `*DATA DE NASCIMENTO:* ${dataFormatada}\n`;
-            mensagemText += `*ESTADO CIVIL:* ${estadoCivil}\n`;
-            mensagemText += `*QUAL O SEU ENDEREÇO?* ${endereco}\n\n`;
-            mensagemText += `*NOME DA ESPOSA / RESPONSÁVEL:* ${responsavel}\n`;
-            mensagemText += `*WHATSAPP DA PESSOA MENCIONADA:* ${whatsapp_responsavel}\n\n`;
-            mensagemText += `*QUANTOS FILHOS POSSUI?* ${filhos}\n`;
-            mensagemText += `*TAMANHO DA SUA CAMISETA:* ${camiseta}\n`;
-            mensagemText += `*QUAL A SUA RELIGIÃO:* ${religiao}\n`;
-            mensagemText += `*FREQUENTA ALGUMA IGREJA?* ${frequentaIgreja}\n`;
+            let msg = `*NOVA INSCRIÇÃO: ESCOLA DE ESTER*\n`;
+            msg += `-------------------------------------------\n\n`;
+            msg += `*NOME COMPLETO:* ${nome}\n`;
+            msg += `*NÚMERO DO WHATSAPP:* ${whatsapp}\n`;
+            msg += `*DATA DE NASCIMENTO:* ${dataFormatada}\n`;
+            msg += `*ESTADO CIVIL:* ${estadoCivil}\n`;
+            msg += `*QUAL O SEU ENDEREÇO?* ${endereco}\n\n`;
+            msg += `*NOME DA ESPOSA / RESPONSÁVEL:* ${responsavel}\n`;
+            msg += `*WHATSAPP DA PESSOA MENCIONADA:* ${whatsapp_responsavel}\n\n`;
+            msg += `*QUANTOS FILHOS POSSUI?* ${filhos}\n`;
+            msg += `*TAMANHO DA SUA CAMISETA:* ${camiseta}\n`;
+            msg += `*QUAL A SUA RELIGIÃO:* ${religiao}\n`;
+            msg += `*FREQUENTA ALGUMA IGREJA?* ${frequentaIgreja}\n`;
             
             if (frequentaIgreja === 'Sim') {
-                mensagemText += `*NOME DA IGREJA ONDE FREQUENTA:* ${nomeIgreja}\n`;
+                msg += `*NOME DA IGREJA ONDE FREQUENTA:* ${nomeIgreja}\n`;
             }
             
-            mensagemText += `*COMO CONHECEU A ESCOLA?* ${como_conheceu}\n`;
-            mensagemText += `*JÁ FEZ A ESCOLA?* ${jaFez}\n`;
+            msg += `*COMO CONHECEU A ESCOLA?* ${como_conheceu}\n`;
+            msg += `*JÁ FEZ A ESCOLA?* ${jaFez}\n`;
             
             if (jaFez === 'Sim') {
-                mensagemText += `*EM QUAL ANO?* ${anoEscola}\n`;
+                msg += `*EM QUAL ANO?* ${anoEscola}\n`;
             }
             
-            mensagemText += `\n*QUAL O MOTIVO QUE ESTÁ FAZENDO A ESCOLA?*\n_${motivo}_`;
+            msg += `\n*QUAL O MOTIVO QUE ESTÁ FAZENDO A ESCOLA?*\n_${motivo}_`;
 
-            const numeroTelefone = "555181474895";
-            const mensagemEncoded = encodeURIComponent(mensagemText);
-            const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroTelefone}&text=${mensagemEncoded}`;
+            const numeroDestino = "555181474895";
+            const urlFinal = `https://api.whatsapp.com/send?phone=${numeroDestino}&text=${encodeURIComponent(msg)}`;
 
-            window.open(urlWhatsApp, '_blank');
+            window.open(urlFinal, '_blank');
         });
     </script>
 </body>
