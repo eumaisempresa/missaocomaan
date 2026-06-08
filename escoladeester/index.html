@@ -36,6 +36,29 @@
             overflow-x: hidden;
         }
 
+        /* --- BOTÃO VOLTAR PÁGINA MÃE --- */
+        .btn-back-container {
+            text-align: left;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px 0 20px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--rose-deep);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            color: #7a3e4c;
+        }
+
         /* --- LAYOUT HEADER & LOGO --- */
         header {
             background: var(--rose-bg-gradient);
@@ -80,7 +103,7 @@
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 60px 20px;
+            padding: 40px 20px 60px 20px;
             display: grid;
             grid-template-columns: 1.2fr 1fr;
             gap: 50px;
@@ -167,7 +190,7 @@
             font-size: 1.1rem;
         }
 
-        /* --- SISTEMA SANFONA (ACCORDION) DO FORMULÁRIO --- */
+        /* --- SISTEMA SANFONA (ACCORDION) --- */
         .accordion-wrapper {
             background: var(--white);
             border-radius: var(--radius);
@@ -203,7 +226,6 @@
             transition: transform 0.3s ease;
         }
 
-        /* Estado ativo do botão quando aberto */
         .accordion-wrapper.active .accordion-icon {
             transform: rotate(180deg);
         }
@@ -212,7 +234,6 @@
             background: var(--rose-bg-gradient);
         }
 
-        /* Janela de conteúdo colapsável */
         .accordion-content {
             max-height: 0;
             overflow: hidden;
@@ -220,7 +241,7 @@
         }
 
         .accordion-wrapper.active .accordion-content {
-            max-height: 3000px; /* Margem de segurança para expansão suave */
+            max-height: 3000px;
             transition: max-height 0.8s cubic-bezier(1, 0, 1, 0);
         }
 
@@ -393,6 +414,12 @@
 </head>
 <body>
 
+    <div class="btn-back-container">
+        <a href="https://eumaisempresa.github.io/missaocomaan/index.html" class="btn-back">
+            ← Voltar para o Portal da Igreja
+        </a>
+    </div>
+
     <header>
         <div class="logo-container">
             <img src="imagens/logo-escola-de-ester.png" class="logo-img" alt="Escola de Ester">
@@ -410,8 +437,8 @@
             <p>Através de uma abordagem acolhedora e espiritualmente fundamentada, o curso atua diretamente na reconstrução da identidade, no fortalecimento emocional e na ativação do propósito de cada aluna que passa pelas nossas salas.</p>
 
             <div class="highlight-box">
-                <h3>Estrutura do Curso</h3>
-                <p style="margin:0; font-size:1rem;">O curso tem a duração exata de <strong>4 meses</strong>. As aulas são totalmente estruturadas de forma modular, com encontros dinâmicos que acontecem apenas <strong>uma vez por semana</strong>, facilitando a absorção do conteúdo e a aplicação prática.</p>
+                <h3>Estrutura e Formato</h3>
+                <p style="margin:0; font-size:1rem;">As aulas são totalmente estruturadas de forma modular, dispostas em blocos sequenciais de aprendizado estratégico com encontros dinâmicos que acontecem **uma vez por semana**, facilitando a absorção do conteúdo e a aplicação prática no cotidiano.</p>
             </div>
 
             <h2>Pilares do Aprendizado</h2>
@@ -534,7 +561,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="como_conheceu">Como conheceu a escola?</label>
+                            <label_for="como_conheceu">Como conheceu a escola?</label>
                             <input type="text" id="como_conheceu" required placeholder="Ex: Instagram, Amiga, Cartaz...">
                         </div>
 
@@ -575,7 +602,6 @@
     </footer>
 
     <script>
-        // Função do Accordion (Abrir e Fechar o formulário)
         function toggleAccordion() {
             const wrapper = document.getElementById('formAccordion');
             wrapper.classList.toggle('active');
@@ -607,7 +633,6 @@
             }
         }
 
-        // Interceptador e transmissor do formulário para o WhatsApp
         document.getElementById('esterForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
