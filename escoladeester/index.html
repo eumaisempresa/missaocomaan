@@ -3,441 +3,646 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escola de Ester — COMAAN</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Escola de Ester | Cura, Restauração e Edificação</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+        /* --- RESET & VARIÁVEIS RESISTENTES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
         :root {
-            --rose-gold: #B76E79;
-            --wine: #58111A;
-            --wine-light: #7D1E2A;
-            --gold: #D4AF37;
-            --black: #0B0708;
-            --gray-dark: #161011;
-            --gray-light: #23191B;
-            --text-muted: #D1C4C6;
+            --rose-deep: #b36b7c;
+            --rose-medium: #c98495;
+            --rose-light: #e3a3b3;
+            --rose-bg-gradient: linear-gradient(135deg, #cf8293 0%, #9c5364 100%);
+            --white: #ffffff;
+            --text-dark: #4a2831;
+            --text-light: #fdedf0;
+            --shadow: 0 15px 35px rgba(74, 40, 49, 0.15);
+            --radius: 12px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--black);
-            color: #F5F2F3;
+            background-color: #fcf5f6;
+            color: var(--text-dark);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3, .font-serif {
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* HEADER */
+        /* --- LAYOUT HEADER & LOGO --- */
         header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(11, 7, 8, 0.95);
-            backdrop-filter: blur(12px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            border-bottom: 1px solid rgba(183, 110, 121, 0.15);
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--rose-gold);
-            text-decoration: none;
-            letter-spacing: 1px;
-        }
-
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            padding: 8px 16px;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-
-        .btn-back:hover {
-            border-color: var(--rose-gold);
-            color: var(--rose-gold);
-            background: rgba(183, 110, 121, 0.05);
-        }
-
-        /* HERO SECTION */
-        .hero {
-            padding: 160px 5% 80px;
+            background: var(--rose-bg-gradient);
+            padding: 40px 20px;
             text-align: center;
-            background: radial-gradient(circle at center, #231215 0%, var(--black) 100%);
+            color: var(--white);
+            position: relative;
         }
 
-        .hero-logo {
-            width: 160px;
-            height: 160px;
-            margin: 0 auto 30px;
-            border-radius: 50%;
-            border: 2px solid var(--rose-gold);
-            box-shadow: 0 0 30px rgba(183, 110, 121, 0.2);
-            object-fit: cover;
-        }
-
-        .hero subtitle {
-            display: block;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--rose-gold);
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .hero h1 {
-            font-size: clamp(36px, 6vw, 64px);
-            font-weight: 700;
-            color: white;
-            line-height: 1.1;
-            margin-bottom: 25px;
-        }
-
-        .hero p {
-            font-size: clamp(16px, 2.2vw, 20px);
-            max-width: 800px;
-            margin: 0 auto 40px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* CTA BUTTONS */
-        .cta-container {
+        .logo-container {
+            max-width: 280px;
+            margin: 0 auto 20px auto;
+            min-height: 100px;
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .btn {
-            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            padding: 14px 28px;
-            border-radius: 6px;
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: var(--radius);
+            padding: 10px;
+        }
+
+        .logo-placeholder {
+            font-family: 'Cinzel', serif;
             font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            text-transform: uppercase;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--wine-light) 0%, var(--rose-gold) 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(183, 110, 121, 0.2);
+        /* Caso queira inserir a imagem do logo futuramente, basta descomentar e ajustar o caminho abaixo no HTML */
+        .logo-img {
+            max-width: 100%;
+            height: auto;
+            display: block;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(183, 110, 121, 0.4);
-            filter: brightness(1.1);
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .btn-student {
-            background: rgba(255, 255, 255, 0.06);
-            color: white;
-            border: 1px solid rgba(183, 110, 121, 0.4);
+        header p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: var(--text-light);
         }
 
-        .btn-student:hover {
-            background: rgba(183, 110, 121, 0.1);
-            border-color: var(--rose-gold);
-            transform: translateY(-2px);
-        }
-
-        /* HIGHLIGHT CARDS */
-        .highlights-section {
-            padding: 40px 5%;
-            background: var(--gray-dark);
-        }
-
-        .highlights-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+        /* --- CONTAINER PRINCIPAL --- */
+        .main-container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+            align-items: start;
         }
 
-        .highlight-card {
-            background: var(--gray-light);
-            padding: 30px;
-            border-radius: 8px;
-            border-left: 4px solid var(--rose-gold);
+        @media (max-width: 968px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 30px 20px;
+                gap: 40px;
+            }
         }
 
-        .highlight-card h4 {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--rose-gold);
+        /* --- COLUNA INSTITUCIONAL --- */
+        .content-section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--rose-deep);
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .content-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--rose-medium);
+            border-radius: 2px;
+        }
+
+        .content-section p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #5a3d44;
+            text-align: justify;
+        }
+
+        .highlight-box {
+            background-color: var(--white);
+            border-left: 4px solid var(--rose-medium);
+            padding: 25px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 35px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+        }
+
+        .highlight-box h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--rose-deep);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 480px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-item {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+            border: 1px solid rgba(227, 163, 179, 0.2);
+        }
+
+        .feature-item strong {
+            color: var(--rose-deep);
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        /* --- BOX DE INSCRIÇÃO (FORMULÁRIO) --- */
+        .form-box {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(227, 163, 179, 0.3);
+        }
+
+        .form-box h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--rose-deep);
+            text-align: center;
             margin-bottom: 10px;
         }
 
-        .highlight-card p {
-            font-size: 15px;
-            color: #E4E4E7;
-        }
-
-        /* EXPANDABLE CONTENT (DETAILS) */
-        .content-section {
-            padding: 80px 5%;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .section-header {
+        .form-box .subtitle {
             text-align: center;
-            margin-bottom: 50px;
+            font-size: 0.9rem;
+            color: #8c6870;
+            margin-bottom: 30px;
         }
 
-        .section-header h2 {
-            font-size: 36px;
-            color: white;
-            margin-bottom: 15px;
+        .form-group {
+            margin-bottom: 22px;
         }
 
-        .section-header::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 2px;
-            background: var(--rose-gold);
-            margin: 20px auto 0;
-        }
-
-        details {
-            background: var(--gray-dark);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .form-group.conditional {
+            display: none;
+            background: #fffcfc;
+            padding: 15px;
             border-radius: 8px;
-            margin-bottom: 16px;
-            overflow: hidden;
+            border: 1px dashed var(--rose-light);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-dark);
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #d9c5c9;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            background-color: #fffbfb;
             transition: all 0.3s ease;
         }
 
-        details[open] {
-            border-color: rgba(183, 110, 121, 0.4);
-            background: rgba(35, 25, 27, 0.6);
-        }
-
-        summary {
-            padding: 20px;
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--rose-gold);
-            cursor: pointer;
-            list-style: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            user-select: none;
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
+            border-color: var(--rose-medium);
+            box-shadow: 0 0 0 3px rgba(201, 132, 149, 0.15);
+            background-color: var(--white);
         }
 
-        summary::-webkit-details-marker { display: none; }
-
-        summary::after {
-            content: '\f078';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 14px;
-            color: #888;
-            transition: transform 0.3s ease;
+        .radio-group, .select-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 10px;
+            margin-top: 5px;
         }
 
-        details[open] summary::after {
-            transform: rotate(180deg);
-            color: var(--rose-gold);
-        }
-
-        .details-wrapper {
-            padding: 0 20px 24px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.02);
-            padding-top: 20px;
-        }
-
-        .details-wrapper p {
-            color: #E4E4E7;
-            margin-bottom: 15px;
-            font-size: 15px;
-        }
-
-        .points-list { list-style: none; }
-        .points-list li {
+        .radio-option {
             position: relative;
-            padding-left: 25px;
-            margin-bottom: 12px;
-            color: #D4D4D8;
-            font-size: 15px;
         }
 
-        .points-list li::before {
-            content: '♥';
+        .radio-option input[type="radio"] {
             position: absolute;
-            left: 5px;
-            color: var(--rose-gold);
-            font-size: 16px;
-            top: 0;
+            opacity: 0;
+            cursor: pointer;
         }
 
-        /* FINAL CTA */
-        .final-cta {
-            padding: 80px 5%;
+        .radio-option label {
+            display: block;
             text-align: center;
-            background: var(--gray-dark);
-            border-top: 1px solid rgba(183, 110, 121, 0.15);
+            background: #fffbfb;
+            border: 1px solid #d9c5c9;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: none;
+            font-weight: 400;
+            transition: all 0.2s ease;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: var(--rose-bg-gradient);
+            color: var(--white);
+            border-color: var(--rose-deep);
+            font-weight: 500;
+        }
+
+        button.btn-submit {
+            width: 100%;
+            background: var(--rose-bg-gradient);
+            color: var(--white);
+            border: none;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(156, 83, 100, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button.btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(156, 83, 100, 0.4);
+            filter: brightness(1.05);
         }
 
         footer {
-            background: #060404;
-            padding: 40px 5%;
+            background: #2b1419;
+            color: #a68d93;
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.02);
-            font-size: 13px;
-            color: rgba(255,255,255,0.4);
+            padding: 30px 20px;
+            font-size: 0.85rem;
+            border-top: 4px solid var(--rose-deep);
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
     <header>
-        <a href="/missaocomaan/index.html" class="logo">COMAAN</a>
-        <a href="/missaocomaan/index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar à Home</a>
+        <div class="logo-container">
+            <div class="logo-placeholder">[ Espaço para o Logo ]</div>
+        </div>
+        <h1>Escola de Ester</h1>
+        <p>Gerada no Coração de Deus</p>
     </header>
 
-    <!-- HERO -->
-    <section class="hero">
-        <img src="logo-ester.jpg" alt="Logo Escola de Ester" class="hero-logo">
-        <subtitle>Ministração e Identidade Feminina</subtitle>
-        <h1>Escola de Ester</h1>
-        <p>“Formando e consolidando a real identidade das Rainhas e filhas de Deus”</p>
+    <div class="main-container">
         
-        <div class="cta-container">
-            <!-- LINK DO FORMULÁRIO CONFIGURADO -->
-            <a href="https://docs.google.com/forms/d/1DptjlfCEGnJH-772lV6DFk_tS8NdURNIpRy-fUqfZDk/viewform?edit_requested=true" target="_blank" class="btn btn-primary">
-                <i class="fas fa-crown"></i> Quero me tornar aluna
-            </a>
-            <a href="/missaocomaan/escoladeester/estudante.html" class="btn btn-student">
-                <i class="fas fa-user-graduate"></i> Área da Aluna
-            </a>
-        </div>
-    </section>
+        <div class="content-section">
+            <h2>O que é a Escola de Ester?</h2>
+            <p>Gerada no Coração de Deus para trazer cura, restauração e edificação para a vida de mulheres que desejam alcançar a plenitude em Deus. A Escola de Ester é uma resposta clara e profunda para o posicionamento e amadurecimento da mulher cristã nos dias de hoje.</p>
+            
+            <p>Através de uma abordagem acolhedora e espiritualmente fundamentada, o curso atua diretamente na reconstrução da identidade, no fortalecimento emocional e na ativação do propósito de cada aluna que passa pelas nossas salas.</p>
 
-    <!-- HIGHLIGHTS -->
-    <section class="highlights-section">
-        <div class="highlights-grid">
-            <div class="highlight-card">
-                <h4>Ativação de Identidade</h4>
-                <p>Uma jornada profunda voltada para restaurar, curar e consolidar o posicionamento da mulher segundo o coração de Deus.</p>
+            <div class="highlight-box">
+                <h3>Estrutura do Curso</h3>
+                <p style="margin:0; font-size:1rem;">O curso tem a duração exata de <strong>4 meses</strong>. As aulas são totalmente estruturadas de forma modular, com encontros dinâmicos que acontecem apenas <strong>uma vez por semana</strong>, facilitando a absorção do conteúdo e a aplicação prática.</p>
             </div>
-            <div class="highlight-card">
-                <h4>Beleza e Propósito</h4>
-                <p>Muito além da estética: o desenvolvimento do caráter e da sabedoria para governar e influenciar sua geração.</p>
-            </div>
-            <div class="highlight-card">
-                <h4>Cultura do Reino</h4>
-                <p>Aulas dinâmicas focadas em princípios práticos de posicionamento familiar, espiritual e social.</p>
-            </div>
-        </div>
-    </section>
 
-    <!-- EXPANDABLE ESTRUTURA -->
-    <section class="content-section">
-        <div class="section-header">
-            <h2>Módulos de Formação</h2>
-            <p style="color: var(--text-muted); font-size: 13px; margin-top: 5px;">Toque nos módulos abaixo para expandir os detalhes:</p>
+            <h2>Pilares do Aprendizado</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <strong>Cura Emocional</strong>
+                    <p style="font-size:0.9rem; margin:0;">Tratamento de feridas do passado e blindagem da mente.</p>
+                </div>
+                <div class="feature-item">
+                    <strong>Restauração</strong>
+                    <p style="font-size:0.9rem; margin:0;">Resgate dos valores fundamentais e da autoimagem correta.</p>
+                </div>
+                <div class="feature-item">
+                    <strong>Edificação</strong>
+                    <p style="font-size:0.9rem; margin:0;">Crescimento espiritual prático para governar no dia a dia.</p>
+                </div>
+                <div class="feature-item">
+                    <strong>Identidade</strong>
+                    <p style="font-size:0.9rem; margin:0;">Ativação do chamado soberano desenhado pelo Criador.</p>
+                </div>
+            </div>
         </div>
 
-        <details>
-            <summary>Módulo 1: A Cura do Coração e das Emoções</summary>
-            <div class="details-wrapper">
-                <p>O primeiro passo para o palácio é a cura do passado. Ninguém governa enquanto for escrava de feridas emocionais.</p>
-                <ul class="points-list">
-                    <li>Rompimento com rejeições e traumas geracionais.</li>
-                    <li>A transição de órfã para filha legítima do Rei.</li>
-                    <li>Restaurando a autoimagem através dos olhos de Cristo.</li>
-                </ul>
-            </div>
-        </details>
+        <div class="form-box">
+            <h3>Ficha de Triagem</h3>
+            <p class="subtitle">Preencha os dados abaixo para iniciar sua inscrição. Suas respostas serão enviadas de forma segura para o nosso atendimento.</p>
+            
+            <form id="esterForm">
+                
+                <div class="form-group">
+                    <label for="nome">Nome Completo:</label>
+                    <input type="text" id="nome" required placeholder="Digite seu nome completo">
+                </div>
 
-        <details>
-            <summary>Módulo 2: O Preparo na Câmara das Mulheres</summary>
-            <div class="details-wrapper">
-                <p>O tempo do óleo de mirra e dos bálsamos doces. O processo de desenvolvimento da paciência, constância e caráter aprovado.</p>
-                <ul class="points-list">
-                    <li>A importância do tempo de preparo e submissão ao processo.</li>
-                    <li>Desenvolvendo uma vida secreta de oração e intimidade.</li>
-                    <li>Sabedoria prática e inteligência emocional no cotidiano.</li>
-                </ul>
-            </div>
-        </details>
+                <div class="form-group">
+                    <label for="whatsapp">Número do WhatsApp:</label>
+                    <input type="text" id="whatsapp" required placeholder="(00) 00000-0000">
+                </div>
 
-        <details>
-            <summary>Módulo 3: Posicionamento e Graça Diante do Rei</summary>
-            <div class="details-wrapper">
-                <p>A entrada no palácio exige vestes adequadas, honra e protocolo espiritual. Aprendendo a governar através da intercessão.</p>
-                <ul class="points-list">
-                    <li>A força da mansidão e o poder do silêncio sábio.</li>
-                    <li>Como se posicionar e conquistar favor em ambientes de crise.</li>
-                    <li>O papel da mulher como coluna espiritual do lar.</li>
-                </ul>
-            </div>
-        </details>
+                <div class="form-group">
+                    <label for="nascimento">Data de Nascimento:</label>
+                    <input type="date" id="nascimento" required>
+                </div>
 
-        <details>
-            <summary>Módulo 4: O Decreto de Vitória e o Legado</summary>
-            <div class="details-wrapper">
-                <p>"E quem sabe se para conjuntura como esta não vieste ao reino?". Ativando o jejum, a coragem e salvando sua geografia.</p>
-                <ul class="points-list">
-                    <li>Intercessão de alto nível e guerra espiritual estratégica.</li>
-                    <li>Quebrando decretos de morte contra a família e os filhos.</li>
-                    <li>A manifestação pública do propósito e o legado para as próximas gerações.</li>
-                </ul>
-            </div>
-        </details>
-    </section>
+                <div class="form-group">
+                    <label>Estado Civil:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="civil_solteiro" name="estado_civil" value="Solteiro" required>
+                            <label for="civil_solteiro">Solteira</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="civil_casado" name="estado_civil" value="Casado">
+                            <label for="civil_casado">Casada</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="civil_divorciado" name="estado_civil" value="Divorciado">
+                            <label for="civil_divorciado">Divorciada</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="civil_viuvo" name="estado_civil" value="Viúvo">
+                            <label for="civil_viuvo">Viúva</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="civil_uniao" name="estado_civil" value="União Estável">
+                            <label for="civil_uniao">União Estável</label>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- FINAL CTA -->
-    <section class="final-cta">
-        <h2>Para uma Conjuntura como Esta</h2>
-        <p>Chegou a hora de sair dos bastidores e assumir o posicionamento real que Deus desenhou para você.</p>
-        <div class="cta-container" style="margin-top: 30px;">
-            <a href="https://docs.google.com/forms/d/1DptjlfCEGnJH-772lV6DFk_tS8NdURNIpRy-fUqfZDk/viewform?edit_requested=true" target="_blank" class="btn btn-primary">
-                <i class="fas fa-crown"></i> Quero me tornar aluna
-            </a>
+                <div class="form-group">
+                    <label for="endereco">Qual o seu endereço?</label>
+                    <input type="text" id="endereco" required placeholder="Rua, número, bairro e cidade">
+                </div>
+
+                <div class="form-group">
+                    <label for="responsavel">Nome da Esposa / Responsável:</label>
+                    <span style="font-size:0.75rem; color:#8c6870; display:block; margin-top:-5px; margin-bottom:5px;">(Caso não tenha, pode ser do Pai, Mãe, Filho ou Amigo/a)</span>
+                    <input type="text" id="responsavel" required placeholder="Nome do contato de referência">
+                </div>
+
+                <div class="form-group">
+                    <label for="whatsapp_responsavel">WhatsApp da Pessoa Mencionada Acima:</label>
+                    <input type="text" id="whatsapp_responsavel" required placeholder="(00) 00000-0000">
+                </div>
+
+                <div class="form-group">
+                    <label>Quantos Filhos Possui?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="filhos_0" name="filhos" value="Nenhum" required>
+                            <label for="filhos_0">Nenhum</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="filhos_1" name="filhos" value="Um">
+                            <label for="filhos_1">1 Filho</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="filhos_2" name="filhos" value="Dois">
+                            <label for="filhos_2">2 Filhos</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="filhos_3" name="filhos" value="Três">
+                            <label for="filhos_3">3 Filhos</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="filhos_4" name="filhos" value="Quatro ou mais">
+                            <label for="filhos_4">4 ou mais</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="camiseta">Tamanho da sua Camiseta:</label>
+                    <select id="camiseta" required>
+                        <option value="" disabled selected>Selecione o tamanho</option>
+                        <option value="PP">PP</option>
+                        <option value="P">P</option>
+                        <option value="M">M</option>
+                        <option value="G">G</option>
+                        <option value="GG">GG</option>
+                        <option value="G1">G1</option>
+                        <option value="G2">G2</option>
+                        <option value="G3">G3</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="religiao">Qual a sua Religião?</label>
+                    <input type="text" id="religiao" required placeholder="Ex: Evangélica, Católica, etc.">
+                </div>
+
+                <div class="form-group">
+                    <label>Frequenta Alguma Igreja?</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr 1fr;">
+                        <div class="radio-option">
+                            <input type="radio" id="igreja_sim" name="frequenta_igreja" value="Sim" required onchange="toggleIgrejaField(true)">
+                            <label for="igreja_sim">Sim</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="igreja_nao" name="frequenta_igreja" value="Não" onchange="toggleIgrejaField(false)">
+                            <label for="igreja_nao">Não</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group conditional" id="nome_igreja_container">
+                    <label for="nome_igreja">Qual o nome da igreja onde frequenta?</label>
+                    <input type="text" id="nome_igreja" placeholder="Digite o nome da comunidade/igreja">
+                </div>
+
+                <div class="form-group">
+                    <label for="como_conheceu">Como conheceu a escola?</label>
+                    <input type="text" id="como_conheceu" required placeholder="Ex: Instagram, Amiga, Igreja...">
+                </div>
+
+                <div class="form-group">
+                    <label>Já fez a Escola de Ester antes?</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr 1fr;">
+                        <div class="radio-option">
+                            <input type="radio" id="fez_sim" name="ja_fez" value="Sim" required onchange="toggleAnoField(true)">
+                            <label for="fez_sim">Sim</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="fez_nao" name="ja_fez" value="Não" onchange="toggleAnoField(false)">
+                            <label for="fez_nao">Não</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group conditional" id="ano_escola_container">
+                    <label for="ano_escola">Em qual ano você realizou o curso?</label>
+                    <input type="text" id="ano_escola" placeholder="Ex: 2022">
+                </div>
+
+                <div class="form-group">
+                    <label for="motivo">Qual o motivo que está fazendo a escola?</label>
+                    <textarea id="motivo" rows="4" required placeholder="Compartilhe brevemente o seu objetivo ou o que busca alcançar..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Concluir e Enviar via WhatsApp
+                </button>
+            </form>
         </div>
-    </section>
 
-    <!-- FOOTER -->
+    </div>
+
     <footer>
-        <p>© 2026 COMAAN — Casa de Oração Missão Apostólica Antioquia</p>
+        <p>&copy; 2026 Escola de Ester. Todos os direitos reservados.</p>
+        <p style="font-size:0.75rem; margin-top:5px; color:#704f56;">Cura, Restauração e Edificação para a Plenitude</p>
     </footer>
 
+    <script>
+        // Controla exibição dinâmica do campo de Igreja
+        function toggleIgrejaField(show) {
+            const container = document.getElementById('nome_igreja_container');
+            const input = document.getElementById('nome_igreja');
+            if (show) {
+                container.style.display = 'block';
+                input.setAttribute('required', 'required');
+            } else {
+                container.style.display = 'none';
+                input.removeAttribute('required');
+                input.value = '';
+            }
+        }
+
+        // Controla exibição dinâmica do campo de Ano anterior
+        function toggleAnoField(show) {
+            const container = document.getElementById('ano_escola_container');
+            const input = document.getElementById('ano_escola');
+            if (show) {
+                container.style.display = 'block';
+                input.setAttribute('required', 'required');
+            } else {
+                container.style.display = 'none';
+                input.removeAttribute('required');
+                input.value = '';
+            }
+        }
+
+        // Processa o formulário e envia via API do WhatsApp
+        document.getElementById('esterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Captura de dados simples
+            const nome = document.getElementById('nome').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+            const nascimento = document.getElementById('nascimento').value;
+            const endereco = document.getElementById('endereco').value.trim();
+            const responsavel = document.getElementById('responsavel').value.trim();
+            const whatsapp_responsavel = document.getElementById('whatsapp_responsavel').value.trim();
+            const camiseta = document.getElementById('camiseta').value;
+            const religiao = document.getElementById('religiao').value.trim();
+            const como_conheceu = document.getElementById('como_conheceu').value.trim();
+            const motivo = document.getElementById('motivo').value.trim();
+
+            // Captura de Radio Buttons obrigatórios
+            const estadoCivilEl = document.querySelector('input[name="estado_civil"]:checked');
+            const estadoCivil = estadoCivilEl ? estadoCivilEl.value : '';
+
+            const filhosEl = document.querySelector('input[name="filhos"]:checked');
+            const filhos = filhosEl ? filhosEl.value : '';
+
+            const frequentaIgrejaEl = document.querySelector('input[name="frequenta_igreja"]:checked');
+            const frequentaIgreja = frequentaIgrejaEl ? frequentaIgrejaEl.value : '';
+            const nomeIgreja = document.getElementById('nome_igreja').value.trim();
+
+            const jaFezEl = document.querySelector('input[name="ja_fez"]:checked');
+            const jaFez = jaFezEl ? jaFezEl.value : '';
+            const anoEscola = document.getElementById('ano_escola').value.trim();
+
+            // Formatação da data de nascimento para padrão brasileiro
+            let dataFormatada = nascimento;
+            if(nascimento) {
+                const partes = nascimento.split('-');
+                if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+            }
+
+            // Construção da mensagem estruturada para o WhatsApp
+            let mensagemText = `*NOVA INSCRIÇÃO: ESCOLA DE ESTER*\n`;
+            mensagemText += `-------------------------------------------\n\n`;
+            mensagemText += `*NOME COMPLETO:* ${nome}\n`;
+            mensagemText += `*NÚMERO DO WHATSAPP:* ${whatsapp}\n`;
+            mensagemText += `*DATA DE NASCIMENTO:* ${dataFormatada}\n`;
+            mensagemText += `*ESTADO CIVIL:* ${estadoCivil}\n`;
+            mensagemText += `*QUAL O SEU ENDEREÇO?* ${endereco}\n\n`;
+            mensagemText += `*NOME DA ESPOSA / RESPONSÁVEL:* ${responsavel}\n`;
+            mensagemText += `*WHATSAPP DA PESSOA MENCIONADA:* ${whatsapp_responsavel}\n\n`;
+            mensagemText += `*QUANTOS FILHOS POSSUI?* ${filhos}\n`;
+            mensagemText += `*TAMANHO DA SUA CAMISETA:* ${camiseta}\n`;
+            mensagemText += `*QUAL A SUA RELIGIÃO:* ${religiao}\n`;
+            mensagemText += `*FREQUENTA ALGUMA IGREJA?* ${frequentaIgreja}\n`;
+            
+            if (frequentaIgreja === 'Sim') {
+                mensagemText += `*NOME DA IGREJA ONDE FREQUENTA:* ${nomeIgreja}\n`;
+            }
+            
+            mensagemText += `*COMO CONHECEU A ESCOLA?* ${como_conheceu}\n`;
+            mensagemText += `*JÁ FEZ A ESCOLA?* ${jaFez}\n`;
+            
+            if (jaFez === 'Sim') {
+                mensagemText += `*EM QUAL ANO?* ${anoEscola}\n`;
+            }
+            
+            mensagemText += `\n*QUAL O MOTIVO QUE ESTÁ FAZENDO A ESCOLA?*\n_${motivo}_`;
+
+            // Número de destino (51 8147-4895) higienizado no padrão internacional
+            const numeroTelefone = "555181474895";
+            
+            // Tratamento de encode URI para segurança de caracteres especiais e quebras de linha
+            const mensagemEncoded = encodeURIComponent(mensagemText);
+            
+            // Montagem do Link de Transmissão da API do WhatsApp
+            const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroTelefone}&text=${mensagemEncoded}`;
+
+            // Executa o redirecionamento
+            window.open(urlWhatsApp, '_blank');
+        });
+    </script>
 </body>
 </html>
-
