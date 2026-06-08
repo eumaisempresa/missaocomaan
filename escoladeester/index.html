@@ -65,7 +65,6 @@
             text-transform: uppercase;
         }
 
-        /* Caso queira inserir a imagem do logo futuramente, basta descomentar e ajustar o caminho abaixo no HTML */
         .logo-img {
             max-width: 100%;
             height: auto;
@@ -249,7 +248,7 @@
             background-color: var(--white);
         }
 
-        .radio-group, .select-grid {
+        .radio-group {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
             gap: 10px;
@@ -312,13 +311,34 @@
             filter: brightness(1.05);
         }
 
+        /* --- RODAPÉ ATUALIZADO --- */
         footer {
             background: #2b1419;
             color: #a68d93;
             text-align: center;
-            padding: 30px 20px;
+            padding: 40px 20px;
             font-size: 0.85rem;
             border-top: 4px solid var(--rose-deep);
+        }
+
+        .footer-credits {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(166, 141, 147, 0.1);
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-credits a {
+            color: var(--rose-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer-credits a:hover {
+            color: var(--white);
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -534,10 +554,13 @@
     <footer>
         <p>&copy; 2026 Escola de Ester. Todos os direitos reservados.</p>
         <p style="font-size:0.75rem; margin-top:5px; color:#704f56;">Cura, Restauração e Edificação para a Plenitude</p>
+        
+        <div class="footer-credits">
+            Projeto desenvolvido por <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" rel="noopener noreferrer">EU+ Missão</a>
+        </div>
     </footer>
 
     <script>
-        // Controla exibição dinâmica do campo de Igreja
         function toggleIgrejaField(show) {
             const container = document.getElementById('nome_igreja_container');
             const input = document.getElementById('nome_igreja');
@@ -551,7 +574,6 @@
             }
         }
 
-        // Controla exibição dinâmica do campo de Ano anterior
         function toggleAnoField(show) {
             const container = document.getElementById('ano_escola_container');
             const input = document.getElementById('ano_escola');
@@ -565,11 +587,9 @@
             }
         }
 
-        // Processa o formulário e envia via API do WhatsApp
         document.getElementById('esterForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Captura de dados simples
             const nome = document.getElementById('nome').value.trim();
             const whatsapp = document.getElementById('whatsapp').value.trim();
             const nascimento = document.getElementById('nascimento').value;
@@ -581,7 +601,6 @@
             const como_conheceu = document.getElementById('como_conheceu').value.trim();
             const motivo = document.getElementById('motivo').value.trim();
 
-            // Captura de Radio Buttons obrigatórios
             const estadoCivilEl = document.querySelector('input[name="estado_civil"]:checked');
             const estadoCivil = estadoCivilEl ? estadoCivilEl.value : '';
 
@@ -596,14 +615,12 @@
             const jaFez = jaFezEl ? jaFezEl.value : '';
             const anoEscola = document.getElementById('ano_escola').value.trim();
 
-            // Formatação da data de nascimento para padrão brasileiro
             let dataFormatada = nascimento;
             if(nascimento) {
                 const partes = nascimento.split('-');
                 if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
             }
 
-            // Construção da mensagem estruturada para o WhatsApp
             let mensagemText = `*NOVA INSCRIÇÃO: ESCOLA DE ESTER*\n`;
             mensagemText += `-------------------------------------------\n\n`;
             mensagemText += `*NOME COMPLETO:* ${nome}\n`;
@@ -631,16 +648,10 @@
             
             mensagemText += `\n*QUAL O MOTIVO QUE ESTÁ FAZENDO A ESCOLA?*\n_${motivo}_`;
 
-            // Número de destino (51 8147-4895) higienizado no padrão internacional
             const numeroTelefone = "555181474895";
-            
-            // Tratamento de encode URI para segurança de caracteres especiais e quebras de linha
             const mensagemEncoded = encodeURIComponent(mensagemText);
-            
-            // Montagem do Link de Transmissão da API do WhatsApp
             const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroTelefone}&text=${mensagemEncoded}`;
 
-            // Executa o redirecionamento
             window.open(urlWhatsApp, '_blank');
         });
     </script>
