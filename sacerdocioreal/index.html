@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- RESET & VARIÁVEIS MASCULINAS --- */
+        /* --- RESET & VARIÁVEIS MASCULINAS (PALETA AZUL) --- */
         * {
             margin: 0;
             padding: 0;
@@ -18,17 +18,17 @@
         }
 
         :root {
-            --gold-light: #f1c40f;
-            --gold-medium: #d4af37;
-            --gold-deep: #aa7c11;
-            --gold-gradient: linear-gradient(135deg, #f1c40f 0%, #aa7c11 100%);
+            --blue-light: #3498db;
+            --blue-medium: #1f5f9e;
+            --blue-deep: #123c66;
+            --blue-gradient: linear-gradient(135deg, #2980b9 0%, #112d4e 100%);
             --dark-bg: #111417;
             --dark-surface: #1a1d21;
             --dark-input: #24282e;
             --white: #ffffff;
             --text-light: #f5f6f7;
             --text-muted: #9aa0a6;
-            --border-color: rgba(212, 175, 55, 0.25);
+            --border-color: rgba(52, 152, 219, 0.25);
             --shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             --radius: 12px;
         }
@@ -45,14 +45,14 @@
             background-color: #090a0c;
             padding: 12px 20px;
             text-align: left;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(52, 152, 219, 0.1);
         }
 
         .btn-back {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: var(--gold-medium);
+            color: var(--blue-light);
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: 600;
@@ -70,7 +70,7 @@
             background: linear-gradient(180deg, #090a0c 0%, var(--dark-bg) 100%);
             padding: 40px 20px 50px 20px;
             text-align: center;
-            border-bottom: 2px solid rgba(212, 175, 55, 0.15);
+            border-bottom: 2px solid rgba(52, 152, 219, 0.15);
         }
 
         .logo-container {
@@ -86,14 +86,14 @@
             height: auto;
             display: block;
             border-radius: 50%;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 25px rgba(52, 152, 219, 0.2);
         }
 
         header .subtitle-top {
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 4px;
-            color: var(--gold-medium);
+            color: var(--blue-light);
             font-weight: 600;
             margin-bottom: 8px;
         }
@@ -130,7 +130,7 @@
         .content-section h2 {
             font-family: 'Cinzel', serif;
             font-size: 1.8rem;
-            color: var(--gold-medium);
+            color: var(--blue-light);
             margin-bottom: 25px;
             position: relative;
             padding-bottom: 10px;
@@ -143,7 +143,7 @@
             left: 0;
             width: 60px;
             height: 3px;
-            background-color: var(--gold-medium);
+            background-color: var(--blue-light);
             border-radius: 2px;
         }
 
@@ -156,18 +156,18 @@
 
         .highlight-box {
             background-color: var(--dark-surface);
-            border-left: 4px solid var(--gold-medium);
+            border-left: 4px solid var(--blue-light);
             padding: 25px;
             border-radius: 0 var(--radius) var(--radius) 0;
             margin: 35px 0;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(52, 152, 219, 0.05);
             border-left-width: 0;
         }
 
         .highlight-box h3 {
             font-family: 'Cinzel', serif;
-            color: var(--gold-medium);
+            color: var(--blue-light);
             margin-bottom: 10px;
             font-size: 1.2rem;
         }
@@ -198,7 +198,7 @@
         }
 
         .feature-item strong {
-            color: var(--gold-medium);
+            color: var(--blue-light);
             display: block;
             margin-bottom: 8px;
             font-size: 1.1rem;
@@ -223,8 +223,8 @@
 
         .accordion-trigger {
             width: 100%;
-            background: var(--gold-gradient);
-            color: var(--dark-bg);
+            background: var(--blue-gradient);
+            color: var(--white);
             border: none;
             padding: 22px;
             font-family: 'Cinzel', serif;
@@ -254,7 +254,7 @@
 
         .accordion-wrapper.active .accordion-trigger {
             background: #1a1d21;
-            color: var(--gold-medium);
+            color: var(--blue-light);
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -282,7 +282,7 @@
         .form-interior h3 {
             font-family: 'Cinzel', serif;
             font-size: 1.4rem;
-            color: var(--gold-medium);
+            color: var(--blue-light);
             text-align: center;
             margin-bottom: 10px;
             letter-spacing: 1px;
@@ -302,10 +302,10 @@
 
         .form-group.conditional {
             display: none;
-            background: rgba(212, 175, 55, 0.03);
+            background: rgba(52, 152, 219, 0.03);
             padding: 15px;
             border-radius: 8px;
-            border: 1px dashed var(--gold-medium);
+            border: 1px dashed var(--blue-light);
         }
 
         label {
@@ -315,7 +315,7 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--gold-medium);
+            color: var(--blue-light);
         }
 
         input[type="text"],
@@ -324,7 +324,7 @@
         textarea {
             width: 100%;
             padding: 14px 15px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(52, 152, 219, 0.2);
             border-radius: 6px;
             font-size: 0.95rem;
             color: var(--white);
@@ -337,8 +337,8 @@
         select:focus,
         textarea:focus {
             outline: none;
-            border-color: var(--gold-light);
-            box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.15);
+            border-color: var(--blue-light);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
             background-color: #2b3038;
         }
 
@@ -368,7 +368,7 @@
             display: block;
             text-align: center;
             background: var(--dark-input);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(52, 152, 219, 0.2);
             padding: 12px 10px;
             border-radius: 6px;
             cursor: pointer;
@@ -380,9 +380,9 @@
         }
 
         .radio-option input[type="radio"]:checked + label {
-            background: var(--gold-gradient);
-            color: var(--dark-bg);
-            border-color: var(--gold-light);
+            background: var(--blue-gradient);
+            color: var(--white);
+            border-color: var(--blue-light);
             font-weight: 700;
         }
 
@@ -420,19 +420,19 @@
             text-align: center;
             padding: 40px 20px;
             font-size: 0.85rem;
-            border-top: 3px solid var(--gold-deep);
+            border-top: 3px solid var(--blue-deep);
         }
 
         .footer-credits {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            border-top: 1px solid rgba(52, 152, 219, 0.1);
             font-size: 0.8rem;
             letter-spacing: 0.5px;
         }
 
         .footer-credits a {
-            color: var(--gold-medium);
+            color: var(--blue-light);
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
@@ -700,7 +700,7 @@
             let dataFormatada = nascimento;
             if(nascimento) {
                 const partes = nascimento.split('-');
-                if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                if(partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[Partes[0]}`;
             }
 
             let msg = `*SOLICITAÇÃO DE TRIAGEM: SACERDÓCIO REAL*\n`;
