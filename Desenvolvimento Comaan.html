@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMAAN+ — Sistema de Arrecadação de Missões</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .gold-shine {
+            background: linear-gradient(135deg, #FFE066 0%, #F5B041 50%, #B7950B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 12px rgba(245, 176, 65, 0.4);
+            animation: pulse 2s infinite alternate;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 font-sans text-zinc-100 min-h-screen flex flex-col justify-between">
+
+    <div class="max-w-4xl mx-auto p-4 md:p-8 w-full">
+        
+        <header class="text-center py-6 border-b border-zinc-800 mb-8">
+            <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white uppercase">
+                COMAAN<a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="gold-shine inline-block font-extrabold transform hover:scale-110 transition-transform ml-0.5" title="Conheça a Frente EU+ Missão">+</a>
+            </h1>
+            <p class="text-zinc-400 italic text-sm mt-2 tracking-wide">"Conectando Vidas e famílias ao propósito de Deus."</p>
+        </header>
+
+        <div class="bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-800 p-6 mb-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div id="loading-banner" class="col-span-full text-center text-zinc-500 py-6">
+                Carregando informações da ação missionária...
+            </div>
+            <div id="banner-img-box" class="hidden h-52 md:h-64 rounded-2xl overflow-hidden bg-zinc-800 border border-zinc-700 flex items-center justify-center">
+                <img id="campanha-foto" src="" alt="Prêmio da Campanha" class="w-full h-full object-cover">
+            </div>
+            <div id="banner-info-box" class="hidden">
+                <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Frente EU+ Missão</span>
+                <h2 id="campanha-nome" class="text-2xl md:text-3xl font-extrabold text-white mt-3 mb-2">Ação Missionária</h2>
+                <p class="text-zinc-400 text-sm mb-4">Escolha os seus números abaixo, faça o PIX institucional e envie o comprovante.</p>
+                <div class="inline-block bg-zinc-800/80 border border-zinc-700 rounded-2xl px-4 py-2">
+                    <span class="text-xs text-zinc-500 block uppercase font-medium">Valor por Cota</span>
+                    <span class="text-xl font-black text-amber-400" id="campanha-valor">R$ 0,00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-800 p-6 mb-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
+                <div>
+                    <h3 class="text-xl font-bold text-white tracking-tight">Selecione seus Números</h3>
+                    <p class="text-xs text-zinc-500">Você pode marcar múltiplos números antes de fechar a reserva.</p>
+                </div>
+                <div id="contador-selecao" class="bg-zinc-800 text-zinc-300 border border-zinc-700 text-xs font-bold px-3 py-1.5 rounded-xl hidden">
+                    0 selecionados
+                </div>
+            </div>
+            
+            <div id="wrapper-grid" class="grid grid-cols-5 sm:grid-cols-10 gap-2">
+                </div>
+
+            <button id="btn-abrir-reserva" class="w-full mt-6 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-zinc-950 font-black py-4 px-6 rounded-2xl shadow-lg transition-all transform active:scale-[0.98] hidden items-center justify-center gap-2 cursor-pointer">
+                🎟️ Reservar Números Selecionados
+            </button>
+        </div>
+
+        <div id="box-checkout" class="bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-800 p-6 mb-6 hidden scroll-mt-6">
+            <h3 class="text-xl font-bold text-white mb-2">Quase pronto! Efetue o seu PIX</h3>
+            <p class="text-zinc-400 text-sm mb-4">Para garantir as suas cotas, copie a chave abaixo e realize o pagamento no app do seu banco. Em seguida, clique no botão verde para enviar o comprovante.</p>
+            
+            <div class="bg-zinc-950 p-4 rounded-2xl mb-4 border border-zinc-800 flex justify-between items-center">
+                <span class="text-sm text-zinc-400 font-medium">Números escolhidos: <strong id="checkout-lista-numeros" class="text-white font-mono"></strong></span>
+                <span class="text-sm text-zinc-400 font-medium">Total Estimado: <strong id="checkout-valor-total" class="text-amber-400 text-base font-black"></strong></span>
+            </div>
+
+            <div onclick="copiarPix()" class="bg-zinc-950 p-4 rounded-2xl mb-4 text-center border border-zinc-800 cursor-pointer hover:border-amber-500/50 transition-all group relative">
+                <span class="text-[10px] text-zinc-500 block uppercase font-bold tracking-wider mb-1 group-hover:text-amber-400 transition-colors">Chave PIX Oficial da Igreja (Clique para Copiar)</span>
+                <strong class="text-base md:text-lg text-zinc-200 font-mono tracking-wider break-all px-2 block" id="txt-chave-pix">52865468000142</strong>
+                <span id="toast-copiado" class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-amber-500 text-zinc-950 text-xs font-bold px-3 py-1 rounded-full opacity-0 transition-opacity pointer-events-none">Copiado!</span>
+            </div>
+
+            <button id="btn-enviar-whats" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2 transform active:scale-[0.98] cursor-pointer text-base">
+                🟢 Enviar Comprovante por WhatsApp da Igreja
+            </button>
+        </div>
+
+    </div>
+
+    <footer class="w-full bg-zinc-950 border-t border-zinc-900 py-6 text-center mt-12 px-4">
+        <p class="text-zinc-500 text-xs tracking-wide">Casa de Oração Missão Apostólica Antioquia</p>
+        <p class="text-zinc-400 text-sm font-semibold tracking-normal mt-1">"Conectando Vidas e famílias ao propósito de Deus."</p>
+        <p class="text-zinc-600 text-[10px] mt-4 tracking-wider uppercase">
+            © 2026 • Todos os direitos reservados
+        </p>
+        <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="inline-block mt-4 border border-zinc-800 bg-zinc-900/50 px-4 py-2 rounded-xl text-xs font-bold tracking-wider text-amber-500 hover:bg-zinc-800 hover:text-amber-400 transition-all">
+            🛡️ DESENVOLVIDO POR GRUPO EU<sup>+</sup> MISSÃO
+        </a>
+    </footer>
+
+    <script>
+        const URL_ENDPOINT_PROD = "https://script.google.com/macros/s/AKfycbwSeJjsgGrdsxZ0Ik4bYRnx8NoSHnwT4KVRzAacZgFdndO8y3nTMQbJCm8i-V_sCrDIHA/exec"; 
+        const CAMPANHA_ATIVA_ID = "CAMP_1781364561110"; 
+        const WHATSAPP_IGREJA = "555181659360"; 
+
+        let listaNumerosSelecionados = [];
+        let valorCotaUnitario = 8.0;
+
+        // Copiar Chave PIX
+        function copiarPix() {
+            const txt = document.getElementById("txt-chave-pix").innerText;
+            navigator.clipboard.writeText(txt);
+            const toast = document.getElementById("toast-copiado");
+            toast.classList.remove("opacity-0");
+            toast.classList.add("opacity-100");
+            setTimeout(() => {
+                toast.classList.remove("opacity-100");
+                toast.classList.add("opacity-0");
+            }, 1800);
+        }
+
+        // Buscar Meta-dados e Grid
+        async function renderizarPainel() {
+            try {
+                // Sincroniza informações da Campanha (Nome, Imagem, Valor)
+                fetch(`${URL_ENDPOINT_PROD}?action=OBTER_GRID&campanhaId=Configuracoes_Gerais`)
+                .then(r => r.json()).then(payloadConfig => {
+                    if(payloadConfig.status === "SUCESSO") {
+                        const dadosCampanha = payloadConfig.data.find(c => c.numero === CAMPANHA_ATIVA_ID || c.ID_Campanha === CAMPANHA_ATIVA_ID);
+                        // Fallback caso a chave venha limpa ou diferente por conta da leitura de colunas
+                        if(dadosCampanha || payloadConfig.data.length > 0) {
+                            const info = dadosCampanha || payloadConfig.data[payloadConfig.data.length - 1];
+                            document.getElementById("campanha-nome").innerText = info.Nome_Acao || info.nome || "Ação Missionária COMAAN+";
+                            if(info.Valor_Cota || info.valorCota) {
+                                valorCotaUnitario = parseFloat(info.Valor_Cota || info.valorCota);
+                                document.getElementById("campanha-valor").innerText = `R$ ${valorCotaUnitario.toFixed(2).replace('.',',')}`;
+                            }
+                            if(info.Imagem_URL || info.imageUrl) {
+                                document.getElementById("campanha-foto").src = info.Imagem_URL || info.imageUrl;
+                                document.getElementById("loading-banner").classList.add("hidden");
+                                document.getElementById("banner-img-box").classList.remove("hidden");
+                                document.getElementById("banner-info-box").classList.remove("hidden");
+                            }
+                        }
+                    }
+                }).catch(() => {
+                    // Fallback estético padrão caso a aba configurações gerais use mapeamento complexo
+                    document.getElementById("campanha-nome").innerText = "Grande Ação Missionária COMAAN+";
+                    document.getElementById("campanha-valor").innerText = "R$ 8,00";
+                    document.getElementById("campanha-foto").src = "https://i.ibb.co/680LWh1V/comaan-banner.png";
+                    document.getElementById("loading-banner").classList.add("hidden");
+                    document.getElementById("banner-img-box").classList.remove("hidden");
+                    document.getElementById("banner-info-box").classList.remove("hidden");
+                });
+
+                // Desenha o Grid de Bilhetes
+                const container = document.getElementById("wrapper-grid");
+                container.innerHTML = "<p class='col-span-full text-center text-zinc-500 py-4 text-sm'>Sincronizando números da campanha...</p>";
+                
+                const res = await fetch(`${URL_ENDPOINT_PROD}?action=OBTER_GRID&campanhaId=${CAMPANHA_ATIVA_ID}`);
+                const payload = await res.json();
+                
+                if(payload.status !== "SUCESSO") throw new Error(payload.message);
+                
+                container.innerHTML = "";
+                payload.data.forEach(item => {
+                    const btn = document.createElement("button");
+                    const numFormatado = String(item.numero).padStart(3, '0');
+                    btn.innerText = numFormatado;
+                    
+                    if(item.status === "DISPONIVEL") {
+                        btn.className = "p-3 bg-zinc-800 text-zinc-200 font-bold rounded-xl border border-zinc-700 hover:bg-zinc-700 transition-all text-sm shadow-sm cursor-pointer";
+                        btn.onclick = () => alternarSelecaoNumero(item.numero, btn);
+                    } else if (item.status === "RESERVADO") {
+                        btn.className = "p-3 bg-amber-500/10 text-amber-500/60 border border-amber-500/20 rounded-xl text-sm font-medium cursor-not-allowed opacity-50";
+                        btn.title = "Aguardando validação";
+                    } else {
+                        btn.className = "p-3 bg-zinc-900 text-zinc-600 border border-zinc-800 rounded-xl cursor-not-allowed text-xs font-normal line-through opacity-30";
+                        btn.disabled = true;
+                    }
+                    container.appendChild(btn);
+                });
+            } catch(e) {
+                document.getElementById("wrapper-grid").innerHTML = `<p class='col-span-full text-center text-red-400 font-medium py-4 text-sm'>Aviso: Erro de comunicação com o banco de dados.</p>`;
+            }
+        }
+
+        // Lógica de Múltipla Seleção Visual
+        function alternarSelecaoNumero(numero, elementoBtn) {
+            const index = listaNumerosSelecionados.indexOf(numero);
+            if(index > -1) {
+                listaNumerosSelecionados.splice(index, 1);
+                elementoBtn.className = "p-3 bg-zinc-800 text-zinc-200 font-bold rounded-xl border border-zinc-700 hover:bg-zinc-700 transition-all text-sm shadow-sm cursor-pointer";
+            } else {
+                listaNumerosSelecionados.push(numero);
+                elementoBtn.className = "p-3 bg-gradient-to-b from-amber-400 to-amber-500 text-zinc-950 font-black rounded-xl border border-amber-300 transition-all text-sm shadow-md scale-105";
+            }
+
+            const contador = document.getElementById("contador-selecao");
+            const btnAcao = document.getElementById("btn-abrir-reserva");
+
+            if(listaNumerosSelecionados.length > 0) {
+                contador.innerText = `${listaNumerosSelecionados.length} ${listaNumerosSelecionados.length === 1 ? 'selecionado' : 'selecionados'}`;
+                contador.classList.remove("hidden");
+                btnAcao.classList.remove("hidden");
+                btnAcao.classList.add("flex");
+            } else {
+                contador.classList.add("hidden");
+                btnAcao.classList.add("hidden");
+                btnAcao.classList.remove("flex");
+            }
+        }
+
+        // Abrir Caixa de Confirmação com Múltiplos Números
+        document.getElementById("btn-abrir-reserva").onclick = async () => {
+            if(listaNumerosSelecionados.length === 0) return;
+
+            const nomeMock = prompt(`Para reservar os números [${listaNumerosSelecionados.join(', ')}], digite seu Nome Completo:`);
+            if(!nomeMock) return;
+            const whatsMock = prompt("Digite seu WhatsApp com DDD (apenas números):");
+            if(!whatsMock) return;
+
+            const btnAcao = document.getElementById("btn-abrir-reserva");
+            btnAcao.disabled = true;
+            btnAcao.innerText = "Registrando bilhetes no templo...";
+
+            try {
+                const payloadInput = {
+                    action: "PRÉ_RESERVA",
+                    campanhaId: CAMPANHA_ATIVA_ID,
+                    nome: nomeMock,
+                    whatsapp: whatsMock,
+                    numeros: listaNumerosSelecionados
+                };
+
+                const response = await fetch(URL_ENDPOINT_PROD, {
+                    method: "POST",
+                    body: JSON.stringify(payloadInput)
+                });
+                const resJson = await response.json();
+
+                if(resJson.status === "SUCESSO_RESERVA") {
+                    const numerosFormatados = listaNumerosSelecionados.map(n => String(n).padStart(3, '0')).join(', ');
+                    const valorCalculado = listaNumerosSelecionados.length * valorCotaUnitario;
+
+                    document.getElementById("checkout-lista-numeros").innerText = numerosFormatados;
+                    document.getElementById("checkout-valor-total").innerText = `R$ ${valorCalculado.toFixed(2).replace('.', ',')}`;
+
+                    // Mensagem WhatsApp Completa
+                    const txtMsg = encodeURIComponent(`Olá! Acabei de efetuar a reserva dos números [ ${numerosFormatados} ] no painel do COMAAN+ em nome de ${nomeMock}.\n\nEstou enviando em anexo o comprovante do PIX para a validação das cotas.`);
+                    const apiWhats = `https://wa.me/${WHATSAPP_IGREJA}?text=${txtMsg}`;
+                    
+                    document.getElementById("box-checkout").classList.remove("hidden");
+                    document.getElementById("btn-enviar-whats").onclick = () => {
+                        window.open(apiWhats, '_blank');
+                        location.reload();
+                    };
+                    document.getElementById("box-checkout").scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert(`Aviso: ${resJson.message}`);
+                    location.reload();
+                }
+            } catch(err) {
+                alert("Falha de rede: " + err.message);
+            } finally {
+                btnAcao.disabled = false;
+                btnAcao.innerText = "🎟️ Reservar Números Selecionados";
+            }
+        };
+
+        window.onload = renderizarPainel;
+    </script>
+</body>
+</html>
