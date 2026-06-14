@@ -1,98 +1,332 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ação Missionária - COMAAN</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COMAAN+ — Sistema de Arrecadação de Missões</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+      @keyframes pulse {
+          0% { transform: scale(1); opacity: 0.9; }
+          100% { transform: scale(1.03); opacity: 1; }
+      }
+      .gold-shine {
+          background: linear-gradient(135deg, #FFE066 0%, #F5B041 50%, #B7950B 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          text-shadow: 0 0 12px rgba(245, 176, 65, 0.4);
+          animation: pulse 2s infinite alternate;
+      }
+  </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 p-4">
+<body class="bg-zinc-950 font-sans text-zinc-100 min-h-screen flex flex-col justify-between pb-24 md:pb-28">
 
-    <div id="app" class="max-w-2xl mx-auto">
-        <h1 id="tituloCampanha" class="text-2xl font-black text-amber-500 mb-4">Carregando campanha...</h1>
-        <div id="gradeNumeros" class="grid grid-cols-5 gap-2"></div>
-        
-        <div id="formReserva" class="mt-8 bg-zinc-900 p-6 rounded-xl hidden">
-            <h3 class="font-bold mb-4">Reservar números selecionados</h3>
-            <input type="text" id="nome" placeholder="Seu Nome" class="w-full bg-zinc-800 p-2 rounded mb-2">
-            <input type="text" id="whatsapp" placeholder="Seu WhatsApp" class="w-full bg-zinc-800 p-2 rounded mb-4">
-            <button onclick="salvarReserva()" class="w-full bg-green-600 p-3 rounded font-bold">Confirmar Reserva</button>
-        </div>
-    </div>
+  <div class="max-w-4xl mx-auto p-4 md:p-8 w-full">
+      
+      <header class="text-center py-6 border-b border-zinc-800 mb-8">
+          <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white uppercase">
+              COMAAN<a href="https://eumaisempresa.github.io/missaocomaan/arrecadacao/" target="_blank" class="gold-shine inline-block font-extrabold transform hover:scale-110 transition-transform ml-0.5" title="Conheça a Frente EU+ Missão">+</a>
+          </h1>
+          <p class="text-zinc-400 italic text-sm mt-2 tracking-wide">"Conectando Vidas e famílias ao propósito de Deus."</p>
+      </header>
 
-    <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbwSeJjsgGrdsxZ0Ik4bYRnx8NoSHnwT4KVRzAacZgFdndO8y3nTMQbJCm8i-V_sCrDIHA/exec";
-        let campanhaId = new URLSearchParams(window.location.search).get("id");
-        let numerosSelecionados = [];
+      <div class="bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-800 p-6 mb-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <div id="loading-banner" class="col-span-full text-center text-zinc-500 py-6">
+              Carregando informações da ação missionária...
+          </div>
 
-        async function carregarCampanha() {
-            if (!campanhaId) return alert("Campanha não encontrada!");
-            
-            const res = await fetch(`${API_URL}?action=buscarCampanha&id=${campanhaId}`);
-            const data = await res.json();
-            
-            if (data.status === "sucesso") {
-                document.getElementById("tituloCampanha").textContent = data.campanha.nome;
-                renderizarGrade(data.campanha, data.numerosReservados, data.numerosPagos);
-            }
-        }
+          <div id="banner-img-box" class="hidden h-52 md:h-64 rounded-2xl overflow-hidden bg-zinc-800 border border-zinc-700 flex items-center justify-center">
+              <img id="campanha-foto" src="" alt="Prêmio da Campanha" class="w-full h-full object-cover">
+          </div>
 
-        function renderizarGrade(campanha, reservados, pagos) {
-            const container = document.getElementById("gradeNumeros");
-            for (let i = 1; i <= campanha.totalNumeros; i++) {
-                const btn = document.createElement("button");
-                btn.textContent = i;
-                btn.className = "p-3 rounded border border-zinc-700 text-sm font-bold";
-                
-                if (pagos.includes(String(i))) {
-                    btn.classList.add("bg-red-900", "text-zinc-500");
-                    btn.disabled = true;
-                } else if (reservados.includes(String(i))) {
-                    btn.classList.add("bg-amber-900", "text-zinc-400");
-                    btn.disabled = true;
-                } else {
-                    btn.classList.add("bg-zinc-800", "hover:bg-zinc-700");
-                    btn.onclick = () => alternarSelecao(btn, i);
-                }
-                container.appendChild(btn);
-            }
-        }
+          <div id="banner-info-box" class="hidden">
+              <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Frente EU+ Missão</span>
+              <h2 id="campanha-nome" class="text-2xl md:text-3xl font-extrabold text-white mt-3 mb-2">Ação Missionária</h2>
+              <p class="text-zinc-400 text-sm mb-4">Escolha os seus números abaixo, faça o PIX institucional e envie o comprovante.</p>
+              <div class="inline-block bg-zinc-800/80 border border-zinc-700 rounded-2xl px-4 py-2">
+                  <span class="text-xs text-zinc-500 block uppercase font-medium">Valor por Cota</span>
+                  <span class="text-xl font-black text-amber-400" id="campanha-valor">R$ 0,00</span>
+              </div>
+          </div>
+      </div>
 
-        function alternarSelecao(btn, num) {
-            if (numerosSelecionados.includes(num)) {
-                numerosSelecionados = numerosSelecionados.filter(n => n !== num);
-                btn.classList.remove("bg-green-600");
-            } else {
-                numerosSelecionados.push(num);
-                btn.classList.add("bg-green-600");
-            }
-            document.getElementById("formReserva").classList.toggle("hidden", numerosSelecionados.length === 0);
-        }
+      <div class="bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-800 p-6 mb-6">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
+              <div>
+                  <h3 class="text-xl font-bold text-white tracking-tight">Selecione seus Números</h3>
+                  <p class="text-xs text-zinc-500">Você pode marcar múltiplos números antes de fechar a reserva.</p>
+              </div>
+              <div id="contador-selecao" class="bg-zinc-800 text-zinc-300 border border-zinc-700 text-xs font-bold px-3 py-1.5 rounded-xl hidden">
+                  0 selecionados
+              </div>
+          </div>
+          
+          <div class="flex flex-wrap gap-4 mb-6 text-xs font-semibold bg-zinc-950 p-3 rounded-xl border border-zinc-800/60">
+              <div class="flex items-center gap-1.5 text-emerald-400">
+                  <span class="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500"></span> Disponíveis
+              </div>
+              <div class="flex items-center gap-1.5 text-amber-400">
+                  <span class="w-3 h-3 rounded-full bg-amber-500/20 border border-amber-500/40"></span> Reservados
+              </div>
+              <div class="flex items-center gap-1.5 text-red-400">
+                  <span class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/40"></span> Vendidos
+              </div>
+          </div>
+          
+          <div id="wrapper-grid" class="grid grid-cols-5 sm:grid-cols-10 gap-2"></div>
+      </div>
 
-        async function salvarReserva() {
-            const nome = document.getElementById("nome").value;
-            const zap = document.getElementById("whatsapp").value;
-            
-            const formData = new URLSearchParams();
-            formData.append("action", "salvarReserva");
-            formData.append("idCampanha", campanhaId);
-            formData.append("comprador", nome);
-            formData.append("whatsapp", zap);
-            formData.append("numeros", numerosSelecionados.join(","));
-            formData.append("total", numerosSelecionados.length * 10); // Ajuste conforme valor da cota
+      <div id="box-checkout" class="bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-800 p-6 mb-6 hidden scroll-mt-6">
+          <h3 class="text-xl font-bold text-white mb-2">Quase pronto! Efetue o seu PIX</h3>
+          <p class="text-zinc-400 text-sm mb-4">Para garantir as suas cotas, copie a chave abaixo e realize o pagamento no app do seu banco. Em seguida, clique no botão verde para enviar o comprovante.</p>
+          
+          <div class="bg-zinc-950 p-4 rounded-2xl mb-4 border border-zinc-800 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+              <span class="text-sm text-zinc-400 font-medium">Números escolhidos: <strong id="checkout-lista-numeros" class="text-white font-mono text-base"></strong></span>
+              <span class="text-sm text-zinc-400 font-medium">Total Estimado: <strong id="checkout-valor-total" class="text-amber-400 text-lg font-black"></strong></span>
+          </div>
 
-            const res = await fetch(API_URL, { method: "POST", body: formData });
-            const data = await res.json();
-            
-            if (data.status === "sucesso") {
-                alert("Reserva feita! Envie o comprovante via Pix.");
-                window.location.reload();
-            } else {
-                alert("Erro: " + data.message);
-            }
-        }
+          <div onclick="copiarPix()" class="bg-gradient-to-r from-amber-500/10 to-amber-600/10 p-5 rounded-2xl mb-4 text-center border-2 border-dashed border-amber-500/40 cursor-pointer hover:border-amber-400 hover:from-amber-500/20 hover:to-amber-600/20 transition-all group relative shadow-md">
+              <span class="text-xs text-amber-400 block uppercase font-black tracking-wider mb-2 group-hover:scale-105 transition-transform">
+                  📋 Copie aqui o pix para pagamento (Clique para Copiar)
+              </span>
+              <strong class="text-lg md:text-xl text-zinc-100 font-mono tracking-widest break-all px-2 block select-all bg-zinc-950/80 py-2 rounded-xl border border-zinc-800" id="txt-chave-pix">52865468000142</strong>
+              <span id="toast-copiado" class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-zinc-950 text-xs font-black px-4 py-1.5 rounded-full opacity-0 transition-opacity pointer-events-none shadow-xl">✓ CHAVE COPIADA!</span>
+          </div>
 
-        carregarCampanha();
-    </script>
+          <button id="btn-enviar-whats" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2 transform active:scale-[0.98] cursor-pointer text-base">
+              🟢 Enviar Comprovante por WhatsApp da Igreja
+          </button>
+      </div>
+
+  </div>
+
+  <div id="container-flutuante" class="fixed bottom-0 left-0 right-0 p-4 bg-zinc-950/80 backdrop-blur-md border-t border-zinc-800 shadow-2xl transform translate-y-full transition-transform duration-300 z-50 flex justify-center items-center">
+      <button id="btn-abrir-reserva" class="w-full max-w-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-zinc-950 font-black py-4 px-6 rounded-2xl shadow-xl transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer text-base">
+          🎟️ Reservar (<span id="btn-contador">0</span>) Números Selecionados
+      </button>
+  </div>
+
+  <footer class="w-full bg-zinc-950 border-t border-zinc-900 py-6 text-center mt-12 px-4">
+      <p class="text-zinc-500 text-xs tracking-wide">Casa de Oração Missão Apostólica Antioquia</p>
+      <p class="text-zinc-400 text-sm font-semibold tracking-normal mt-1">"Conectando Vidas e famílias ao propósito de Deus."</p>
+      <p class="text-zinc-600 text-[10px] mt-4 tracking-wider uppercase">© 2026 • Todos os direitos reservados</p>
+      <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="inline-block mt-4 border border-zinc-800 bg-zinc-900/50 px-4 py-2 rounded-xl text-xs font-bold tracking-wider text-amber-500 hover:bg-zinc-800 hover:text-amber-400 transition-all">
+          🛡️ DESENVOLVIDO POR GRUPO EU<sup>+</sup> MISSÃO
+      </a>
+  </footer>
+
+  <script>
+      const URL_ENDPOINT_PROD = "https://script.google.com/macros/s/AKfycbwSeJjsgGrdsxZ0Ik4bYRnx8NoSHnwT4KVRzAacZgFdndO8y3nTMQbJCm8i-V_sCrDIHA/exec"; 
+      const WHATSAPP_IGREJA = "555181659360"; 
+      const CHAVE_PIX_TEXTO = "52865468000142";
+
+      // Captura o ID da URL dinamicamente (?id=camp_...)
+      const urlParams = new URLSearchParams(window.location.search);
+      let CAMPANHA_ATIVA_ID = urlParams.get('id'); 
+
+      let listaNumerosSelecionados = [];
+      let valorCotaUnitario = 8.0;
+
+      // Executa a cópia da chave PIX para a área de transferência
+      function copiarPix() {
+          const txt = document.getElementById("txt-chave-pix").innerText;
+          navigator.clipboard.writeText(txt);
+          const toast = document.getElementById("toast-copiado");
+          
+          toast.classList.remove("opacity-0");
+          toast.classList.add("opacity-100");
+          setTimeout(() => {
+              toast.classList.remove("opacity-100");
+              toast.classList.add("opacity-0");
+          }, 1800);
+      }
+
+      // Renderização do Painel com base nos metadados coletados da Planilha
+      async function renderizarPainel() {
+          try {
+              const rConfig = await fetch(`${URL_ENDPOINT_PROD}?action=OBTER_GRID&campanhaId=Configuracoes_Gerais`);
+              const payloadConfig = await rConfig.json();
+              
+              if(payloadConfig.status === "SUCESSO" && payloadConfig.data.length > 0) {
+                  
+                  // Se nenhum ID válido veio na URL, assume automaticamente a última campanha marcada como "Ativa"
+                  if (!CAMPANHA_ATIVA_ID) {
+                      const ativas = payloadConfig.data.filter(c => String(c.Status || c["Status (Ativa / Pausada / Encerada)"] || c.status).toUpperCase() === "ATIVA");
+                      const selecionada = ativas.length > 0 ? ativas[ativas.length - 1] : payloadConfig.data[payloadConfig.data.length - 1];
+                      CAMPANHA_ATIVA_ID = selecionada.ID_Campanha || selecionada.numero;
+                  }
+
+                  // Localiza as configurações específicas da campanha atual
+                  const info = payloadConfig.data.find(c => c.ID_Campanha === CAMPANHA_ATIVA_ID || c.numero === CAMPANHA_ATIVA_ID);
+                  
+                  if (info) {
+                      document.getElementById("campanha-nome").innerText = info.Nome_Acao || info.nome || "Ação Missionária COMAAN+";
+                      if(info.Valor_Cota || info.valorCota) {
+                          valorCotaUnitario = parseFloat(info.Valor_Cota || info.valorCota);
+                          document.getElementById("campanha-valor").innerText = `R$ ${valorCotaUnitario.toFixed(2).replace('.',',')}`;
+                      }
+                      if(info.Imagem_URL || info.imageUrl) {
+                          document.getElementById("campanha-foto").src = info.Imagem_URL || info.imageUrl;
+                      } else {
+                          document.getElementById("campanha-foto").src = "https://i.ibb.co/680LWh1V/comaan-banner.png";
+                      }
+                      document.getElementById("loading-banner").classList.add("hidden");
+                      document.getElementById("banner-img-box").classList.remove("hidden");
+                      document.getElementById("banner-info-box").classList.remove("hidden");
+                  }
+              }
+          } catch (err) {
+              console.error("Erro carregando configurações gerais:", err);
+              // Fallback para não quebrar a tela do usuário
+              document.getElementById("campanha-nome").innerText = "Grande Ação Missionária COMAAN+";
+              document.getElementById("campanha-valor").innerText = "R$ 8,00";
+              document.getElementById("campanha-foto").src = "https://i.ibb.co/680LWh1V/comaan-banner.png";
+              document.getElementById("loading-banner").classList.add("hidden");
+              document.getElementById("banner-img-box").classList.remove("hidden");
+              document.getElementById("banner-info-box").classList.remove("hidden");
+          }
+
+          // Aborta com aviso visual se nenhuma ID foi definida ou localizada na planilha
+          if (!CAMPANHA_ATIVA_ID) {
+              document.getElementById("wrapper-grid").innerHTML = `<p class='col-span-full text-center text-amber-500 font-semibold py-4 text-sm'>Nenhuma campanha ativa foi configurada no banco de dados.</p>`;
+              return;
+          }
+
+          // Renderização do grid numérico da campanha
+          try {
+              const container = document.getElementById("wrapper-grid");
+              container.innerHTML = "<p class='col-span-full text-center text-zinc-500 py-4 text-sm'>Sincronizando números da campanha...</p>";
+             
+              const res = await fetch(`${URL_ENDPOINT_PROD}?action=OBTER_GRID&campanhaId=${CAMPANHA_ATIVA_ID}`);
+              const payload = await res.json();
+
+              if(payload.status !== "SUCESSO") throw new Error(payload.message);
+
+              container.innerHTML = "";
+              payload.data.forEach(item => {
+                  const btn = document.createElement("button");
+                  const numFormatado = String(item.numero).padStart(3, '0');
+                  btn.innerText = numFormatado;
+
+                  if(item.status === "DISPONIVEL") {
+                      btn.className = "p-3 bg-zinc-900 text-emerald-400 font-bold rounded-xl border-2 border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-500/10 transition-all text-sm shadow-sm cursor-pointer";
+                      btn.onclick = () => alternarSelecaoNumero(item.numero, btn);
+                  } else if (item.status === "RESERVADO") {
+                      btn.className = "p-3 bg-amber-500/5 text-amber-500 border-2 border-amber-500/20 rounded-xl text-sm font-bold cursor-not-allowed opacity-60";
+                      btn.title = "Aguardando validação";
+                  } else {
+                      btn.className = "p-3 bg-zinc-950 text-red-500/40 border-2 border-red-500/10 rounded-xl cursor-not-allowed text-xs font-normal line-through opacity-40";
+                      btn.disabled = true;
+                  }
+                  container.appendChild(btn);
+              });
+
+          } catch(e) {
+              document.getElementById("wrapper-grid").innerHTML = `<p class='col-span-full text-center text-red-400 font-medium py-4 text-sm'>Aviso: Erro de comunicação ao obter os números desta campanha.</p>`;
+          }
+      }
+
+      // Controle de Estados e Estilos na seleção de múltiplos botões
+      function alternarSelecaoNumero(numero, elementoBtn) {
+          const index = listaNumerosSelecionados.indexOf(numero);
+
+          if(index > -1) {
+              listaNumerosSelecionados.splice(index, 1);
+              elementoBtn.className = "p-3 bg-zinc-900 text-emerald-400 font-bold rounded-xl border-2 border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-500/10 transition-all text-sm shadow-sm cursor-pointer";
+          } else {
+              listaNumerosSelecionados.push(numero);
+              elementoBtn.className = "p-3 bg-gradient-to-b from-amber-400 to-amber-500 text-zinc-950 font-black rounded-xl border-2 border-amber-300 transition-all text-sm shadow-md scale-105 active:scale-95 cursor-pointer";
+          }
+
+          const contador = document.getElementById("contador-selecao");
+          const containerFlutuante = document.getElementById("container-flutuante");
+          const btnContador = document.getElementById("btn-contador");
+
+          if(listaNumerosSelecionados.length > 0) {
+              contador.innerText = `${listaNumerosSelecionados.length} ${listaNumerosSelecionados.length === 1 ? 'selecionado' : 'selecionados'}`;
+              contador.classList.remove("hidden");
+              btnContador.innerText = listaNumerosSelecionados.length;
+              containerFlutuante.classList.remove("translate-y-full");
+          } else {
+              contador.classList.add("hidden");
+              containerFlutuante.classList.add("translate-y-full");
+          }
+      }
+
+      // Disparo do Fluxo de Pré-Reserva no Apps Script
+      document.getElementById("btn-abrir-reserva").onclick = async () => {
+          if(listaNumerosSelecionados.length === 0) return;
+
+          const prosseguir = confirm(`Você selecionou os números: [ ${listaNumerosSelecionados.join(', ')} ]\n\nDeseja PROSSEGUIR para a área de pagamento?`);
+          if (!prosseguir) return;
+
+          const nomeMock = prompt("👉 [PASSO 1 de 2]: SEU NOME COMPLETO\n\nDigite seu Nome Completo para identificarmos sua cota:");
+          if(!nomeMock || nomeMock.trim().length < 3) {
+              alert("O preenchimento do nome é obrigatório para validação.");
+              return;
+          }
+
+          const whatsMock = prompt("👉 [PASSO 2 de 2]: SEU WHATSAPP COM DDD\n\nExemplo: 51988887777 (Insira apenas números, sem traços ou parênteses):");
+          if(!whatsMock || whatsMock.trim().length < 10) {
+              alert("Por favor, informe um número de WhatsApp válido com o DDD.");
+              return;
+          }
+
+          const btnAcao = document.getElementById("btn-abrir-reserva");
+          btnAcao.disabled = true;
+          btnAcao.innerText = "⏳ Gravando dados da sua cota no sistema...";
+
+          try {
+              const payloadInput = {
+                  action: "PRÉ_RESERVA",
+                  campanhaId: CAMPANHA_ATIVA_ID,
+                  nome: nomeMock.trim(),
+                  whatsapp: whatsMock.replace(/\D/g, ''), 
+                  numeros: listaNumerosSelecionados
+              };
+
+              const response = await fetch(URL_ENDPOINT_PROD, {
+                  method: "POST",
+                  body: JSON.stringify(payloadInput)
+              });
+              const resJson = await response.json();
+
+              if(resJson.status === "SUCESSO_RESERVA") {
+                  const numerosFormatados = listaNumerosSelecionados.map(n => String(n).padStart(3, '0')).join(', ');
+                  const valorCalculado = listaNumerosSelecionados.length * valorCotaUnitario;
+
+                  document.getElementById("checkout-lista-numeros").innerText = numerosFormatados;
+                  document.getElementById("checkout-valor-total").innerText = `R$ ${valorCalculado.toFixed(2).replace('.', ',')}`;
+
+                  document.getElementById("container-flutuante").classList.add("translate-y-full");
+
+                  const txtMsg = encodeURIComponent(`Olá! Acabei de efetuar a reserva dos números [ ${numerosFormatados} ] no painel do COMAAN+ em nome de ${nomeMock.trim()}.\n\n🔑 CHAVE PIX DA IGREJA: ${CHAVE_PIX_TEXTO}\n💰 VALOR TOTAL: R$ ${valorCalculado.toFixed(2).replace('.', ',')}\n\nEstou enviando em anexo o comprovante do PIX para a validação das minhas cotas.`);
+                  const apiWhats = `https://wa.me/${WHATSAPP_IGREJA}?text=${txtMsg}`;
+
+                  document.getElementById("box-checkout").classList.remove("hidden");
+                  document.getElementById("btn-enviar-whats").onclick = () => {
+                      window.open(apiWhats, '_blank');
+                      // Delay seguro de 500ms para o navegador mobile não travar o redirecionamento externo
+                      setTimeout(() => {
+                          location.reload();
+                      }, 500);
+                  };
+                  document.getElementById("box-checkout").scrollIntoView({ behavior: 'smooth' });
+
+              } else {
+                  alert(`Aviso do Sistema: ${resJson.message}`);
+                  location.reload();
+              }
+
+          } catch(err) {
+              alert("Falha crítica de rede ou comunicação: " + err.message);
+          } finally {
+              btnAcao.disabled = false;
+              btnAcao.innerText = "🎟️ Reservar Números Selecionados";
+          }
+      };
+
+      window.onload = renderizarPainel;
+  </script>
 </body>
 </html>
