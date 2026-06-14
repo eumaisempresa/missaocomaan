@@ -32,16 +32,19 @@
             font-family: 'Courier New', Courier, monospace;
         }
         
-        /* CORES RESTAURADAS */
+        /* CORES DE STATUS */
         .btn-livre { background-color: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
         .btn-livre:hover { border-color: #F5B041; }
-        .btn-selecionado { background-color: #F5B041 !important; color: #000 !important; border-color: #F5B041 !important; }
-        .btn-ocupado { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); opacity: 0.6; cursor: not-allowed; }
+        
+        .btn-reservado { background-color: rgba(245, 176, 65, 0.15); color: #F5B041; border: 1px solid rgba(245, 176, 65, 0.3); cursor: not-allowed; }
+        
+        .btn-pago { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); cursor: not-allowed; }
+        
+        .btn-selecionado { background-color: #F5B041 !important; color: #000 !important; border-color: #F5B041 !important; box-shadow: 0 0 15px rgba(245, 176, 65, 0.4); }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans pb-20">
 
-    <!-- CABEÇALHO DE ARRECADAÇÃO & MARKETING -->
     <header class="w-full bg-zinc-900/50 border-b border-zinc-800 py-4 px-4 text-center">
         <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-1">Painel de Ações de Arrecadação Missionária</p>
         <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="text-xs font-bold hover:opacity-80 transition-opacity">
@@ -50,7 +53,6 @@
     </header>
 
     <div class="max-w-xl mx-auto px-4 pt-8">
-        <!-- LOGO AMARELO AJUSTADO -->
         <div class="text-center mb-8">
             <h1 class="text-4xl font-black uppercase tracking-tighter comaan-yellow">
                 COMAAN<span class="plus-symbol text-5xl">+</span>
@@ -58,7 +60,6 @@
             <p class="text-zinc-500 text-xs italic mt-1">"Conectando Vidas e famílias ao propósito de Deus."</p>
         </div>
 
-        <!-- INFO SORTEIO INSTAGRAM -->
         <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 mb-6 flex items-center gap-4">
             <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 flex items-center justify-center text-white text-xl">
                 <i class="fa-brands fa-instagram"></i>
@@ -70,7 +71,6 @@
             </div>
         </div>
 
-        <!-- BOX DE CAMPANHA -->
         <div id="boxCampanha" class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden mb-6">
             <div class="relative z-10">
                 <div class="flex justify-between items-start mb-4">
@@ -96,20 +96,18 @@
             </div>
         </div>
 
-        <!-- GRID DE NÚMEROS -->
         <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                 <h3 class="text-lg font-bold text-white">Selecione seus Números</h3>
-                <div class="flex gap-2">
-                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/30"></div><span class="text-[10px] text-zinc-500 font-bold uppercase">Livre</span></div>
-                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-amber-500"></div><span class="text-[10px] text-zinc-500 font-bold uppercase">Sua</span></div>
-                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/30"></div><span class="text-[10px] text-zinc-500 font-bold uppercase">Ocupado</span></div>
+                <div class="flex flex-wrap gap-3">
+                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/30"></div><span class="text-[9px] text-zinc-500 font-bold uppercase">Livre</span></div>
+                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-amber-500/40 border border-amber-500/50"></div><span class="text-[9px] text-zinc-500 font-bold uppercase">Reservado</span></div>
+                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-red-500/40 border border-red-500/50"></div><span class="text-[9px] text-zinc-500 font-bold uppercase">Pago</span></div>
                 </div>
             </div>
             <div id="gridNumeros" class="grid-numeros"></div>
         </div>
 
-        <!-- RODAPÉ LGPD -->
         <footer class="mt-8 text-center px-4 space-y-4">
             <div class="bg-zinc-900/30 border border-zinc-800/50 rounded-xl p-3">
                 <p class="text-[9px] text-zinc-600 leading-relaxed">
@@ -120,7 +118,6 @@
         </footer>
     </div>
 
-    <!-- BARRA DE CHECKOUT FLUTUANTE -->
     <div id="checkoutBar" class="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-800 p-4 transform translate-y-full transition-transform duration-300 z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         <div class="max-w-xl mx-auto flex justify-between items-center">
             <div>
@@ -133,7 +130,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE RESERVA -->
     <div id="modalReserva" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
         <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 max-w-md w-full shadow-2xl space-y-6">
             <div class="text-center">
@@ -165,7 +161,6 @@
         </div>
     </div>
 
-    <!-- BOTÕES PÓS-RESERVA (FLUTUANTES) -->
     <div id="botoesPosReserva" class="fixed bottom-6 right-6 flex flex-col gap-3 hidden z-[110]">
         <button onclick="copiarPix()" class="bg-white text-black font-black px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce">
             <i class="fa-solid fa-copy"></i> Copiar Chave PIX
@@ -225,8 +220,10 @@
                     if(item.status === 'DISPONIVEL') {
                         btn.className = "numero-btn text-sm btn-livre";
                         btn.onclick = () => alternarSelecao(item.numero, btn);
-                    } else {
-                        btn.className = "numero-btn text-sm btn-ocupado";
+                    } else if(item.status === 'RESERVADO') {
+                        btn.className = "numero-btn text-sm btn-reservado";
+                    } else if(item.status === 'PAGO') {
+                        btn.className = "numero-btn text-sm btn-pago";
                     }
                     grid.appendChild(btn);
                 });
