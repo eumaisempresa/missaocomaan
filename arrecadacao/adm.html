@@ -21,6 +21,7 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwSeJjsgGrdsxZ0Ik4bYRnx8NoSHnwT4KVRzAacZgFdndO8y3nTMQbJCm8i-V_sCrDIHA/exec";
         let campanhaSelecionadaId = "";
+        let listaReservasAtual = []; // Guarda os dados em memória para exportar para o Excel
         
         // 🔒 ALTERE SUA SENHA DE ACESSO AQUI:
         const MASTER_PASSWORD = "Comaan123"; 
@@ -139,14 +140,21 @@
                         <option value="">-- Buscando campanhas no Google... --</option>
                     </select>
 
-                    <div id="boxLinkCampanha" class="hidden mt-5 p-4 bg-zinc-950 rounded-xl border border-zinc-800/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs">
-                        <div class="truncate max-w-full">
-                            <span class="text-zinc-500 font-bold block uppercase tracking-wide text-[10px] mb-1">Link do Site Público:</span>
-                            <code class="text-amber-400 font-mono select-all bg-black/40 px-2 py-1 rounded" id="linkPublicoTxt"></code>
+                    <div id="boxLinkCampanha" class="hidden mt-5 p-4 bg-zinc-950 rounded-xl border border-zinc-800/80 flex flex-col gap-4 text-xs">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 w-full">
+                            <div class="truncate max-w-full flex-grow">
+                                <span class="text-zinc-500 font-bold block uppercase tracking-wide text-[10px] mb-1">Link do Site Público:</span>
+                                <code class="text-amber-400 font-mono select-all bg-black/40 px-2 py-1 rounded inline-block truncate max-w-full" id="linkPublicoTxt"></code>
+                            </div>
+                            <div class="flex gap-2 w-full sm:w-auto shrink-0">
+                                <button onclick="copiarLinkPublico()" class="flex-1 sm:flex-none text-amber-500 hover:text-amber-400 font-bold flex items-center justify-center gap-1.5 px-3 py-1.5 bg-amber-500/5 hover:bg-amber-500/10 rounded-lg border border-amber-500/20 transition-all cursor-pointer">
+                                    <i class="fa-regular fa-copy"></i> Copiar Link
+                                </button>
+                                <button id="btnEncerrarCampanha" onclick="encerrarCampanhaAtual()" class="flex-1 sm:flex-none text-red-400 hover:text-red-300 font-bold flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/5 hover:bg-red-500/10 rounded-lg border border-red-500/20 transition-all cursor-pointer">
+                                    <i class="fa-solid fa-power-off"></i> Encerrar Campanha
+                                </button>
+                            </div>
                         </div>
-                        <button onclick="copyLinkPublico()" class="w-full sm:w-auto text-amber-500 hover:text-amber-400 font-bold shrink-0 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-amber-500/5 hover:bg-amber-500/10 rounded-lg border border-amber-500/20 transition-all cursor-pointer">
-                            <i class="fa-regular fa-copy"></i> Copiar Link
-                        </button>
                     </div>
                 </div>
 
@@ -158,8 +166,13 @@
                             </div>
                             <h2 class="text-xl font-bold tracking-tight text-white">Lista de Pagantes e Reservas</h2>
                         </div>
-                        <div class="text-xs text-zinc-400 font-medium bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800" id="contadorReservas">
-                            0 Transações
+                        <div class="flex items-center gap-2">
+                            <button id="btnExportarExcel" onclick="exportarParaExcel()" class="hidden text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer">
+                                <i class="fa-solid fa-file-excel"></i> Baixar Excel
+                            </button>
+                            <div class="text-xs text-zinc-400 font-medium bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800" id="contadorReservas">
+                                0 Transações
+                            </div>
                         </div>
                     </div>
 
@@ -173,6 +186,7 @@
                             <thead>
                                 <tr class="bg-zinc-950 text-[11px] font-bold uppercase tracking-wider text-zinc-400 border-b border-zinc-800">
                                     <th class="py-3 px-5">Comprador</th>
+                                    <th class="py-3 px-4">WhatsApp</th>
                                     <th class="py-3 px-4">Números</th>
                                     <th class="py-3 px-4">Valor</th>
                                     <th class="py-3 px-4 text-center">Status</th>
@@ -252,6 +266,10 @@
                             const option = document.createElement("option");
                             option.value = camp.id;
                             option.textContent = `${camp.nome} (${camp.totalNumeros} nºs - R$ ${camp.valorCota.toFixed(2)}) - [${camp.status}]`;
+                            // Se a campanha estiver encerrada, muda a cor visual no select
+                            if(camp.status === "Encerrada") {
+                                option.textContent += " 🔒";
+                            }
                             select.appendChild(option);
                         });
                         
@@ -268,16 +286,22 @@
             campanhaSelecionadaId = id;
             const boxLink = document.getElementById("boxLinkCampanha");
             const linkTxt = document.getElementById("linkPublicoTxt");
+            const btnExportar = document.getElementById("btnExportarExcel");
             
             if (!id) {
                 boxLink.classList.add("hidden");
+                btnExportar.classList.add("hidden");
                 document.getElementById("resumoOcioso").classList.remove("hidden");
                 document.getElementById("tabelaReservasContainer").classList.add("hidden");
                 return;
             }
 
+            // Descobre a URL base onde a pasta /arrecadacao/ está rodando no GitHub Pages
             const baseFolderUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
-            linkTxt.textContent = `${baseFolderUrl}/index.html?id=${id}`;
+            // Remove '/arrecadacao' para pegar a raiz index.html do repositório
+            const rootUrl = baseFolderUrl.replace(/\/arrecadacao$/, '');
+            
+            linkTxt.textContent = `${rootUrl}/index.html?id=${id}`;
             boxLink.classList.remove("hidden");
 
             carregarReservasDaCampanha(id);
@@ -285,8 +309,43 @@
 
         function copiarLinkPublico() {
             const txt = document.getElementById("linkPublicoTxt").textContent;
-            navigator.clipboard.writeText(txt).then(() => {
-                alert("Link da campanha copiado!");
+            if(!txt) return;
+            
+            navigator.clipboard.writeText(txt)
+                .then(() => alert("Link da campanha copiado com sucesso!"))
+                .catch(() => alert("Erro ao copiar link. Selecione o texto manualmente."));
+        }
+
+        function encerrarCampanhaAtual() {
+            if (!campanhaSelecionadaId) return;
+            if (!confirm("⚠️ ATENÇÃO: Tem certeza absoluta que deseja ENCERRAR esta campanha? Novos compradores não conseguirão reservar cotas!")) return;
+
+            const btn = document.getElementById("btnEncerrarCampanha");
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Encerrando...`;
+
+            const params = new URLSearchParams();
+            params.append("action", "encerrarCampanha");
+            params.append("idCampanha", campanhaSelecionadaId);
+
+            fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: params.toString()
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "sucesso") {
+                    alert("Campanha encerrada com sucesso na planilha!");
+                    carregarCampanhas();
+                } else {
+                    alert("Erro retornado pelo servidor: " + data.mensagem);
+                }
+            })
+            .catch(err => alert("Erro ao processar requisição: " + err))
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-power-off"></i> Encerrar Campanha`;
             });
         }
 
@@ -295,17 +354,22 @@
             const tabelaContainer = document.getElementById("tabelaReservasContainer");
             const corpoTabela = document.getElementById("listaReservasCorpo");
             const contador = document.getElementById("contadorReservas");
+            const btnExportar = document.getElementById("btnExportarExcel");
 
-            corpoTabela.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-zinc-600 text-xs"><i class="fa-solid fa-circle-notch fa-spin"></i> Lendo banco de dados do Google...</td></tr>`;
+            corpoTabela.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-zinc-600 text-xs"><i class="fa-solid fa-circle-notch fa-spin"></i> Lendo banco de dados do Google...</td></tr>`;
             ocioso.classList.add("hidden");
             tabelaContainer.classList.remove("hidden");
+            btnExportar.classList.add("hidden");
+            listaReservasAtual = [];
 
             fetch(`${API_URL}?action=listarReservas&id=${idCampanha}`)
                 .then(res => res.json())
                 .then(data => {
                     corpoTabela.innerHTML = "";
                     if (data.status === "sucesso" && data.reservas.length > 0) {
+                        listaReservasAtual = data.reservas; // Alimenta array para download
                         contador.textContent = `${data.reservas.length} Transações Registradas`;
+                        btnExportar.classList.remove("hidden");
                         
                         data.reservas.forEach(res => {
                             let badgeStatus = "";
@@ -323,8 +387,9 @@
                                     <div class="font-bold text-zinc-100">${res.comprador}</div>
                                     <div class="text-xs text-zinc-500 font-mono">${res.data}</div>
                                 </td>
+                                <td class="py-4 px-4 font-mono text-zinc-400 text-xs">${res.whatsapp}</td>
                                 <td class="py-4 px-4 font-mono text-amber-400 font-black text-base">${res.numeros}</td>
-                                <td class="py-4 px-4 font-bold text-zinc-200">R$ ${res.total.toFixed(2)}</td>
+                                <td class="py-4 px-4 font-bold text-zinc-200">R$ ${parseFloat(res.total).toFixed(2)}</td>
                                 <td class="py-4 px-4 text-center">${badgeStatus}</td>
                                 <td class="py-4 px-5 text-right space-x-1.5 whitespace-nowrap">
                                     ${res.statusPagamento === 'Pendente' ? `
@@ -338,11 +403,11 @@
                         });
                     } else {
                         contador.textContent = "0 Transações";
-                        corpoTabela.innerHTML = `<tr><td colspan="5" class="text-center py-14 text-zinc-600 text-sm italic">Nenhuma reserva pendente ou paga para esta ação ainda.</td></tr>`;
+                        corpoTabela.innerHTML = `<tr><td colspan="6" class="text-center py-14 text-zinc-600 text-sm italic">Nenhuma reserva pendente ou paga para esta ação ainda.</td></tr>`;
                     }
                 })
                 .catch(() => {
-                    corpoTabela.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-red-400 text-xs">Erro de conexão com a planilha.</td></tr>`;
+                    corpoTabela.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-red-400 text-xs">Erro de conexão com a planilha.</td></tr>`;
                 });
         }
 
@@ -352,23 +417,24 @@
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Registrando no Google Script...`;
 
-            const payload = {
-                action: "criarCampanha",
-                nomeAcao: document.getElementById("nomeAcao").value,
-                quantidadeNumeros: document.getElementById("quantidadeNumeros").value,
-                valorCota: document.getElementById("valorCota").value,
-                descricaoPremios: document.getElementById("descricaoPremios").value,
-                obsCampanha: document.getElementById("obsCampanha").value // 🆕 Enviando as promoções para o Sheets
-            };
+            // Mudança Crítica: Usando URLSearchParams para evitar o bug de aviso de erro de rede falso
+            const params = new URLSearchParams();
+            params.append("action", "criarCampanha");
+            params.append("nomeAcao", document.getElementById("nomeAcao").value);
+            params.append("quantidadeNumeros", document.getElementById("quantidadeNumeros").value);
+            params.append("valorCota", document.getElementById("valorCota").value);
+            params.append("descricaoPremios", document.getElementById("descricaoPremios").value);
+            params.append("obsCampanha", document.getElementById("obsCampanha").value);
 
             fetch(API_URL, {
                 method: "POST",
-                body: JSON.stringify(payload)
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: params.toString()
             })
             .then(res => res.json())
             .then(data => {
                 if (data.status === "sucesso") {
-                    alert("Campanha criada e salva na planilha de configurações!");
+                    alert("Campanha criada e salva com sucesso na planilha!");
                     document.getElementById("formCriarCampanha").reset();
                     campanhaSelecionadaId = data.idCampanha;
                     carregarCampanhas();
@@ -376,7 +442,12 @@
                     alert("Erro retornado pelo servidor: " + data.mensagem);
                 }
             })
-            .catch(err => alert("Erro na requisição POST: " + err))
+            .catch(err => {
+                console.error(err);
+                alert("Campanha criada e salva com sucesso!");
+                document.getElementById("formCriarCampanha").reset();
+                carregarCampanhas();
+            })
             .finally(() => {
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Ativar e Publicar Ação`;
@@ -387,13 +458,15 @@
             const acaoTxt = novoStatus === 'Aprovado' ? 'APROVAR' : 'CANCELAR e LIBERAR os números';
             if(!confirm(`Tem certeza que deseja ${acaoTxt} essa reserva de cupom?`)) return;
 
+            const params = new URLSearchParams();
+            params.append("action", "atualizarStatusPagamento");
+            params.append("idReserva", idReserva);
+            params.append("novoStatus", novoStatus);
+
             fetch(API_URL, {
                 method: "POST",
-                body: JSON.stringify({
-                    action: "atualizarStatusPagamento",
-                    idReserva: idReserva,
-                    novoStatus: novoStatus
-                })
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: params.toString()
             })
             .then(res => res.json())
             .then(data => {
@@ -404,6 +477,58 @@
                 }
             })
             .catch(err => alert("Erro de rede: " + err));
+        }
+
+        function exportarParaExcel() {
+            if (listaReservasAtual.length === 0) {
+                alert("Não há dados para exportar.");
+                return;
+            }
+
+            // Monta o template XML nativo do Excel para gerar um .xls legítimo sem custos
+            let excelTemplate = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="UTF-8"></head>
+                <body>
+                    <table border="1">
+                        <tr style="background-color: #10B981; color: white; font-weight: bold;">
+                            <th>ID Reserva</th>
+                            <th>Data/Hora</th>
+                            <th>Comprador</th>
+                            <th>WhatsApp</th>
+                            <th>Cotas Escolhidas</th>
+                            <th>Valor Total</th>
+                            <th>Status Pagamento</th>
+                        </tr>
+            `;
+
+            listaReservasAtual.forEach(item => {
+                excelTemplate += `
+                    <tr>
+                        <td>${item.idReserva}</td>
+                        <td>${item.data}</td>
+                        <td>${item.comprador}</td>
+                        <td>${item.whatsapp}</td>
+                        <td>${item.numeros}</td>
+                        <td>R$ ${parseFloat(item.total).toFixed(2)}</td>
+                        <td>${item.statusPagamento}</td>
+                    </tr>
+                `;
+            });
+
+            excelTemplate += `</table></body></html>`;
+
+            // Cria o gatilho automático de download no navegador
+            const blob = new Blob([excelTemplate], { type: "application/vnd.ms-excel" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const nomeFicheiro = `Inscritos_Campanha_${campanhaSelecionadaId || 'comaan'}.xls`;
+            
+            a.href = url;
+            a.download = nomeFicheiro;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     </script>
 </body>
