@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo - COMAAN+</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .gold-shine {
@@ -31,9 +32,8 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwSeJjsgGrdsxZ0Ik4bYRnx8NoSHnwT4KVRzAacZgFdndO8y3nTMQbJCm8i-V_sCrDIHA/exec";
         let campanhaSelecionadaId = "";
-        let listaReservasAtual = []; 
+        let dadosExportacao = [];
         const MASTER_PASSWORD = "Comaan123"; 
-        // Link base do GitHub (ajuste se necessário)
         const GITHUB_BASE_URL = "https://eumaisempresa.github.io/missaocomaan/arrecadacao/publico.html";
     </script>
 
@@ -64,13 +64,9 @@
                     <h1 class="text-2xl font-extrabold uppercase tracking-tight text-white">
                         COMAAN<span class="plus-symbol text-3xl">+</span>
                     </h1>
-                    <div class="hidden sm:block ml-4 pl-4 border-l border-zinc-800">
-                        <p class="text-sm font-bold">Painel Operacional</p>
-                        <p class="text-[10px] text-zinc-500 uppercase tracking-widest">Gestão de Missões</p>
-                    </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="carregarCampanhas()" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 p-2.5 rounded-xl transition-all cursor-pointer" title="Atualizar">
+                    <button onclick="carregarCampanhas()" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 p-2.5 rounded-xl transition-all cursor-pointer">
                         <i class="fa-solid fa-rotate"></i>
                     </button>
                     <button onclick="fazerLogout()" class="bg-red-900/20 text-red-400 p-2.5 rounded-xl transition-all cursor-pointer">
@@ -82,95 +78,63 @@
 
         <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6 w-full flex-grow">
             
-            <!-- FORMULÁRIO DE CRIAÇÃO (RESTAURADO) -->
             <section class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-xl h-fit">
                 <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-plus text-amber-500"></i> Criar Nova Campanha
                 </h2>
                 <form id="formCriarCampanha" onsubmit="criarCampanha(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1">Nome da Ação</label>
-                        <input type="text" id="nomeAcao" required placeholder="Ex: Ação Missionária de Inverno" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 focus:border-amber-500 outline-none">
-                    </div>
-
+                    <input type="text" id="nomeAcao" required placeholder="Nome da Ação" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 outline-none">
                     <div class="grid grid-cols-3 gap-3">
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1">Nº Inicial</label>
-                            <input type="number" id="numeroInicial" required value="1" min="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 outline-none text-center">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1">Qtd Cotas</label>
-                            <select id="quantidadeNumeros" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-3 text-sm text-zinc-100 outline-none cursor-pointer">
-                                <option value="50">50</option>
-                                <option value="100" selected>100</option>
-                                <option value="200">200</option>
-                                <option value="500">500</option>
-                                <option value="1000">1000</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1">Valor R$</label>
-                            <input type="number" id="valorCota" step="0.01" required placeholder="10,00" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 outline-none">
-                        </div>
+                        <input type="number" id="numeroInicial" required value="1" placeholder="Início" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-3 text-sm text-zinc-100 outline-none text-center">
+                        <select id="quantidadeNumeros" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-3 text-sm text-zinc-100 outline-none">
+                            <option value="50">50</option>
+                            <option value="100" selected>100</option>
+                            <option value="200">200</option>
+                            <option value="500">500</option>
+                        </select>
+                        <input type="number" id="valorCota" step="0.01" required placeholder="Valor" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-3 text-sm text-zinc-100 outline-none">
                     </div>
-
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1">Listagem de Prêmios (Escrito)</label>
-                        <textarea id="descricaoPremios" rows="3" required placeholder="1º Prêmio: Cesta Completa&#10;2º Prêmio: Livro Devocional" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 outline-none"></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-1">Promoções / Observações</label>
-                        <textarea id="obsCampanha" rows="2" placeholder="Ex: 1 número por R$ 10,00&#10;2 por R$ 18,00" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 outline-none"></textarea>
-                    </div>
-
-                    <button type="submit" id="btnSalvarCampanha" class="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black py-4 rounded-xl transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-cloud-arrow-up"></i> Ativar e Publicar Ação
+                    <textarea id="descricaoPremios" rows="2" required placeholder="Prêmios" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 outline-none"></textarea>
+                    <textarea id="obsCampanha" rows="2" placeholder="Promoções" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-100 outline-none"></textarea>
+                    <button type="submit" id="btnSalvarCampanha" class="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black py-3 rounded-xl transition-all cursor-pointer">
+                        Publicar Ação
                     </button>
                 </form>
             </section>
 
-            <!-- GESTÃO DE RESERVAS -->
             <section class="lg:col-span-2 space-y-6">
-                
-                <!-- SELETOR E LINK (RESTAURADO) -->
                 <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-xl">
-                    <label class="block text-xs font-bold text-zinc-500 uppercase mb-2">Selecione a Campanha para Gerenciar</label>
                     <select id="selectCampanhas" onchange="selecionarCampanha(this.value)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-4 text-zinc-100 font-bold text-lg outline-none cursor-pointer mb-4">
                         <option value="">Carregando campanhas...</option>
                     </select>
 
                     <div id="boxLinkCampanha" class="hidden p-4 bg-zinc-950 rounded-xl border border-zinc-800/80 flex flex-col sm:flex-row justify-between items-center gap-4">
-                        <div class="truncate w-full">
-                            <span class="text-[10px] text-zinc-500 font-bold uppercase block mb-1">Link do Site Público:</span>
-                            <code id="linkPublicoTxt" class="text-amber-400 font-mono text-xs truncate block"></code>
+                        <div class="flex-1 overflow-hidden">
+                            <span id="badgeStatus" class="inline-block px-2 py-0.5 rounded text-[9px] font-black uppercase mb-1"></span>
+                            <code id="linkPublicoTxt" class="text-amber-400 font-mono text-xs truncate block w-full"></code>
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto">
-                            <button onclick="copiarLinkPublico()" class="flex-1 sm:flex-none bg-amber-500/10 text-amber-500 border border-amber-500/20 px-4 py-2 rounded-lg text-xs font-bold hover:bg-amber-500/20 transition-all cursor-pointer">
-                                <i class="fa-regular fa-copy"></i> Copiar
-                            </button>
-                            <button onclick="encerrarCampanhaAtual()" class="flex-1 sm:flex-none bg-red-900/10 text-red-400 border border-red-900/20 px-4 py-2 rounded-lg text-xs font-bold hover:bg-red-900/20 transition-all cursor-pointer">
-                                <i class="fa-solid fa-power-off"></i> Encerrar
-                            </button>
+                            <button onclick="copiarLinkPublico()" class="bg-amber-500/10 text-amber-500 border border-amber-500/20 px-4 py-2 rounded-lg text-xs font-bold cursor-pointer">Copiar</button>
+                            <button onclick="encerrarCampanhaAtual()" class="bg-red-900/10 text-red-400 border border-red-900/20 px-4 py-2 rounded-lg text-xs font-bold cursor-pointer">Encerrar</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- LISTA DE RESERVAS (RESPONSIVA) -->
                 <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-xl min-h-[400px]">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-list-check text-emerald-500"></i> Lista de Pagantes e Reservas
-                        </h2>
-                        <span id="contadorReservas" class="text-[10px] bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800 text-zinc-500 font-bold uppercase">0 Pedidos</span>
+                    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+                        <h2 class="text-lg font-bold text-white">Lista de Pagantes e Reservas</h2>
+                        <div class="flex items-center gap-3">
+                            <button onclick="exportarExcel()" id="btnExportar" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-file-excel"></i> Baixar Excel
+                            </button>
+                            <span id="contadorReservas" class="text-[10px] bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800 text-zinc-500 font-bold">0 Transações</span>
+                        </div>
                     </div>
 
                     <div id="resumoOcioso" class="text-center py-20 text-zinc-600">
-                        <i class="fa-solid fa-inbox text-4xl mb-3 opacity-20"></i>
-                        <p class="text-sm">Selecione uma campanha acima para ver os pedidos.</p>
+                        <p class="text-sm">Selecione uma campanha para ver os pedidos.</p>
                     </div>
 
-                    <!-- TABELA DESKTOP -->
                     <div class="overflow-x-auto rounded-xl border border-zinc-800 hidden" id="tabelaReservasContainer">
                         <table class="w-full text-left desktop-table">
                             <thead class="bg-zinc-950 text-[10px] font-bold uppercase text-zinc-500 border-b border-zinc-800">
@@ -184,20 +148,14 @@
                             </thead>
                             <tbody id="listaReservasCorpo" class="text-sm divide-y divide-zinc-800"></tbody>
                         </table>
-
-                        <!-- LISTA CARDS MOBILE -->
                         <div id="listaReservasCards" class="mobile-card-list space-y-4 p-2"></div>
                     </div>
                 </div>
             </section>
         </main>
 
-        <footer class="w-full bg-zinc-950 border-t border-zinc-900 py-6 text-center px-4">
-            <p class="text-zinc-500 text-xs tracking-wide">Casa de Oração Missão Apostólica Antioquia</p>
-            <p class="text-zinc-400 text-sm font-semibold mt-1">"Conectando Vidas e famílias ao propósito de Deus."</p>
-            <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="inline-block mt-4 border border-zinc-800 bg-zinc-900/50 px-4 py-2 rounded-xl text-[10px] font-bold tracking-wider text-amber-500 hover:bg-zinc-800 transition-all">
-                🛡️ DESENVOLVIDO POR GRUPO EU<sup>+</sup> MISSÃO
-            </a>
+        <footer class="w-full bg-zinc-950 border-t border-zinc-900 py-6 text-center">
+            <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="text-amber-500 text-[10px] font-bold">🛡️ DESENVOLVIDO POR GRUPO EU+ MISSÃO</a>
         </footer>
     </div>
 
@@ -210,7 +168,6 @@
                 carregarCampanhas();
             } else {
                 document.getElementById("erroSenha").classList.remove("hidden");
-                setTimeout(() => document.getElementById("erroSenha").classList.add("hidden"), 3000);
             }
         }
 
@@ -218,146 +175,126 @@
 
         async function carregarCampanhas() {
             const sel = document.getElementById("selectCampanhas");
-            sel.innerHTML = "<option>Carregando campanhas do Google...</option>";
+            sel.innerHTML = "<option>Carregando...</option>";
             try {
                 const res = await fetch(`${API_URL}?action=listarcampanhas`);
                 const json = await res.json();
                 sel.innerHTML = '<option value="">-- Selecione uma Campanha --</option>';
                 json.campanhas.forEach(c => {
-                    sel.innerHTML += `<option value="${c.id}">${c.nome} (${c.totalNumeros} nºs) - [${c.status}]</option>`;
+                    sel.innerHTML += `<option value="${c.id}" data-status="${c.status}">${c.nome} (${c.totalNumeros} nºs) - [${c.status}]</option>`;
                 });
-                if(campanhaSelecionadaId) sel.value = campanhaSelecionadaId;
-            } catch(e) { alert("Erro ao conectar com a planilha."); }
+            } catch(e) { alert("Erro de conexão."); }
         }
 
         async function selecionarCampanha(id) {
-            if(!id) {
-                document.getElementById("boxLinkCampanha").classList.add("hidden");
-                document.getElementById("resumoOcioso").classList.remove("hidden");
-                document.getElementById("tabelaReservasContainer").classList.add("hidden");
-                return;
-            }
+            if(!id) return;
             campanhaSelecionadaId = id;
-            const link = `${GITHUB_BASE_URL}?id=${id}`;
-            document.getElementById("linkPublicoTxt").innerText = link;
+            const option = document.getElementById("selectCampanhas").selectedOptions[0];
+            const status = option.getAttribute("data-status");
+            
+            const badge = document.getElementById("badgeStatus");
+            badge.innerText = status;
+            badge.className = `inline-block px-2 py-0.5 rounded text-[9px] font-black uppercase mb-1 ${status === 'ATIVA' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`;
+
+            document.getElementById("linkPublicoTxt").innerText = `${GITHUB_BASE_URL}?id=${id}`;
             document.getElementById("boxLinkCampanha").classList.remove("hidden");
             document.getElementById("resumoOcioso").classList.add("hidden");
             document.getElementById("tabelaReservasContainer").classList.remove("hidden");
+            document.getElementById("btnExportar").classList.remove("hidden");
+            
             atualizarListaReservas();
         }
 
         function copiarLinkPublico() {
-            const link = document.getElementById("linkPublicoTxt").innerText;
-            navigator.clipboard.writeText(link);
-            alert("Link da campanha copiado!");
+            navigator.clipboard.writeText(document.getElementById("linkPublicoTxt").innerText);
+            alert("Link copiado!");
         }
 
         async function atualizarListaReservas() {
             const corpo = document.getElementById("listaReservasCorpo");
             const cards = document.getElementById("listaReservasCards");
-            corpo.innerHTML = "<tr><td colspan='5' class='p-10 text-center'>Sincronizando...</td></tr>";
-            cards.innerHTML = "<p class='text-center py-10'>Sincronizando...</p>";
+            corpo.innerHTML = "<tr><td colspan='5' class='p-10 text-center'>Buscando...</td></tr>";
+            cards.innerHTML = "<p class='text-center py-10'>Buscando...</p>";
 
             try {
                 const res = await fetch(`${API_URL}?action=listarreservas&id=${campanhaSelecionadaId}`);
                 const json = await res.json();
                 corpo.innerHTML = "";
                 cards.innerHTML = "";
+                dadosExportacao = json.reservas; // Salva para o Excel
                 
-                document.getElementById("contadorReservas").innerText = `${json.reservas.length} Pedidos`;
+                document.getElementById("contadorReservas").innerText = `${json.reservas.length} Transações Registradas`;
 
                 json.reservas.forEach(r => {
-                    const statusClass = r.statusPagamento === "Aprovado" ? "text-emerald-500 bg-emerald-500/10" : "text-amber-500 bg-amber-500/10";
+                    const isAprovado = r.statusPagamento === "Aprovado" || r.statusPagamento === "PAGO";
+                    const statusLabel = isAprovado ? "Aprovado" : "Pendente";
+                    const statusClass = isAprovado ? "text-emerald-500 bg-emerald-500/10" : "text-amber-500 bg-amber-500/10";
                     
                     const rowHtml = `
-                        <tr class="hover:bg-zinc-800/30 transition-all">
+                        <tr class="hover:bg-zinc-800/30">
                             <td class="p-4 font-bold text-white">${r.comprador}<br><span class="text-[10px] text-zinc-500">${r.whatsapp}</span></td>
                             <td class="p-4 font-mono text-xs text-amber-400">${r.numeros}</td>
                             <td class="p-4 font-bold">R$ ${r.total.toFixed(2)}</td>
-                            <td class="p-4 text-center"><span class="px-2 py-1 rounded-md text-[10px] font-bold uppercase ${statusClass}">${r.statusPagamento}</span></td>
+                            <td class="p-4 text-center"><span class="px-2 py-1 rounded-md text-[10px] font-bold uppercase ${statusClass}">${statusLabel}</span></td>
                             <td class="p-4 text-right flex justify-end gap-2">
-                                ${r.statusPagamento !== 'Aprovado' ? `<button onclick="alterarStatus('${r.idReserva}', 'Aprovado')" class="bg-emerald-600 p-2 rounded-lg text-white hover:bg-emerald-500 transition-all cursor-pointer" title="Aprovar Pagamento"><i class="fa-solid fa-check"></i></button>` : ''}
-                                <button onclick="alterarStatus('${r.idReserva}', 'Cancelado')" class="bg-red-900/40 p-2 rounded-lg text-red-400 hover:bg-red-800/40 transition-all cursor-pointer" title="Excluir Reserva"><i class="fa-solid fa-trash-can"></i></button>
+                                ${!isAprovado ? `<button onclick="alterarStatus('${r.idReserva}', 'Aprovado')" class="bg-emerald-600 p-2 rounded-lg text-white cursor-pointer"><i class="fa-solid fa-check"></i></button>` : ''}
+                                <button onclick="alterarStatus('${r.idReserva}', 'Cancelado')" class="bg-red-900/40 p-2 rounded-lg text-red-400 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>
                     `;
                     corpo.innerHTML += rowHtml;
 
-                    const cardHtml = `
-                        <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-4 space-y-3 shadow-md">
+                    cards.innerHTML += `
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-4 space-y-3">
                             <div class="flex justify-between items-start">
-                                <div>
-                                    <h3 class="font-black text-white text-base">${r.comprador}</h3>
-                                    <p class="text-xs text-zinc-500">${r.whatsapp}</p>
-                                </div>
-                                <span class="px-2 py-1 rounded-md text-[9px] font-black uppercase ${statusClass}">${r.statusPagamento}</span>
+                                <div><h3 class="font-black text-white">${r.comprador}</h3><p class="text-xs text-zinc-500">${r.whatsapp}</p></div>
+                                <span class="px-2 py-1 rounded-md text-[9px] font-black uppercase ${statusClass}">${statusLabel}</span>
                             </div>
-                            <div class="bg-zinc-900/50 p-2 rounded-lg">
-                                <p class="text-[10px] text-zinc-500 uppercase font-bold mb-1">Números:</p>
-                                <p class="text-amber-400 font-mono text-xs break-words">${r.numeros}</p>
-                            </div>
+                            <p class="text-amber-400 font-mono text-xs">${r.numeros}</p>
                             <div class="flex justify-between items-center">
                                 <p class="font-black text-lg text-white">R$ ${r.total.toFixed(2)}</p>
                                 <div class="flex gap-2">
-                                    ${r.statusPagamento !== 'Aprovado' ? `<button onclick="alterarStatus('${r.idReserva}', 'Aprovado')" class="bg-emerald-600 px-4 py-2 rounded-xl text-white font-bold text-sm transition-all active:scale-95 cursor-pointer">Aprovar</button>` : ''}
-                                    <button onclick="alterarStatus('${r.idReserva}', 'Cancelado')" class="bg-red-900/40 px-3 py-2 rounded-xl text-red-400 font-bold text-sm transition-all active:scale-95 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                                    ${!isAprovado ? `<button onclick="alterarStatus('${r.idReserva}', 'Aprovado')" class="bg-emerald-600 px-4 py-2 rounded-xl text-white font-bold text-sm">Aprovar</button>` : ''}
+                                    <button onclick="alterarStatus('${r.idReserva}', 'Cancelado')" class="bg-red-900/40 px-3 py-2 rounded-xl text-red-400 font-bold text-sm"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </div>
                         </div>
                     `;
-                    cards.innerHTML += cardHtml;
                 });
-            } catch(e) { corpo.innerHTML = "<tr><td colspan='5' class='p-10 text-center text-red-500'>Erro de conexão com o Google.</td></tr>"; }
+            } catch(e) { corpo.innerHTML = "<tr><td colspan='5' class='p-10 text-center text-red-500'>Erro ao carregar dados.</td></tr>"; }
         }
 
         async function alterarStatus(id, novoStatus) {
-            const acao = novoStatus === 'Aprovado' ? 'APROVAR' : 'EXCLUIR';
-            const senha = prompt(`⚠️ Para ${acao} este pedido, digite a senha master:`);
-            if(senha !== MASTER_PASSWORD) {
-                if(senha !== null) alert("Senha incorreta! Operação cancelada.");
-                return;
-            }
-
+            const senha = prompt(`Digite a senha master para ${novoStatus.toUpperCase()}:`);
+            if(senha !== MASTER_PASSWORD) return;
             try {
                 const res = await fetch(API_URL, {
                     method: "POST",
                     body: JSON.stringify({ action: "atualizarstatuspagamento", idReserva: id, novoStatus: novoStatus, idCampanha: campanhaSelecionadaId })
                 });
                 const json = await res.json();
-                if(json.status === "sucesso") { 
-                    atualizarListaReservas(); 
-                } else { 
-                    alert("Erro: " + json.message); 
-                }
+                if(json.status === "sucesso") { atualizarListaReservas(); } else { alert("Erro: " + json.message); }
             } catch(e) { alert("Erro de conexão."); }
         }
 
         async function encerrarCampanhaAtual() {
-            const senha = prompt("⚠️ Para ENCERRAR esta campanha permanentemente, digite a senha master:");
-            if(senha !== MASTER_PASSWORD) {
-                if(senha !== null) alert("Senha incorreta!");
-                return;
-            }
+            const senha = prompt("Digite a senha master para ENCERRAR esta campanha:");
+            if(senha !== MASTER_PASSWORD) return;
             try {
                 const res = await fetch(API_URL, {
                     method: "POST",
-                    body: JSON.stringify({ action: "encerrarcampanha", idCampanha: campanhaSelecionadaId })
+                    body: JSON.stringify({ action: "encerrarcampanha", id: campanhaSelecionadaId })
                 });
                 const json = await res.json();
-                if(json.status === "sucesso") {
-                    alert("Campanha encerrada com sucesso!");
-                    carregarCampanhas();
-                    selecionarCampanha("");
-                }
-            } catch(e) { alert("Erro ao encerrar."); }
+                if(json.status === "sucesso") { alert("Campanha encerrada!"); carregarCampanhas(); }
+            } catch(e) { alert("Erro."); }
         }
 
         async function criarCampanha(e) {
             e.preventDefault();
             const btn = document.getElementById("btnSalvarCampanha");
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
-            
+            btn.innerText = "Criando...";
             const payload = {
                 action: "criarcampanha",
                 nome: document.getElementById("nomeAcao").value,
@@ -367,21 +304,27 @@
                 descricaoPremios: document.getElementById("descricaoPremios").value,
                 obsCampanha: document.getElementById("obsCampanha").value
             };
-            
             try {
                 const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
                 const json = await res.json();
-                if(json.status === "sucesso") { 
-                    alert("✅ Campanha ativada com sucesso!");
-                    document.getElementById("formCriarCampanha").reset();
-                    carregarCampanhas(); 
-                } else { 
-                    alert("Erro: " + json.message); 
-                }
-            } catch(e) { alert("Erro de conexão."); }
-            
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Ativar e Publicar Ação';
+                if(json.status === "sucesso") { alert("Campanha criada!"); document.getElementById("formCriarCampanha").reset(); carregarCampanhas(); }
+            } catch(e) { alert("Erro."); }
+            btn.disabled = false; btn.innerText = "Publicar Ação";
+        }
+
+        function exportarExcel() {
+            if(dadosExportacao.length === 0) { alert("Não há dados para exportar."); return; }
+            const nomeAcao = document.getElementById("selectCampanhas").selectedOptions[0].text.split('(')[0].trim();
+            const ws = XLSX.utils.json_to_sheet(dadosExportacao.map(r => ({
+                "Comprador": r.comprador,
+                "WhatsApp": r.whatsapp,
+                "Números": r.numeros,
+                "Valor Total": r.total,
+                "Status": r.statusPagamento
+            })));
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Reservas");
+            XLSX.writeFile(wb, `Campanha_${nomeAcao}.xlsx`);
         }
     </script>
 </body>
