@@ -31,6 +31,12 @@
             transition: all 0.2s;
             font-family: 'Courier New', Courier, monospace;
         }
+        
+        /* CORES RESTAURADAS */
+        .btn-livre { background-color: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
+        .btn-livre:hover { border-color: #F5B041; }
+        .btn-selecionado { background-color: #F5B041 !important; color: #000 !important; border-color: #F5B041 !important; }
+        .btn-ocupado { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); opacity: 0.6; cursor: not-allowed; }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans pb-20">
@@ -44,9 +50,9 @@
     </header>
 
     <div class="max-w-xl mx-auto px-4 pt-8">
-        <!-- LOGO AJUSTADO -->
+        <!-- LOGO AMARELO AJUSTADO -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-black uppercase tracking-tighter text-white">
+            <h1 class="text-4xl font-black uppercase tracking-tighter comaan-yellow">
                 COMAAN<span class="plus-symbol text-5xl">+</span>
             </h1>
             <p class="text-zinc-500 text-xs italic mt-1">"Conectando Vidas e famílias ao propósito de Deus."</p>
@@ -77,7 +83,6 @@
                 <h2 class="text-3xl font-black text-white mb-2 leading-tight" id="nomeCampanhaTxt">---</h2>
                 <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Escolha seus números abaixo, realize o PIX e envie o comprovante para validar sua participação.</p>
                 
-                <!-- BOXES DE TEXTO (SUBSTITUINDO IMAGEM) -->
                 <div class="space-y-3">
                     <div class="bg-black/40 border border-zinc-800 rounded-2xl p-4">
                         <p class="text-[10px] font-bold text-zinc-500 uppercase mb-2">🎁 Listagem de Prêmios</p>
@@ -96,9 +101,9 @@
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-bold text-white">Selecione seus Números</h3>
                 <div class="flex gap-2">
-                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-zinc-800 border border-zinc-700"></div><span class="text-[10px] text-zinc-500 font-bold uppercase">Livre</span></div>
+                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/30"></div><span class="text-[10px] text-zinc-500 font-bold uppercase">Livre</span></div>
                     <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-amber-500"></div><span class="text-[10px] text-zinc-500 font-bold uppercase">Sua</span></div>
-                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-red-900/40"></div><span class="text-[10px] text-zinc-500 font-bold uppercase">Ocupado</span></div>
+                    <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/30"></div><span class="text-[10px] text-zinc-500 font-bold uppercase">Ocupado</span></div>
                 </div>
             </div>
             <div id="gridNumeros" class="grid-numeros"></div>
@@ -139,10 +144,18 @@
                 <input type="text" id="nomeUser" placeholder="Seu Nome Completo" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-4 text-white focus:border-amber-500 outline-none">
                 <input type="tel" id="whatsUser" placeholder="WhatsApp com DDD (Ex: 51988...)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-4 text-white focus:border-amber-500 outline-none">
                 
-                <div class="bg-amber-500/5 border border-amber-500/10 rounded-xl p-4 text-center">
-                    <p class="text-[10px] text-zinc-500 uppercase font-bold mb-1">Total a Pagar:</p>
-                    <p class="text-2xl font-black text-white" id="totalModal">R$ 0,00</p>
-                    <p class="text-[10px] text-amber-500/60 font-bold mt-1" id="obsCheckoutTxt"></p>
+                <p class="text-[10px] text-zinc-600 font-bold text-center italic">"Envio meu nome e telefone de forma voluntária para participar da ação social"</p>
+
+                <div class="bg-amber-500/5 border border-amber-500/10 rounded-xl p-4 text-center space-y-2">
+                    <div>
+                        <p class="text-[10px] text-zinc-500 uppercase font-bold">Números Escolhidos:</p>
+                        <p class="text-xs text-amber-500 font-mono font-bold" id="numerosCheckoutTxt">---</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-zinc-500 uppercase font-bold">Total a Pagar:</p>
+                        <p class="text-2xl font-black text-white" id="totalModal">R$ 0,00</p>
+                        <p class="text-[10px] text-amber-500/60 font-bold mt-1" id="obsCheckoutTxt"></p>
+                    </div>
                 </div>
             </div>
             <button onclick="confirmarReserva()" id="btnConfirmar" class="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
@@ -207,10 +220,13 @@
                 grid.innerHTML = "";
                 json.data.forEach(item => {
                     const btn = document.createElement("button");
-                    btn.className = `numero-btn text-sm ${item.status === 'DISPONIVEL' ? 'bg-zinc-800 text-zinc-400 border border-zinc-700 hover:border-amber-500' : 'bg-red-900/20 text-red-900/40 border border-red-900/10 cursor-not-allowed'}`;
                     btn.innerText = item.numero.toString().padStart(3, '0');
+                    
                     if(item.status === 'DISPONIVEL') {
+                        btn.className = "numero-btn text-sm btn-livre";
                         btn.onclick = () => alternarSelecao(item.numero, btn);
+                    } else {
+                        btn.className = "numero-btn text-sm btn-ocupado";
                     }
                     grid.appendChild(btn);
                 });
@@ -220,12 +236,12 @@
         function alternarSelecao(num, btn) {
             if(selecionados.includes(num)) {
                 selecionados = selecionados.filter(n => n !== num);
-                btn.classList.remove("bg-amber-500", "text-zinc-950", "border-amber-400");
-                btn.classList.add("bg-zinc-800", "text-zinc-400", "border-zinc-700");
+                btn.classList.remove("btn-selecionado");
+                btn.classList.add("btn-livre");
             } else {
                 selecionados.push(num);
-                btn.classList.remove("bg-zinc-800", "text-zinc-400", "border-zinc-700");
-                btn.classList.add("bg-amber-500", "text-zinc-950", "border-amber-400");
+                btn.classList.remove("btn-livre");
+                btn.classList.add("btn-selecionado");
             }
             atualizarBarraCheckout();
         }
@@ -242,6 +258,7 @@
         }
 
         function abrirModalReserva() {
+            document.getElementById("numerosCheckoutTxt").innerText = selecionados.sort((a,b)=>a-b).join(", ");
             document.getElementById("totalModal").innerText = `R$ ${(selecionados.length * valorCota).toFixed(2)}`;
             document.getElementById("modalReserva").classList.remove("hidden");
             document.getElementById("modalReserva").classList.add("flex");
@@ -278,7 +295,7 @@
                     const msgZap = `📌 *PRÉ-RECIBO DE RESERVA - COMAAN+*\n\n` +
                                    `📍 *Campanha:* ${nomeCampanha}\n` +
                                    `👤 *Comprador:* ${nome}\n` +
-                                   `🔢 *Números:* ${selecionados.join(", ")}\n` +
+                                   `🔢 *Números:* ${selecionados.sort((a,b)=>a-b).join(", ")}\n` +
                                    `📦 *Quantidade:* ${selecionados.length} cota(s)\n` +
                                    `💰 *Valor Total:* R$ ${total}\n\n` +
                                    `🎁 *Promoção/Obs:* ${obsCampanha || "N/A"}\n\n` +
