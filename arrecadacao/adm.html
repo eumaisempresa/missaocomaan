@@ -299,11 +299,11 @@
                 return;
             }
 
-            // CORREÇÃO: Garante que a URL gerada aponte diretamente para a subpasta correta (/arrecadacao/index.html)
+            // AJUSTADO: Pega a URL atual do adm.html e monta o link para publico.html na mesma pasta
             const currentUrl = window.location.href.split('?')[0];
             const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
             
-            linkTxt.textContent = `${baseUrl}/index.html?id=${id}`;
+            linkTxt.textContent = `${baseUrl}/publico.html?id=${id}`;
             boxLink.classList.remove("hidden");
 
             carregarReservasDaCampanha(id);
