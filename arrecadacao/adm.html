@@ -60,7 +60,7 @@
                     <div class="flex items-center gap-2.5 comaan-yellow p-1">
                         <i class="fa-solid fa-fire-flame-curved text-2xl"></i>
                         <h1 class="text-3xl font-extrabold uppercase tracking-tight relative">
-                            COMAAN<a href="https://eumaisempresa.github.io/eumaismissao/arrecadacao" target="_blank" class="gold-shine inline-block font-black text-4xl absolute -top-3 -right-3.5 transform hover:scale-110 transition-transform" title="Conheça a Frente EU+ Missão">+</a>
+                            COMAAN<a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="gold-shine inline-block font-black text-4xl absolute -top-3 -right-3.5 transform hover:scale-110 transition-transform" title="Conheça a Frente EU+ Missão">+</a>
                         </h1>
                     </div>
                     <div class="ml-4 pl-4 border-l border-zinc-800">
@@ -95,22 +95,26 @@
                         <input type="text" id="nomeAcao" required placeholder="Ex: Ação Missionária de Inverno" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-amber-500 transition-all">
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Qtde de Números</label>
-                            <select id="quantidadeNumeros" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 focus:outline-none focus:border-amber-500 transition-all text-sm">
-                                <option value="50">50 Cotas</option>
-                                <option value="100" selected>100 Cotas</option>
-                                <option value="200">200 Cotas</option>
-                                <option value="500">500 Cotas</option>
-                                <option value="1000">1000 Cotas</option>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Nº Inicial</label>
+                            <input type="number" id="numeroInicial" required value="1" min="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-3 text-zinc-100 focus:outline-none focus:border-amber-500 transition-all text-sm font-mono text-center">
+                        </div>
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Total Cotas</label>
+                            <select id="quantidadeNumeros" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-3 text-zinc-100 focus:outline-none focus:border-amber-500 transition-all text-sm">
+                                <option value="50">50</option>
+                                <option value="100" selected>100</option>
+                                <option value="200">200</option>
+                                <option value="500">500</option>
+                                <option value="1000">1000</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Valor por Cota</label>
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Valor Cota</label>
                             <div class="relative">
-                                <span class="absolute left-4 top-3 text-zinc-500 text-sm font-semibold">R$</span>
-                                <input type="number" id="valorCota" step="0.01" required placeholder="10,00" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-amber-500 transition-all">
+                                <span class="absolute left-2.5 top-3 text-zinc-600 text-xs font-bold">R$</span>
+                                <input type="number" id="valorCota" step="0.01" required placeholder="10,00" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-7 pr-2 py-3 text-zinc-100 text-sm placeholder-zinc-700 focus:outline-none focus:border-amber-500 transition-all">
                             </div>
                         </div>
                     </div>
@@ -150,7 +154,7 @@
                                 <button onclick="copiarLinkPublico()" class="flex-1 sm:flex-none text-amber-500 hover:text-amber-400 font-bold flex items-center justify-center gap-1.5 px-3 py-1.5 bg-amber-500/5 hover:bg-amber-500/10 rounded-lg border border-amber-500/20 transition-all cursor-pointer">
                                     <i class="fa-regular fa-copy"></i> Copiar Link
                                 </button>
-                                <button id="btnEncerrarCampanha" onclick="encerrarCampanhaAtual()" class="flex-1 sm:flex-none text-red-400 hover:text-red-300 font-bold flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/5 hover:bg-red-500/10 rounded-lg border border-red-500/20 transition-all cursor-pointer">
+                                <button id="btnEncerrarCampanha" onclick="encerrarCampanhaAtual()" class="flex-1 sm:flex-none text-red-400 hover:text-red-300 font-bold flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/5 hover:bg-red-500/10 rounded-lg border border-red-500/20 transition-all cursor-pointer" title="Encerramento Seguro">
                                     <i class="fa-solid fa-power-off"></i> Encerrar Campanha
                                 </button>
                             </div>
@@ -272,7 +276,7 @@
                             select.appendChild(option);
                         });
                         
-                        if(campanhaSelecionadaId) select.value = campañaSelecionadaId;
+                        if(campanhaSelecionadaId) select.value = campanhaSelecionadaId;
                     } else {
                         select.innerHTML = '<option value="">Nenhuma campanha cadastrada no banco.</option>';
                     }
@@ -315,7 +319,16 @@
 
         function encerrarCampanhaAtual() {
             if (!campanhaSelecionadaId) return;
-            if (!confirm("⚠️ ATENÇÃO: Tem certeza absoluta que deseja ENCERRAR esta campanha? Novos compradores não conseguirão reservar cotas!")) return;
+            
+            // 🔒 Solicitação de confirmação por senha para segurança adicional
+            const senhaConfirmacao = prompt("⚠️ AÇÃO RESTRITA!\nPara encerrar esta campanha em definitivo, confirme digitando a senha de administrador:");
+            
+            if (senhaConfirmacao === null) return; // Se clicou em cancelar
+            
+            if (senhaConfirmacao !== MASTER_PASSWORD) {
+                alert("❌ Senha incorreta! O encerramento da campanha foi cancelado por segurança.");
+                return;
+            }
 
             const btn = document.getElementById("btnEncerrarCampanha");
             btn.disabled = true;
@@ -326,23 +339,20 @@
                 idCampanha: campanhaSelecionadaId
             };
 
-            // Mantido como texto puro JSON para corresponder exatamente ao que o seu Sheets espera receber!
             fetch(API_URL, {
                 method: "POST",
                 body: JSON.stringify(payload)
             })
             .then(res => res.json())
             .then(data => {
-                if (data.status === "sucesso" || data.status === "sucesso_silencioso") {
+                if (data.status === "sucesso") {
                     alert("Campanha encerrada com sucesso na planilha!");
-                    carregarCampanhas();
                 } else {
-                    alert("Aviso: A planilha processou a alteração de encerramento!");
-                    carregarCampanhas();
+                    alert("Status da campanha atualizado!");
                 }
+                carregarCampanhas();
             })
             .catch(() => {
-                // Captura o redirecionamento com sucesso implícito
                 alert("Campanha encerrada com sucesso!");
                 carregarCampanhas();
             })
@@ -423,13 +433,13 @@
             const payload = {
                 action: "criarCampanha",
                 nomeAcao: document.getElementById("nomeAcao").value,
+                numeroInicial: document.getElementById("numeroInicial").value, // Novo campo passado para o sheets
                 quantidadeNumeros: document.getElementById("quantidadeNumeros").value,
                 valorCota: document.getElementById("valorCota").value,
                 descricaoPremios: document.getElementById("descricaoPremios").value,
                 obsCampanha: document.getElementById("obsCampanha").value
             };
 
-            // Retornamos ao envio bruto JSON original que o seu back-end exige!
             fetch(API_URL, {
                 method: "POST",
                 body: JSON.stringify(payload)
@@ -439,18 +449,20 @@
                 if (data.status === "sucesso") {
                     alert("Campanha criada e salva com sucesso na planilha!");
                     document.getElementById("formCriarCampanha").reset();
+                    document.getElementById("numeroInicial").value = "1";
                     campanhaSelecionadaId = data.idCampanha;
                     carregarCampanhas();
                 } else {
                     alert("Campanha criada com sucesso!");
                     document.getElementById("formCriarCampanha").reset();
+                    document.getElementById("numeroInicial").value = "1";
                     carregarCampanhas();
                 }
             })
             .catch(err => {
-                // Aqui capturamos o redirecionamento com segurança e forçamos a atualização correta da página!
                 alert("Campanha ativada e publicada com sucesso!");
                 document.getElementById("formCriarCampanha").reset();
+                document.getElementById("numeroInicial").value = "1";
                 carregarCampanhas();
             })
             .finally(() => {
@@ -475,11 +487,7 @@
             })
             .then(res => res.json())
             .then(data => {
-                if(data.status === "sucesso") {
-                    carregarReservasDaCampanha(campanhaSelecionadaId);
-                } else {
-                    carregarReservasDaCampanha(campanhaSelecionadaId);
-                }
+                carregarReservasDaCampanha(campanhaSelecionadaId);
             })
             .catch(() => {
                 carregarReservasDaCampanha(campanhaSelecionadaId);
