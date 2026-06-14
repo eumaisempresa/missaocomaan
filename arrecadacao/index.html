@@ -117,14 +117,17 @@
 
   <script>
       const URL_ENDPOINT_PROD = "https://script.google.com/macros/s/AKfycbwSeJjsgGrdsxZ0Ik4bYRnx8NoSHnwT4KVRzAacZgFdndO8y3nTMQbJCm8i-V_sCrDIHA/exec"; 
-      const CAMPANHA_ATIVA_ID = "CAMP_1781364561110"; 
       const WHATSAPP_IGREJA = "555181659360"; 
       const CHAVE_PIX_TEXTO = "52865468000142";
+
+      // Captura o ID da URL dinamicamente (?id=camp_...)
+      const urlParams = new URLSearchParams(window.location.search);
+      let CAMPANHA_ATIVA_ID = urlParams.get('id'); 
 
       let listaNumerosSelecionados = [];
       let valorCotaUnitario = 8.0;
 
-      // Copiar Chave PIX
+      // Executa a cópia da chave PIX para a área de transferência
       function copiarPix() {
           const txt = document.getElementById("txt-chave-pix").innerText;
           navigator.clipboard.writeText(txt);
@@ -138,37 +141,59 @@
           }, 1800);
       }
 
-      // Buscar Meta-dados e Grid
+      // Renderização do Painel com base nos metadados coletados da Planilha
       async function renderizarPainel() {
           try {
-              fetch(`${URL_ENDPOINT_PROD}?action=OBTER_GRID&campanhaId=Configuracoes_Gerais`)
-              .then(r => r.json()).then(payloadConfig => {
-                  if(payloadConfig.status === "SUCESSO") {
-                      const dadosCampanha = payloadConfig.data.find(c => c.numero === CAMPANHA_ATIVA_ID || c.ID_Campanha === CAMPANHA_ATIVA_ID);
-                      if(dadosCampanha || payloadConfig.data.length > 0) {
-                          const info = dadosCampanha || payloadConfig.data[payloadConfig.data.length - 1];
-                          document.getElementById("campanha-nome").innerText = info.Nome_Acao || info.nome || "Ação Missionária COMAAN+";
-                          if(info.Valor_Cota || info.valorCota) {
-                              valorCotaUnitario = parseFloat(info.Valor_Cota || info.valorCota);
-                              document.getElementById("campanha-valor").innerText = `R$ ${valorCotaUnitario.toFixed(2).replace('.',',')}`;
-                          }
-                          if(info.Imagem_URL || info.imageUrl) {
-                              document.getElementById("campanha-foto").src = info.Imagem_URL || info.imageUrl;
-                              document.getElementById("loading-banner").classList.add("hidden");
-                              document.getElementById("banner-img-box").classList.remove("hidden");
-                              document.getElementById("banner-info-box").classList.remove("hidden");
-                          }
-                      }
+              const rConfig = await fetch(`${URL_ENDPOINT_PROD}?action=OBTER_GRID&campanhaId=Configuracoes_Gerais`);
+              const payloadConfig = await rConfig.json();
+              
+              if(payloadConfig.status === "SUCESSO" && payloadConfig.data.length > 0) {
+                  
+                  // Se nenhum ID válido veio na URL, assume automaticamente a última campanha marcada como "Ativa"
+                  if (!CAMPANHA_ATIVA_ID) {
+                      const ativas = payloadConfig.data.filter(c => String(c.Status || c["Status (Ativa / Pausada / Encerada)"] || c.status).toUpperCase() === "ATIVA");
+                      const selecionada = ativas.length > 0 ? ativas[ativas.length - 1] : payloadConfig.data[payloadConfig.data.length - 1];
+                      CAMPANHA_ATIVA_ID = selecionada.ID_Campanha || selecionada.numero;
                   }
-              }).catch(() => {
-                  document.getElementById("campanha-nome").innerText = "Grande Ação Missionária COMAAN+";
-                  document.getElementById("campanha-valor").innerText = "R$ 8,00";
-                  document.getElementById("campanha-foto").src = "https://i.ibb.co/680LWh1V/comaan-banner.png";
-                  document.getElementById("loading-banner").classList.add("hidden");
-                  document.getElementById("banner-img-box").classList.remove("hidden");
-                  document.getElementById("banner-info-box").classList.remove("hidden");
-              });
 
+                  // Localiza as configurações específicas da campanha atual
+                  const info = payloadConfig.data.find(c => c.ID_Campanha === CAMPANHA_ATIVA_ID || c.numero === CAMPANHA_ATIVA_ID);
+                  
+                  if (info) {
+                      document.getElementById("campanha-nome").innerText = info.Nome_Acao || info.nome || "Ação Missionária COMAAN+";
+                      if(info.Valor_Cota || info.valorCota) {
+                          valorCotaUnitario = parseFloat(info.Valor_Cota || info.valorCota);
+                          document.getElementById("campanha-valor").innerText = `R$ ${valorCotaUnitario.toFixed(2).replace('.',',')}`;
+                      }
+                      if(info.Imagem_URL || info.imageUrl) {
+                          document.getElementById("campanha-foto").src = info.Imagem_URL || info.imageUrl;
+                      } else {
+                          document.getElementById("campanha-foto").src = "https://i.ibb.co/680LWh1V/comaan-banner.png";
+                      }
+                      document.getElementById("loading-banner").classList.add("hidden");
+                      document.getElementById("banner-img-box").classList.remove("hidden");
+                      document.getElementById("banner-info-box").classList.remove("hidden");
+                  }
+              }
+          } catch (err) {
+              console.error("Erro carregando configurações gerais:", err);
+              // Fallback para não quebrar a tela do usuário
+              document.getElementById("campanha-nome").innerText = "Grande Ação Missionária COMAAN+";
+              document.getElementById("campanha-valor").innerText = "R$ 8,00";
+              document.getElementById("campanha-foto").src = "https://i.ibb.co/680LWh1V/comaan-banner.png";
+              document.getElementById("loading-banner").classList.add("hidden");
+              document.getElementById("banner-img-box").classList.remove("hidden");
+              document.getElementById("banner-info-box").classList.remove("hidden");
+          }
+
+          // Aborta com aviso visual se nenhuma ID foi definida ou localizada na planilha
+          if (!CAMPANHA_ATIVA_ID) {
+              document.getElementById("wrapper-grid").innerHTML = `<p class='col-span-full text-center text-amber-500 font-semibold py-4 text-sm'>Nenhuma campanha ativa foi configurada no banco de dados.</p>`;
+              return;
+          }
+
+          // Renderização do grid numérico da campanha
+          try {
               const container = document.getElementById("wrapper-grid");
               container.innerHTML = "<p class='col-span-full text-center text-zinc-500 py-4 text-sm'>Sincronizando números da campanha...</p>";
              
@@ -197,11 +222,11 @@
               });
 
           } catch(e) {
-              document.getElementById("wrapper-grid").innerHTML = `<p class='col-span-full text-center text-red-400 font-medium py-4 text-sm'>Aviso: Erro de comunicação com o banco de dados.</p>`;
+              document.getElementById("wrapper-grid").innerHTML = `<p class='col-span-full text-center text-red-400 font-medium py-4 text-sm'>Aviso: Erro de comunicação ao obter os números desta campanha.</p>`;
           }
       }
 
-      // Lógica de Múltipla Seleção Visual com Barra Flutuante
+      // Controle de Estados e Estilos na seleção de múltiplos botões
       function alternarSelecaoNumero(numero, elementoBtn) {
           const index = listaNumerosSelecionados.indexOf(numero);
 
@@ -228,22 +253,22 @@
           }
       }
 
-      // Fluxo ao Clicar no Botão de Reserva
+      // Disparo do Fluxo de Pré-Reserva no Apps Script
       document.getElementById("btn-abrir-reserva").onclick = async () => {
           if(listaNumerosSelecionados.length === 0) return;
 
-          const prosseguir = confirm(`Você selecionou os números: [ ${listaNumerosSelecionados.join(', ')} ]\n\nDeseja PROSSEGUIR para o pagamento ou prefere Cancelar para ESCOLHER MAIS NÚMEROS?`);
+          const prosseguir = confirm(`Você selecionou os números: [ ${listaNumerosSelecionados.join(', ')} ]\n\nDeseja PROSSEGUIR para a área de pagamento?`);
           if (!prosseguir) return;
 
-          const nomeMock = prompt("👉 [PASSO 1 de 2]: INSIRA SEU NOME COMPLETO\n\nPor favor, digite seu Nome Completo para identificarmos sua cota:");
+          const nomeMock = prompt("👉 [PASSO 1 de 2]: SEU NOME COMPLETO\n\nDigite seu Nome Completo para identificarmos sua cota:");
           if(!nomeMock || nomeMock.trim().length < 3) {
-              alert("O preenchimento do nome é obrigatório para realizar a reserva.");
+              alert("O preenchimento do nome é obrigatório para validação.");
               return;
           }
 
-          const whatsMock = prompt("👉 [PASSO 2 de 2]: INSIRA SEU WHATSAPP COM DDD\n\nExemplo: 51988887777 (Coloque apenas números, sem espaços ou traços):");
+          const whatsMock = prompt("👉 [PASSO 2 de 2]: SEU WHATSAPP COM DDD\n\nExemplo: 51988887777 (Insira apenas números, sem traços ou parênteses):");
           if(!whatsMock || whatsMock.trim().length < 10) {
-              alert("Por favor, insira um número de WhatsApp válido com o DDD.");
+              alert("Por favor, informe um número de WhatsApp válido com o DDD.");
               return;
           }
 
@@ -281,6 +306,7 @@
                   document.getElementById("box-checkout").classList.remove("hidden");
                   document.getElementById("btn-enviar-whats").onclick = () => {
                       window.open(apiWhats, '_blank');
+                      // Delay seguro de 500ms para o navegador mobile não travar o redirecionamento externo
                       setTimeout(() => {
                           location.reload();
                       }, 500);
@@ -288,12 +314,12 @@
                   document.getElementById("box-checkout").scrollIntoView({ behavior: 'smooth' });
 
               } else {
-                  alert(`Aviso: ${resJson.message}`);
+                  alert(`Aviso do Sistema: ${resJson.message}`);
                   location.reload();
               }
 
           } catch(err) {
-              alert("Falha de rede: " + err.message);
+              alert("Falha crítica de rede ou comunicação: " + err.message);
           } finally {
               btnAcao.disabled = false;
               btnAcao.innerText = "🎟️ Reservar Números Selecionados";
