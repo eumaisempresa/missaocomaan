@@ -10,18 +10,29 @@
           0% { transform: scale(1); opacity: 0.9; }
           100% { transform: scale(1.03); opacity: 1; }
       }
-      .gold-shine {
-          background: linear-gradient(135deg, #FFE066 0%, #F5B041 50%, #B7950B 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 12px rgba(245, 176, 65, 0.4);
-          animation: pulse 2s infinite alternate;
+      /* LOGO AMARELO COMAAN+ */
+      .comaan-yellow {
+          color: #F5B041;
+          text-shadow: 0 0 15px rgba(245, 176, 65, 0.3);
+      }
+      .plus-symbol {
+          color: #F5B041;
+          font-weight: 900;
+          display: inline-block;
+          margin-left: -2px;
+          vertical-align: top;
+          margin-top: -2px;
       }
       .whitespace-pre-line {
           white-space: pre-line;
       }
       .btn-float-whatsapp {
           box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+      }
+      .lgpd-text {
+          font-size: 0.65rem;
+          line-height: 1.2;
+          color: #52525b;
       }
   </style>
 </head>
@@ -30,8 +41,8 @@
   <div class="max-w-4xl mx-auto p-4 md:p-8 w-full">
       
       <header class="text-center py-6 border-b border-zinc-800 mb-8">
-          <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white uppercase">
-              COMAAN<a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="gold-shine inline-block font-extrabold transform hover:scale-110 transition-transform ml-0.5" title="Conheça a Frente EU+ Missão">+</a>
+          <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white uppercase flex items-center justify-center gap-0">
+              <span class="comaan-yellow">COMAAN</span><span class="plus-symbol text-5xl md:text-6xl">+</span>
           </h1>
           <p class="text-zinc-400 italic text-sm mt-2 tracking-wide">"Conectando Vidas e famílias ao propósito de Deus."</p>
       </header>
@@ -68,7 +79,7 @@
           </div>
 
           <div id="banner-info-box" class="hidden">
-              <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Ecossistema EU+ Missão</span>
+              <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Frente EU+ Missão</span>
               <h2 id="campanha-nome" class="text-2xl md:text-3xl font-extrabold text-white mt-3 mb-2">Ação Missionária</h2>
               <p class="text-zinc-400 text-sm mb-4 leading-relaxed">Escolha os seus números abaixo, faça o PIX institucional e envie o comprovante pelo WhatsApp para validar sua participação.</p>
               <div class="inline-block bg-zinc-800/80 border border-zinc-700 rounded-2xl px-5 py-3 shadow-lg">
@@ -116,6 +127,7 @@
               <div class="flex flex-col sm:items-end">
                   <span class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Total Estimado</span>
                   <strong id="checkout-valor-total" class="text-amber-400 text-2xl font-black"></strong>
+                  <span id="checkout-obs-promo" class="text-[10px] text-amber-500/80 font-bold italic mt-1 text-right max-w-[200px]"></span>
               </div>
           </div>
 
@@ -141,7 +153,7 @@
       </button>
   </div>
 
-  <!-- BOTÃO FLUTUANTE PÓS-RESERVA (NOVO) -->
+  <!-- BOTÃO FLUTUANTE PÓS-RESERVA -->
   <div id="float-checkout-actions" class="fixed bottom-6 right-6 z-[60] flex flex-col items-end gap-3 hidden">
       <button onclick="copiarPix()" class="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black p-4 rounded-2xl shadow-2xl transition-all transform active:scale-95 flex items-center gap-2 text-sm border-2 border-amber-300">
           📋 Copiar PIX
@@ -154,6 +166,14 @@
   <footer class="w-full bg-zinc-950 border-t border-zinc-900 py-6 text-center mt-12 px-4">
       <p class="text-zinc-500 text-xs tracking-wide">Casa de Oração Missão Apostólica Antioquia</p>
       <p class="text-zinc-400 text-sm font-semibold tracking-normal mt-1">"Conectando Vidas e famílias ao propósito de Deus."</p>
+      
+      <!-- DEFESA LGPD -->
+      <div class="max-w-xs mx-auto mt-4 mb-2">
+          <p class="lgpd-text">
+              🛡️ <strong>Aviso de Privacidade (LGPD):</strong> Seus dados (nome e WhatsApp) são coletados exclusivamente para identificação das suas cotas e validação do pagamento. Não compartilhamos suas informações com terceiros.
+          </p>
+      </div>
+
       <p class="text-zinc-600 text-[10px] mt-4 tracking-wider uppercase">© 2026 • Todos os direitos reservados</p>
       <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="inline-block mt-4 border border-zinc-800 bg-zinc-900/50 px-4 py-2 rounded-xl text-xs font-bold tracking-wider text-amber-500 hover:bg-zinc-800 hover:text-amber-400 transition-all">
           🛡️ DESENVOLVIDO POR GRUPO EU<sup>+</sup> MISSÃO
@@ -337,9 +357,13 @@
 
                   document.getElementById("checkout-lista-numeros").innerText = numerosFormatados;
                   document.getElementById("checkout-valor-total").innerText = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+                  
+                  if(obsCampanhaGlobal) {
+                    document.getElementById("checkout-obs-promo").innerText = `* ${obsCampanhaGlobal}`;
+                  }
+
                   document.getElementById("container-flutuante").classList.add("translate-y-full");
 
-                  // MONTAGEM DA MENSAGEM COMPLETA DO WHATSAPP
                   let msgZap = `Olá! Acabei de reservar minhas cotas no sistema COMAAN+.\n\n`;
                   msgZap += `👤 *Nome:* ${nomeMock.trim()}\n`;
                   msgZap += `🎟️ *Números:* [ ${numerosFormatados} ]\n`;
@@ -356,14 +380,12 @@
 
                   const apiWhats = `https://wa.me/${WHATSAPP_IGREJA}?text=${encodeURIComponent(msgZap)}`;
 
-                  // Exibe os boxes de checkout
                   document.getElementById("box-checkout").classList.remove("hidden");
                   document.getElementById("float-checkout-actions").classList.remove("hidden");
                   
-                  // Configura os botões de envio
                   const fnEnviar = () => {
                       window.open(apiWhats, '_blank');
-                      setTimeout(() => { location.reload(); }, 500);
+                      // REMOVIDO RELOAD AUTOMÁTICO PARA NÃO PERDER A VISUALIZAÇÃO
                   };
                   
                   document.getElementById("btn-enviar-whats").onclick = fnEnviar;
