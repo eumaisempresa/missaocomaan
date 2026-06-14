@@ -295,12 +295,10 @@
                                    `🔢 *Números:* ${selecionados.sort((a,b)=>a-b).join(", ")}\n` +
                                    `📦 *Quantidade:* ${selecionados.length} cota(s)\n` +
                                    `💰 *Valor Total:* R$ ${total}\n\n` +
-                                   `⚠️ _Verifique se tem direito a promoção._`;
                                    `🎁 *Promoção/Obs:* ${obsCampanha || "N/A"}\n\n` +
                                    `🏦 *CHAVE PIX (CNPJ):* ${CHAVE_PIX_IGREJA}\n\n` +
-                                   `⚠️ _Por favor, envie o comprovante de pagamento agora para validarmos sua participação._`;
-                                   `⚠️ _Minha adesão é voluntária compartilhando Nome e Telefone._`;
-                    
+                                   `⚠️ _Por favor, envie o comprovante de pagamento agora para validarmos sua participação. Verifique se tem direito a promoção. Minha adesão é voluntária compartilhando Nome e Telefone._`;
+                                      
                     document.getElementById("linkZapFinal").href = `https://api.whatsapp.com/send?phone=${WHATSAPP_IGREJA}&text=${encodeURIComponent(msgZap)}`;
                     
                     fecharModal();
