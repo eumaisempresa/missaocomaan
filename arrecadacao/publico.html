@@ -20,6 +20,9 @@
       .whitespace-pre-line {
           white-space: pre-line;
       }
+      .btn-float-whatsapp {
+          box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+      }
   </style>
 </head>
 <body class="bg-zinc-950 font-sans text-zinc-100 min-h-screen flex flex-col justify-between pb-24 md:pb-28">
@@ -106,28 +109,45 @@
           <p class="text-zinc-400 text-sm mb-4">Para garantir as suas cotas, copie a chave abaixo e realize o pagamento no app do seu banco. Em seguida, clique no botão verde para enviar o comprovante.</p>
           
           <div class="bg-zinc-950 p-4 rounded-2xl mb-4 border border-zinc-800 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-              <span class="text-sm text-zinc-400 font-medium">Números escolhidos: <strong id="checkout-lista-numeros" class="text-white font-mono text-base"></strong></span>
-              <span class="text-sm text-zinc-400 font-medium">Total Estimado: <strong id="checkout-valor-total" class="text-amber-400 text-lg font-black"></strong></span>
+              <div class="flex flex-col">
+                  <span class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Números escolhidos</span>
+                  <strong id="checkout-lista-numeros" class="text-white font-mono text-lg"></strong>
+              </div>
+              <div class="flex flex-col sm:items-end">
+                  <span class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Total Estimado</span>
+                  <strong id="checkout-valor-total" class="text-amber-400 text-2xl font-black"></strong>
+              </div>
           </div>
 
           <div onclick="copiarPix()" class="bg-gradient-to-r from-amber-500/10 to-amber-600/10 p-5 rounded-2xl mb-4 text-center border-2 border-dashed border-amber-500/40 cursor-pointer hover:border-amber-400 hover:from-amber-500/20 hover:to-amber-600/20 transition-all group relative shadow-md">
               <span class="text-xs text-amber-400 block uppercase font-black tracking-wider mb-2 group-hover:scale-105 transition-transform">
-                  📋 Copie aqui o pix para pagamento (Clique para Copiar)
+                  📋 Clique aqui para copiar a Chave PIX
               </span>
               <strong class="text-lg md:text-xl text-zinc-100 font-mono tracking-widest break-all px-2 block select-all bg-zinc-950/80 py-2 rounded-xl border border-zinc-800" id="txt-chave-pix">52865468000142</strong>
               <span id="toast-copiado" class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-zinc-950 text-xs font-black px-4 py-1.5 rounded-full opacity-0 transition-opacity pointer-events-none shadow-xl">✓ CHAVE COPIADA!</span>
           </div>
 
           <button id="btn-enviar-whats" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2 transform active:scale-[0.98] cursor-pointer text-base">
-              🟢 Enviar Comprovante por WhatsApp da Igreja
+              🟢 Enviar Comprovante por WhatsApp
           </button>
       </div>
 
   </div>
 
+  <!-- CONTAINER FLUTUANTE DE RESERVA (INICIAL) -->
   <div id="container-flutuante" class="fixed bottom-0 left-0 right-0 p-4 bg-zinc-950/80 backdrop-blur-md border-t border-zinc-800 shadow-2xl transform translate-y-full transition-transform duration-300 z-50 flex justify-center items-center">
       <button id="btn-abrir-reserva" class="w-full max-w-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-zinc-950 font-black py-4 px-6 rounded-2xl shadow-xl transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer text-base">
           🎟️ Reservar (<span id="btn-contador">0</span>) Números Selecionados
+      </button>
+  </div>
+
+  <!-- BOTÃO FLUTUANTE PÓS-RESERVA (NOVO) -->
+  <div id="float-checkout-actions" class="fixed bottom-6 right-6 z-[60] flex flex-col items-end gap-3 hidden">
+      <button onclick="copiarPix()" class="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black p-4 rounded-2xl shadow-2xl transition-all transform active:scale-95 flex items-center gap-2 text-sm border-2 border-amber-300">
+          📋 Copiar PIX
+      </button>
+      <button id="btn-float-whatsapp" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black p-5 rounded-2xl shadow-2xl transition-all transform active:scale-95 flex items-center gap-2 text-base btn-float-whatsapp border-2 border-emerald-400">
+          🟢 Enviar Comprovante
       </button>
   </div>
 
@@ -150,9 +170,10 @@
 
       let listaNumerosSelecionados = [];
       let valorCotaUnitario = 8.0;
+      let obsCampanhaGlobal = "";
 
       function copiarPix() {
-          const txt = document.getElementById("txt-chave-pix").innerText;
+          const txt = CHAVE_PIX_TEXTO;
           navigator.clipboard.writeText(txt);
           const toast = document.getElementById("toast-copiado");
           
@@ -162,6 +183,8 @@
               toast.classList.remove("opacity-100");
               toast.classList.add("opacity-0");
           }, 1800);
+          
+          alert("Chave PIX copiada com sucesso!");
       }
 
       async function renderizarPainel() {
@@ -182,7 +205,9 @@
                   if (info) {
                       document.getElementById("campanha-nome").innerText = info.Nome_Acao || info.nome || "Ação Missionária COMAAN+";
                       document.getElementById("campanha-premios").innerText = info.Descricao_Premios || "Nenhum prêmio cadastrado.";
-                      document.getElementById("campanha-obs").innerText = info.Obs_Campanha || "Nenhuma observação cadastrada.";
+                      
+                      obsCampanhaGlobal = info.Obs_Campanha || "";
+                      document.getElementById("campanha-obs").innerText = obsCampanhaGlobal || "Nenhuma observação cadastrada.";
 
                       if(info.Valor_Cota || info.valorCota) {
                           valorCotaUnitario = parseFloat(info.Valor_Cota || info.valorCota);
@@ -298,54 +323,52 @@
                   numeros: listaNumerosSelecionados
               };
 
-              // FORÇA O ENVIO COMO TEXTO PLANO PARA EVITAR ERROS DE CORS/OPTIONS NO GOOGLE SCRIPT
-              const response = await fetch(URL_ENDPOINT_PROD, {
-                  method: "POST",
-                  mode: "no-cors", // Tenta modo no-cors se o erro persistir, mas aqui usaremos o padrão com correção no script
-                  body: JSON.stringify(payloadInput)
-              });
-              
-              // Como o Google Script redireciona, o fetch às vezes falha ao ler o JSON. 
-              // Vou usar um método mais tradicional de envio para garantir
-              const form = document.createElement('form');
-              form.method = 'POST';
-              form.action = URL_ENDPOINT_PROD;
-              form.target = '_blank'; // Abre em nova aba para não perder o estado da página atual
-              
-              const input = document.createElement('input');
-              input.type = 'hidden';
-              input.name = 'postData';
-              input.value = JSON.stringify(payloadInput);
-              form.appendChild(input);
-              
-              // Mas antes, vamos tentar o fetch normal de novo com um pequeno ajuste
               const res = await fetch(URL_ENDPOINT_PROD, {
                   method: "POST",
                   body: JSON.stringify(payloadInput),
-                  headers: {
-                      'Content-Type': 'text/plain;charset=utf-8'
-                  }
+                  headers: { 'Content-Type': 'text/plain;charset=utf-8' }
               });
               const resJson = await res.json();
 
               if(resJson.status === "SUCESSO_RESERVA") {
                   const numerosFormatados = listaNumerosSelecionados.map(n => String(n).padStart(3, '0')).join(', ');
-                  const valorCalculado = listaNumerosSelecionados.length * valorCotaUnitario;
+                  const qtdNumeros = listaNumerosSelecionados.length;
+                  const valorTotal = qtdNumeros * valorCotaUnitario;
 
                   document.getElementById("checkout-lista-numeros").innerText = numerosFormatados;
-                  document.getElementById("checkout-valor-total").innerText = `R$ ${valorCalculado.toFixed(2).replace('.', ',')}`;
+                  document.getElementById("checkout-valor-total").innerText = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
                   document.getElementById("container-flutuante").classList.add("translate-y-full");
 
-                  const txtMsg = encodeURIComponent(`Olá! Acabei de efetuar a reserva dos números [ ${numerosFormatados} ] no painel do COMAAN+ em nome de ${nomeMock.trim()}.\n\n🔑 CHAVE PIX DA IGREJA: ${CHAVE_PIX_TEXTO}\n💰 VALOR TOTAL: R$ ${valorCalculado.toFixed(2).replace('.', ',')}\n\nEstou enviando em anexo o comprovante do PIX para a validação das minhas cotas.`);
-                  const apiWhats = `https://wa.me/${WHATSAPP_IGREJA}?text=${txtMsg}`;
+                  // MONTAGEM DA MENSAGEM COMPLETA DO WHATSAPP
+                  let msgZap = `Olá! Acabei de reservar minhas cotas no sistema COMAAN+.\n\n`;
+                  msgZap += `👤 *Nome:* ${nomeMock.trim()}\n`;
+                  msgZap += `🎟️ *Números:* [ ${numerosFormatados} ]\n`;
+                  msgZap += `📊 *Quantidade:* ${qtdNumeros} ${qtdNumeros === 1 ? 'cota' : 'cotas'}\n`;
+                  msgZap += `💰 *Valor Unitário:* R$ ${valorCotaUnitario.toFixed(2).replace('.', ',')}\n`;
+                  msgZap += `💵 *Total a Pagar:* R$ ${valorTotal.toFixed(2).replace('.', ',')}\n`;
+                  
+                  if(obsCampanhaGlobal) {
+                    msgZap += `📢 *Promoção/Obs:* ${obsCampanhaGlobal}\n`;
+                  }
+                  
+                  msgZap += `\n🔑 *CHAVE PIX DA IGREJA:* ${CHAVE_PIX_TEXTO}\n`;
+                  msgZap += `\nEstou enviando em anexo o comprovante do PIX para validação.`;
 
+                  const apiWhats = `https://wa.me/${WHATSAPP_IGREJA}?text=${encodeURIComponent(msgZap)}`;
+
+                  // Exibe os boxes de checkout
                   document.getElementById("box-checkout").classList.remove("hidden");
-                  document.getElementById("btn-enviar-whats").onclick = () => {
+                  document.getElementById("float-checkout-actions").classList.remove("hidden");
+                  
+                  // Configura os botões de envio
+                  const fnEnviar = () => {
                       window.open(apiWhats, '_blank');
-                      setTimeout(() => {
-                          location.reload();
-                      }, 500);
+                      setTimeout(() => { location.reload(); }, 500);
                   };
+                  
+                  document.getElementById("btn-enviar-whats").onclick = fnEnviar;
+                  document.getElementById("btn-float-whatsapp").onclick = fnEnviar;
+                  
                   document.getElementById("box-checkout").scrollIntoView({ behavior: 'smooth' });
 
               } else {
@@ -353,8 +376,7 @@
                   location.reload();
               }
           } catch (e) {
-              // Se o fetch falhar por CORS mas o registro ocorrer, avisamos o usuário
-              alert("Sua reserva foi enviada! Se o checkout não aparecer, envie o comprovante pelo WhatsApp da Igreja.");
+              alert("Reserva enviada! Por favor, envie o comprovante pelo WhatsApp da Igreja.");
               location.reload();
           }
       };
