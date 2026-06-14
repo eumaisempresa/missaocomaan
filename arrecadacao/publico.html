@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arrecadação Missionária - COMAAN+</title>
+    <title>Arrecadações Missionárias - COMAAN+</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -46,7 +46,7 @@
 <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans pb-20">
 
     <header class="w-full bg-zinc-900/50 border-b border-zinc-800 py-4 px-4 text-center">
-        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-1">Painel de Ações de Arrecadação Missionária</p>
+        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-1">Painel de Ação de Arrecadação Missionária</p>
         <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="text-xs font-bold hover:opacity-80 transition-opacity">
             Desenvolvido pelo <span class="text-white">Grupo EU<sup>+</sup></span> <span class="missao-green uppercase">Missão</span> 🛡️
         </a>
@@ -66,7 +66,7 @@
             </div>
             <div class="flex-1">
                 <p class="text-[10px] font-bold text-zinc-500 uppercase">Sorteio & Ganhadores</p>
-                <p class="text-xs text-zinc-300">Acompanhe a divulgação em nosso Instagram oficial:</p>
+                <p class="text-xs text-zinc-300">Acompanhe a divulgação em nosso Instagram:</p>
                 <a href="https://www.instagram.com/comaanrs?igsh=dWNpYml3eThpb21o" target="_blank" class="text-amber-500 font-bold text-sm hover:underline">@comaanrs</a>
             </div>
         </div>
@@ -81,15 +81,15 @@
                     </div>
                 </div>
                 <h2 class="text-3xl font-black text-white mb-2 leading-tight" id="nomeCampanhaTxt">---</h2>
-                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Escolha seus números abaixo, realize o PIX e envie o comprovante para validar sua participação.</p>
+                <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Escolha seus números abaixo, e envie o comprovante do PIX para validar sua participação.</p>
                 
                 <div class="space-y-3">
                     <div class="bg-black/40 border border-zinc-800 rounded-2xl p-4">
-                        <p class="text-[10px] font-bold text-zinc-500 uppercase mb-2">🎁 Listagem de Prêmios</p>
+                        <p class="text-[10px] font-bold text-zinc-500 uppercase mb-2">🎁 Lista de Prêmios</p>
                         <div id="premiosTxt" class="text-sm text-zinc-300 whitespace-pre-line">Carregando prêmios...</div>
                     </div>
                     <div class="bg-amber-500/5 border border-amber-500/10 rounded-2xl p-4">
-                        <p class="text-[10px] font-bold text-amber-500/60 uppercase mb-2">📢 Promoções / Observações</p>
+                        <p class="text-[10px] font-bold text-amber-500/60 uppercase mb-2">📢 Promoções / Avisos</p>
                         <div id="obsTxt" class="text-sm text-zinc-300 whitespace-pre-line">---</div>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
 
         <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl">
             <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
-                <h3 class="text-lg font-bold text-white">Selecione seus Números</h3>
+                <h3 class="text-lg font-bold text-white">Escolha seus Números</h3>
                 <div class="flex flex-wrap gap-3">
                     <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/30"></div><span class="text-[9px] text-zinc-500 font-bold uppercase">Livre</span></div>
                     <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-amber-500/40 border border-amber-500/50"></div><span class="text-[9px] text-zinc-500 font-bold uppercase">Reservado</span></div>
@@ -155,7 +155,7 @@
                 </div>
             </div>
             <button onclick="confirmarReserva()" id="btnConfirmar" class="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
-                <i class="fa-solid fa-check-circle"></i> Confirmar e Gerar PIX
+                <i class="fa-solid fa-check-circle"></i> Confirmar para Copiar o PIX
             </button>
             <button onclick="fecharModal()" class="w-full text-zinc-500 text-xs font-bold uppercase tracking-widest hover:text-zinc-300">Cancelar</button>
         </div>
@@ -295,9 +295,11 @@
                                    `🔢 *Números:* ${selecionados.sort((a,b)=>a-b).join(", ")}\n` +
                                    `📦 *Quantidade:* ${selecionados.length} cota(s)\n` +
                                    `💰 *Valor Total:* R$ ${total}\n\n` +
+                                   `⚠️ _Verifique se tem direito a promoção._`;
                                    `🎁 *Promoção/Obs:* ${obsCampanha || "N/A"}\n\n` +
                                    `🏦 *CHAVE PIX (CNPJ):* ${CHAVE_PIX_IGREJA}\n\n` +
                                    `⚠️ _Por favor, envie o comprovante de pagamento agora para validarmos sua participação._`;
+                                   `⚠️ _Minha adesão é voluntária compartilhando Nome e Telefone._`;
                     
                     document.getElementById("linkZapFinal").href = `https://api.whatsapp.com/send?phone=${WHATSAPP_IGREJA}&text=${encodeURIComponent(msgZap)}`;
                     
