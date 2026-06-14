@@ -102,7 +102,7 @@
                         </div>
                         <div class="col-span-1">
                             <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Total Cotas</label>
-                            <select id="quantidadeNumeros" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-3 text-zinc-100 focus:outline-none focus:border-amber-500 transition-all text-sm">
+                            <select id="quantidadeNumeros" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-3 text-zinc-100 focus:outline-none focus:border-amber-500 transition-all text-sm cursor-pointer">
                                 <option value="50">50</option>
                                 <option value="100" selected>100</option>
                                 <option value="200">200</option>
@@ -140,7 +140,7 @@
                 <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl relative">
                     <span class="text-amber-500 animate-pulse absolute top-6 right-6 hidden" id="statusCarregandoCampanhas"><i class="fa-solid fa-spinner fa-spin"></i></span>
                     <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2.5">Selecione a Campanha para Gerenciar</label>
-                    <select id="selectCampanhas" onchange="selecionarCampanha(this.value)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-4 text-zinc-100 font-bold focus:outline-none focus:border-amber-500 transition-all text-base">
+                    <select id="selectCampanhas" onchange="selecionarCampanha(this.value)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-4 text-zinc-100 font-bold focus:outline-none focus:border-amber-500 transition-all text-base cursor-pointer">
                         <option value="">-- Buscando campanhas no Google... --</option>
                     </select>
 
@@ -196,7 +196,7 @@
                                     <th class="py-3 px-4 text-center">Status</th>
                                     <th class="py-3 px-5 text-right">Ações</th>
                                 </tr>
-                            </table>
+                            </thead>
                             <tbody id="listaReservasCorpo" class="text-sm divide-y divide-zinc-800 bg-zinc-900/40">
                             </tbody>
                         </table>
@@ -299,10 +299,11 @@
                 return;
             }
 
-            const baseFolderUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
-            const rootUrl = baseFolderUrl.replace(/\/arrecadacao$/, '');
+            // CORREÇÃO: Garante que a URL gerada aponte diretamente para a subpasta correta (/arrecadacao/index.html)
+            const currentUrl = window.location.href.split('?')[0];
+            const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
             
-            linkTxt.textContent = `${rootUrl}/index.html?id=${id}`;
+            linkTxt.textContent = `${baseUrl}/index.html?id=${id}`;
             boxLink.classList.remove("hidden");
 
             carregarReservasDaCampanha(id);
@@ -333,7 +334,6 @@
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Encerrando...`;
 
-            // ALTERADO: Agora envia via URLSearchParams (Form Data) compatível com e.parameter
             const formData = new URLSearchParams();
             formData.append("action", "encerrarCampanha");
             formData.append("idCampanha", campanhaSelecionadaId);
@@ -430,7 +430,6 @@
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Registrando no Google Script...`;
 
-            // ALTERADO: Envio como URLSearchParams compatível com e.parameter
             const formData = new URLSearchParams();
             formData.append("action", "criarCampanha");
             formData.append("nomeAcao", document.getElementById("nomeAcao").value);
@@ -470,7 +469,6 @@
             const acaoTxt = novoStatus === 'Aprovado' ? 'APROVAR' : 'CANCELAR e LIBERAR os números';
             if(!confirm(`Tem certeza que deseja ${acaoTxt} essa reserva de cupom?`)) return;
 
-            // ALTERADO: Envio como URLSearchParams compatível com e.parameter
             const formData = new URLSearchParams();
             formData.append("action", "atualizarStatusPagamento");
             formData.append("idReserva", idReserva);
@@ -524,20 +522,25 @@
                         <td>${item.comprador}</td>
                         <td>${item.whatsapp}</td>
                         <td>${item.numeros}</td>
-                        <td>${item.total}</td>
+                        <td>R$ ${parseFloat(item.total).toFixed(2)}</td>
                         <td>${item.statusPagamento}</td>
                     </tr>
                 `;
             });
 
-            excelTemplate += `</body></html>`;
+            excelTemplate += `
+                    </table>
+                </body>
+                </html>
+            `;
 
             const blob = new Blob([excelTemplate], { type: "application/vnd.ms-excel" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `Reservas_Campanha_${campanhaSelecionadaId}.xls`;
-            a.click();
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Reservas_Campanha_${campanhaSelecionadaId}.xls`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
