@@ -6,6 +6,10 @@
   <title>COMAAN+ — Sistema de Arrecadação de Missões</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <style>
+      @keyframes pulse {
+          0% { transform: scale(1); opacity: 0.9; }
+          100% { transform: scale(1.03); opacity: 1; }
+      }
       .gold-shine {
           background: linear-gradient(135deg, #FFE066 0%, #F5B041 50%, #B7950B 100%);
           -webkit-background-clip: text;
@@ -180,7 +184,7 @@
                   btn.innerText = numFormatado;
 
                   if(item.status === "DISPONIVEL") {
-                      btn.className = "p-3 bg-zinc-900 text-emerald-400 font-bold rounded-xl border-2 border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-500/10 transition-all text-sm shadow-sm cursor-pointer target-btn";
+                      btn.className = "p-3 bg-zinc-900 text-emerald-400 font-bold rounded-xl border-2 border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-500/10 transition-all text-sm shadow-sm cursor-pointer";
                       btn.onclick = () => alternarSelecaoNumero(item.numero, btn);
                   } else if (item.status === "RESERVADO") {
                       btn.className = "p-3 bg-amber-500/5 text-amber-500 border-2 border-amber-500/20 rounded-xl text-sm font-bold cursor-not-allowed opacity-60";
@@ -206,7 +210,7 @@
               elementoBtn.className = "p-3 bg-zinc-900 text-emerald-400 font-bold rounded-xl border-2 border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-500/10 transition-all text-sm shadow-sm cursor-pointer";
           } else {
               listaNumerosSelecionados.push(numero);
-              elementoBtn.className = "p-3 bg-gradient-to-b from-amber-400 to-amber-500 text-zinc-950 font-black rounded-xl border-2 border-amber-300 transition-all text-sm shadow-md scale-105 active:scale-95";
+              elementoBtn.className = "p-3 bg-gradient-to-b from-amber-400 to-amber-500 text-zinc-950 font-black rounded-xl border-2 border-amber-300 transition-all text-sm shadow-md scale-105 active:scale-95 cursor-pointer";
           }
 
           const contador = document.getElementById("contador-selecao");
@@ -217,10 +221,10 @@
               contador.innerText = `${listaNumerosSelecionados.length} ${listaNumerosSelecionados.length === 1 ? 'selecionado' : 'selecionados'}`;
               contador.classList.remove("hidden");
               btnContador.innerText = listaNumerosSelecionados.length;
-              containerFlutuante.classList.remove("translate-y-full"); // Mostra o botão flutuante
+              containerFlutuante.classList.remove("translate-y-full");
           } else {
               contador.classList.add("hidden");
-              containerFlutuante.classList.add("translate-y-full"); // Oculta o botão flutuante
+              containerFlutuante.classList.add("translate-y-full");
           }
       }
 
@@ -228,18 +232,15 @@
       document.getElementById("btn-abrir-reserva").onclick = async () => {
           if(listaNumerosSelecionados.length === 0) return;
 
-          // Alerta perguntando se quer prosseguir ou escolher mais números
           const prosseguir = confirm(`Você selecionou os números: [ ${listaNumerosSelecionados.join(', ')} ]\n\nDeseja PROSSEGUIR para o pagamento ou prefere Cancelar para ESCOLHER MAIS NÚMEROS?`);
           if (!prosseguir) return;
 
-          // Induzindo preenchimento correto de NOME
           const nomeMock = prompt("👉 [PASSO 1 de 2]: INSIRA SEU NOME COMPLETO\n\nPor favor, digite seu Nome Completo para identificarmos sua cota:");
           if(!nomeMock || nomeMock.trim().length < 3) {
               alert("O preenchimento do nome é obrigatório para realizar a reserva.");
               return;
           }
 
-          // Induzindo preenchimento correto de WHATSAPP
           const whatsMock = prompt("👉 [PASSO 2 de 2]: INSIRA SEU WHATSAPP COM DDD\n\nExemplo: 51988887777 (Coloque apenas números, sem espaços ou traços):");
           if(!whatsMock || whatsMock.trim().length < 10) {
               alert("Por favor, insira um número de WhatsApp válido com o DDD.");
@@ -255,7 +256,7 @@
                   action: "PRÉ_RESERVA",
                   campanhaId: CAMPANHA_ATIVA_ID,
                   nome: nomeMock.trim(),
-                  whatsapp: whatsMock.replace(/\D/g, ''), // Remove caracteres não numéricos
+                  whatsapp: whatsMock.replace(/\D/g, ''), 
                   numeros: listaNumerosSelecionados
               };
 
@@ -272,17 +273,17 @@
                   document.getElementById("checkout-lista-numeros").innerText = numerosFormatados;
                   document.getElementById("checkout-valor-total").innerText = `R$ ${valorCalculado.toFixed(2).replace('.', ',')}`;
 
-                  // Oculta a barra flutuante após o sucesso para não sobrepor a tela
                   document.getElementById("container-flutuante").classList.add("translate-y-full");
 
-                  // Mensagem com o PIX inserido diretamente no texto do WhatsApp
                   const txtMsg = encodeURIComponent(`Olá! Acabei de efetuar a reserva dos números [ ${numerosFormatados} ] no painel do COMAAN+ em nome de ${nomeMock.trim()}.\n\n🔑 CHAVE PIX DA IGREJA: ${CHAVE_PIX_TEXTO}\n💰 VALOR TOTAL: R$ ${valorCalculado.toFixed(2).replace('.', ',')}\n\nEstou enviando em anexo o comprovante do PIX para a validação das minhas cotas.`);
                   const apiWhats = `https://wa.me/${WHATSAPP_IGREJA}?text=${txtMsg}`;
 
                   document.getElementById("box-checkout").classList.remove("hidden");
                   document.getElementById("btn-enviar-whats").onclick = () => {
                       window.open(apiWhats, '_blank');
-                      location.reload();
+                      setTimeout(() => {
+                          location.reload();
+                      }, 500);
                   };
                   document.getElementById("box-checkout").scrollIntoView({ behavior: 'smooth' });
 
