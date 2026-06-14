@@ -109,7 +109,7 @@
                             <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Valor por Cota</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-3 text-zinc-500 text-sm font-semibold">R$</span>
-                                <input type="number" id="valorCota" step="0.01" required placeholder="20,00" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-amber-500 transition-all">
+                                <input type="number" id="valorCota" step="0.01" required placeholder="10,00" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-10 pr-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-amber-500 transition-all">
                             </div>
                         </div>
                     </div>
@@ -117,6 +117,11 @@
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Listagem de Prêmios (Escrito)</label>
                         <textarea id="descricaoPremios" rows="3" required placeholder="1º Prêmio: Cesta Completa&#10;2º Prêmio: Livro Devocional" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-amber-500 transition-all text-sm"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Promoções Progressivas / Observações</label>
+                        <textarea id="obsCampanha" rows="2" placeholder="Ex: 1 número por R$ 10,00&#10;2 por R$ 18,00 | 3 por R$ 24,00" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-amber-500 transition-all text-sm"></textarea>
                     </div>
 
                     <button type="submit" id="btnSalvarCampanha" class="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black py-4 px-4 rounded-xl transition-all shadow-lg shadow-amber-500/10 flex items-center justify-center gap-2 cursor-pointer">
@@ -139,7 +144,7 @@
                             <span class="text-zinc-500 font-bold block uppercase tracking-wide text-[10px] mb-1">Link do Site Público:</span>
                             <code class="text-amber-400 font-mono select-all bg-black/40 px-2 py-1 rounded" id="linkPublicoTxt"></code>
                         </div>
-                        <button onclick="copiarLinkPublico()" class="w-full sm:w-auto text-amber-500 hover:text-amber-400 font-bold shrink-0 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-amber-500/5 hover:bg-amber-500/10 rounded-lg border border-amber-500/20 transition-all cursor-pointer">
+                        <button onclick="copyLinkPublico()" class="w-full sm:w-auto text-amber-500 hover:text-amber-400 font-bold shrink-0 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-amber-500/5 hover:bg-amber-500/10 rounded-lg border border-amber-500/20 transition-all cursor-pointer">
                             <i class="fa-regular fa-copy"></i> Copiar Link
                         </button>
                     </div>
@@ -196,7 +201,6 @@
     </div>
 
     <script>
-        // Executa o bloqueio ou login automático se já tiver logado nesta sessão
         window.onload = function() {
             if (sessionStorage.getItem("adm_autenticado") === "true") {
                 liberarPainel();
@@ -232,7 +236,6 @@
             window.location.reload();
         }
 
-        // --- FUNÇÕES DA API DO GOOGLE SCRIPT ---
         function carregarCampanhas() {
             const statusLabel = document.getElementById("statusCarregandoCampanhas");
             statusLabel.classList.remove("hidden");
@@ -354,7 +357,8 @@
                 nomeAcao: document.getElementById("nomeAcao").value,
                 quantidadeNumeros: document.getElementById("quantidadeNumeros").value,
                 valorCota: document.getElementById("valorCota").value,
-                descricaoPremios: document.getElementById("descricaoPremios").value
+                descricaoPremios: document.getElementById("descricaoPremios").value,
+                obsCampanha: document.getElementById("obsCampanha").value // 🆕 Enviando as promoções para o Sheets
             };
 
             fetch(API_URL, {
