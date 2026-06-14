@@ -3,75 +3,545 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo - COMAAN</title>
+    <title>Painel Administrativo - COMAAN Múltiplas Campanhas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gold-shine {
+            background: linear-gradient(135deg, #FFE066 0%, #F5B041 50%, #B7950B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 12px rgba(245, 176, 65, 0.4);
+        }
+        .comaan-yellow { color: #FFFF00; } 
+    </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 min-h-screen">
+<body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans flex flex-col justify-between sequential-view">
 
     <script>
-        // URL da sua Nova Implantação
         const API_URL = "https://script.google.com/macros/s/AKfycbwSeJjsgGrdsxZ0Ik4bYRnx8NoSHnwT4KVRzAacZgFdndO8y3nTMQbJCm8i-V_sCrDIHA/exec";
         let campanhaSelecionadaId = "";
+        let listaReservasAtual = []; 
+        
+        // 🔒 ALTERE SUA SENHA DE ACESSO AQUI:
         const MASTER_PASSWORD = "Comaan123"; 
     </script>
 
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <section class="bg-zinc-900 p-6 rounded-2xl border border-zinc-800">
-            <select id="selectCampanhas" onchange="selecionarCampanha(this.value)" class="w-full bg-zinc-950 p-4 rounded-xl border border-zinc-800">
-                <option value="">-- Selecione uma Ação Missionária --</option>
-            </select>
-
-            <div id="boxLinkCampanha" class="hidden mt-4 p-4 bg-zinc-950 rounded-xl border border-zinc-800">
-                <p class="text-xs text-zinc-500 uppercase font-bold">Link da Campanha:</p>
-                <code id="linkPublicoTxt" class="text-amber-400 break-all text-sm"></code>
+    <div id="telaLogin" class="fixed inset-0 bg-zinc-950 flex items-center justify-center z-[100] px-4">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-md w-full text-center shadow-2xl space-y-6">
+            <div class="flex flex-col items-center gap-2 comaan-yellow">
+                <i class="fa-solid fa-lock text-4xl mb-2 text-zinc-600"></i>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-fire-flame-curved text-xl"></i>
+                    <h2 class="text-2xl font-black uppercase tracking-tight">COMAAN<span class="gold-shine font-black text-3xl">+</span></h2>
+                </div>
+                <p class="text-zinc-400 text-xs tracking-wide">Área Restrita do Administrador</p>
             </div>
-        </section>
-    </main>
+            
+            <form onsubmit="verificarSenha(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="senhaInput" required placeholder="Digite a senha de acesso" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3.5 text-center text-zinc-100 placeholder-zinc-600 font-bold focus:outline-none focus:border-amber-500 transition-all tracking-widest text-lg">
+                </div>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black py-3.5 px-4 rounded-xl transition-all shadow-lg shadow-amber-500/10 cursor-pointer flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-key"></i> Desbloquear Painel
+                </button>
+                <div id="erroSenha" class="text-red-500 text-xs font-bold hidden animate-pulse">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Senha incorreta. Tente novamente!
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="conteudoPainel" class="hidden flex-col min-h-screen justify-between w-full">
+        
+        <header class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2.5 comaan-yellow p-1">
+                        <i class="fa-solid fa-fire-flame-curved text-2xl"></i>
+                        <h1 class="text-3xl font-extrabold uppercase tracking-tight relative">
+                            COMAAN<a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="gold-shine inline-block font-black text-4xl absolute -top-3 -right-3.5 transform hover:scale-110 transition-transform" title="Conheça a Frente EU+ Missão">+</a>
+                        </h1>
+                    </div>
+                    <div class="ml-4 pl-4 border-l border-zinc-800">
+                        <p class="text-sm font-bold tracking-tight">Painel Operacional</p>
+                        <p class="text-xs text-zinc-400">Gerenciador de Ações Replicável & Autônomo</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="carregarCampanhas()" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-rotate"></i> Atualizar Painel
+                    </button>
+                    <button onclick="fazerLogout()" class="bg-red-950/40 hover:bg-red-900/40 border border-red-900/30 text-red-400 px-3 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer" title="Sair do Painel">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full flex-grow">
+            
+            <section class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl h-fit">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <h2 class="text-xl font-bold tracking-tight text-white">Criar Nova Campanha</h2>
+                </div>
+
+                <form id="formCriarCampanha" onsubmit="criarCampanha(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Nome da Ação</label>
+                        <input type="text" id="nomeAcao" required placeholder="Ex: Ação Missionária de Inverno" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-amber-500 transition-all">
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Nº Inicial</label>
+                            <input type="number" id="numeroInicial" required value="1" min="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-3 text-zinc-100 focus:outline-none focus:border-amber-500 transition-all text-sm font-mono text-center">
+                        </div>
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Total Cotas</label>
+                            <select id="quantidadeNumeros" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-3 text-zinc-100 focus:outline-none focus:border-amber-500 transition-all text-sm cursor-pointer">
+                                <option value="50">50</option>
+                                <option value="100" selected>100</option>
+                                <option value="200">200</option>
+                                <option value="500">500</option>
+                                <option value="1000">1000</option>
+                            </select>
+                        </div>
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Valor Cota</label>
+                            <div class="relative">
+                                <span class="absolute left-2.5 top-3 text-zinc-600 text-xs font-bold">R$</span>
+                                <input type="number" id="valorCota" step="0.01" required placeholder="10,00" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-7 pr-2 py-3 text-zinc-100 text-sm placeholder-zinc-700 focus:outline-none focus:border-amber-500 transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Listagem de Prêmios (Escrito)</label>
+                        <textarea id="descricaoPremios" rows="3" required placeholder="1º Prêmio: Cesta Completa&#10;2º Prêmio: Livro Devocional" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-amber-500 transition-all text-sm"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1.5">Promoções Progressivas / Observações</label>
+                        <textarea id="obsCampanha" rows="2" placeholder="Ex: 1 número por R$ 10,00&#10;2 por R$ 18,00 | 3 por R$ 24,00" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-amber-500 transition-all text-sm"></textarea>
+                    </div>
+
+                    <button type="submit" id="btnSalvarCampanha" class="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black py-4 px-4 rounded-xl transition-all shadow-lg shadow-amber-500/10 flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Ativar e Publicar Ação
+                    </button>
+                </form>
+            </section>
+
+            <section class="lg:col-span-2 space-y-6">
+                
+                <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl relative">
+                    <span class="text-amber-500 animate-pulse absolute top-6 right-6 hidden" id="statusCarregandoCampanhas"><i class="fa-solid fa-spinner fa-spin"></i></span>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2.5">Selecione a Campanha para Gerenciar</label>
+                    <select id="selectCampanhas" onchange="selecionarCampanha(this.value)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-4 text-zinc-100 font-bold focus:outline-none focus:border-amber-500 transition-all text-base cursor-pointer">
+                        <option value="">-- Buscando campanhas no Google... --</option>
+                    </select>
+
+                    <div id="boxLinkCampanha" class="hidden mt-5 p-4 bg-zinc-950 rounded-xl border border-zinc-800/80 flex flex-col gap-4 text-xs">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 w-full">
+                            <div class="truncate max-w-full flex-grow">
+                                <span class="text-zinc-500 font-bold block uppercase tracking-wide text-[10px] mb-1">Link do Site Público:</span>
+                                <code class="text-amber-400 font-mono select-all bg-black/40 px-2 py-1 rounded inline-block truncate max-w-full" id="linkPublicoTxt"></code>
+                            </div>
+                            <div class="flex gap-2 w-full sm:w-auto shrink-0">
+                                <button onclick="copiarLinkPublico()" class="flex-1 sm:flex-none text-amber-500 hover:text-amber-400 font-bold flex items-center justify-center gap-1.5 px-3 py-1.5 bg-amber-500/5 hover:bg-amber-500/10 rounded-lg border border-amber-500/20 transition-all cursor-pointer">
+                                    <i class="fa-regular fa-copy"></i> Copiar Link
+                                </button>
+                                <button id="btnEncerrarCampanha" onclick="encerrarCampanhaAtual()" class="flex-1 sm:flex-none text-red-400 hover:text-red-300 font-bold flex items-center justify-center gap-1.5 px-3 py-1.5 bg-red-500/5 hover:bg-red-500/10 rounded-lg border border-red-500/20 transition-all cursor-pointer" title="Encerramento Seguro">
+                                    <i class="fa-solid fa-power-off"></i> Encerrar Campanha
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl min-h-[350px]">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                <i class="fa-solid fa-receipt"></i>
+                            </div>
+                            <h2 class="text-xl font-bold tracking-tight text-white">Lista de Pagantes e Reservas</h2>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="btnExportarExcel" onclick="exportarParaExcel()" class="hidden text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer">
+                                <i class="fa-solid fa-file-excel"></i> Baixar Excel
+                            </button>
+                            <div class="text-xs text-zinc-400 font-medium bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800" id="contadorReservas">
+                                0 Transações
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resumoOcioso" class="text-center py-16 text-zinc-600 space-y-3">
+                        <i class="fa-solid fa-folder-open text-5xl block opacity-20"></i>
+                        <p class="text-sm font-medium">Selecione uma campanha acima para gerenciar os pagamentos.</p>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-zinc-800 hidden" id="tabelaReservasContainer">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
+                            <thead>
+                                <tr class="bg-zinc-950 text-[11px] font-bold uppercase tracking-wider text-zinc-400 border-b border-zinc-800">
+                                    <th class="py-3 px-5">Comprador</th>
+                                    <th class="py-3 px-4">WhatsApp</th>
+                                    <th class="py-3 px-4">Números</th>
+                                    <th class="py-3 px-4">Valor</th>
+                                    <th class="py-3 px-4 text-center">Status</th>
+                                    <th class="py-3 px-5 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaReservasCorpo" class="text-sm divide-y divide-zinc-800 bg-zinc-900/40">
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <footer class="w-full bg-black border-t border-zinc-900 py-6 text-center mt-12 px-4">
+            <a href="https://eumaisempresa.github.io/eumaismissao/" target="_blank" class="inline-block hover:scale-105 transition-transform group" title="Visitar Portal EU+ Missão">
+                <p class="text-green-200 text-lg font-serif font-semibold group-hover:text-green-100 transition-colors">
+                    Grupo Eu<sup class="text-xs text-green-300 ml-0.5">+</sup> Missão
+                </p>
+            </a>
+            <p class="text-zinc-700 text-[10px] mt-3 tracking-widest uppercase">
+                Sistema operacional de cotas • Desenvolvido com integridade
+            </p>
+        </footer>
+    </div>
 
     <script>
+        window.onload = function() {
+            if (sessionStorage.getItem("adm_autenticado") === "true") {
+                liberarPainel();
+            }
+        };
+
+        function verificarSenha(e) {
+            e.preventDefault();
+            const senhaDigitada = document.getElementById("senhaInput").value;
+            const erroLabel = document.getElementById("erroSenha");
+
+            if (senhaDigitada === MASTER_PASSWORD) {
+                sessionStorage.setItem("adm_autenticado", "true");
+                erroLabel.classList.add("hidden");
+                liberarPainel();
+            } else {
+                erroLabel.classList.remove("hidden");
+                document.getElementById("senhaInput").value = "";
+                document.getElementById("senhaInput").focus();
+            }
+        }
+
+        function liberarPainel() {
+            document.getElementById("telaLogin").classList.add("hidden");
+            const painel = document.getElementById("conteudoPainel");
+            painel.classList.remove("hidden");
+            painel.classList.add("flex");
+            carregarCampanhas();
+        }
+
+        function fazerLogout() {
+            sessionStorage.removeItem("adm_autenticado");
+            window.location.reload();
+        }
+
+        function carregarCampanhas() {
+            const statusLabel = document.getElementById("statusCarregandoCampanhas");
+            statusLabel.classList.remove("hidden");
+
+            fetch(`${API_URL}?action=listarCampanhas`)
+                .then(res => res.json())
+                .then(data => {
+                    const select = document.getElementById("selectCampanhas");
+                    select.innerHTML = "";
+
+                    if (data.status === "sucesso" && data.campanhas.length > 0) {
+                        select.innerHTML = '<option value="">-- Selecione uma Ação Missionária --</option>';
+                        data.campanhas.forEach(camp => {
+                            const option = document.createElement("option");
+                            option.value = camp.id;
+                            option.textContent = `${camp.nome} (${camp.totalNumeros} nºs - R$ ${camp.valorCota.toFixed(2)}) - [${camp.status}]`;
+                            if(camp.status === "Encerrada") {
+                                option.textContent += " 🔒";
+                            }
+                            select.appendChild(option);
+                        });
+                        
+                        if(campanhaSelecionadaId) select.value = campanhaSelecionadaId;
+                    } else {
+                        select.innerHTML = '<option value="">Nenhuma campanha cadastrada no banco.</option>';
+                    }
+                })
+                .catch(err => alert("Erro ao carregar: " + err))
+                .finally(() => statusLabel.classList.add("hidden"));
+        }
+
         function selecionarCampanha(id) {
             campanhaSelecionadaId = id;
             const boxLink = document.getElementById("boxLinkCampanha");
             const linkTxt = document.getElementById("linkPublicoTxt");
+            const btnExportar = document.getElementById("btnExportarExcel");
             
             if (!id) {
                 boxLink.classList.add("hidden");
+                btnExportar.classList.add("hidden");
+                document.getElementById("resumoOcioso").classList.remove("hidden");
+                document.getElementById("tabelaReservasContainer").classList.add("hidden");
                 return;
             }
 
-            // CORREÇÃO: Força o link para o arquivo na pasta arrecadacao
-            const currentUrl = window.location.href; // Ex: .../arrecadacao/adm.html
+            // AJUSTADO: Pega a URL atual do adm.html e monta o link para publico.html na mesma pasta
+            const currentUrl = window.location.href.split('?')[0];
             const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
             
-            // O link aponta para o index.html (ou publico.html) na mesma pasta do adm
-            linkTxt.textContent = `${baseUrl}/index.html?id=${id}`;
+            linkTxt.textContent = `${baseUrl}/publico.html?id=${id}`;
             boxLink.classList.remove("hidden");
 
             carregarReservasDaCampanha(id);
         }
 
-        function carregarReservasDaCampanha(idCampanha) {
-            // Adicionado log para verificar se a API está sendo chamada
-            console.log("Buscando reservas em: " + API_URL + "?action=listarReservas&id=" + idCampanha);
+        function copiarLinkPublico() {
+            const txt = document.getElementById("linkPublicoTxt").textContent;
+            if(!txt) return;
             
+            navigator.clipboard.writeText(txt)
+                .then(() => alert("Link da campanha copiado com sucesso!"))
+                .catch(() => alert("Erro ao copiar link. Selecione o texto manualmente."));
+        }
+
+        function encerrarCampanhaAtual() {
+            if (!campanhaSelecionadaId) return;
+            
+            const senhaConfirmacao = prompt("⚠️ AÇÃO RESTRITA!\nPara encerrar esta campanha em definitivo, confirme digitando a senha de administrador:");
+            
+            if (senhaConfirmacao === null) return;
+            
+            if (senhaConfirmacao !== MASTER_PASSWORD) {
+                alert("❌ Senha incorreta! O encerramento da campanha foi cancelado por segurança.");
+                return;
+            }
+
+            const btn = document.getElementById("btnEncerrarCampanha");
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Encerrando...`;
+
+            const formData = new URLSearchParams();
+            formData.append("action", "encerrarCampanha");
+            formData.append("idCampanha", campanhaSelecionadaId);
+
+            fetch(API_URL, {
+                method: "POST",
+                body: formData,
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "sucesso") {
+                    alert("Sucesso: Status da campanha alterado para 'Encerrada' na planilha!");
+                } else {
+                    alert("Erro: " + (data.message || "A planilha não pôde ser modificada."));
+                }
+                carregarCampanhas();
+            })
+            .catch(err => {
+                alert("Falha na requisição. Verifique sua conexão ou se o script foi implantado como 'Qualquer Pessoa'.");
+                carregarCampanhas();
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-power-off"></i> Encerrar Campanha`;
+            });
+        }
+
+        function carregarReservasDaCampanha(idCampanha) {
+            const ocioso = document.getElementById("resumoOcioso");
+            const tabelaContainer = document.getElementById("tabelaReservasContainer");
+            const corpoTabela = document.getElementById("listaReservasCorpo");
+            const contador = document.getElementById("contadorReservas");
+            const btnExportar = document.getElementById("btnExportarExcel");
+
+            corpoTabela.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-zinc-600 text-xs"><i class="fa-solid fa-circle-notch fa-spin"></i> Lendo banco de dados do Google...</td></tr>`;
+            ocioso.classList.add("hidden");
+            tabelaContainer.classList.remove("hidden");
+            btnExportar.classList.add("hidden");
+            listaReservasAtual = [];
+
             fetch(`${API_URL}?action=listarReservas&id=${idCampanha}`)
                 .then(res => res.json())
                 .then(data => {
-                    if (data.status === "sucesso") {
-                        // ... (renderização da tabela)
-                        console.log("Reservas carregadas:", data.reservas);
+                    corpoTabela.innerHTML = "";
+                    if (data.status === "sucesso" && data.reservas.length > 0) {
+                        listaReservasAtual = data.reservas; 
+                        contador.textContent = `${data.reservas.length} Transações Registradas`;
+                        btnExportar.classList.remove("hidden");
+                        
+                        data.reservas.forEach(res => {
+                            let badgeStatus = "";
+                            if(res.statusPagamento === "Pendente") badgeStatus = `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-xs font-semibold">Pendente</span>`;
+                            if(res.statusPagamento === "Aprovado") badgeStatus = `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-md text-xs font-semibold">Aprovado</span>`;
+                            if(res.statusPagamento === "Cancelado") badgeStatus = `<span class="bg-zinc-800 text-zinc-500 border border-zinc-700 px-2 py-0.5 rounded-md text-xs font-semibold">Cancelado</span>`;
+
+                            const msgZap = encodeURIComponent(`Olá ${res.comprador}, da COMAAN. Vimos que você reservou as cotas [ ${res.numeros} ], mas o comprovante Pix ainda não chegou. Pode nos enviar por aqui para validarmos? Obrigado!`);
+                            const linkZap = `https://wa.me/${res.whatsapp.replace(/\D/g, '')}?text=${msgZap}`;
+
+                            const tr = document.createElement("tr");
+                            tr.className = "hover:bg-zinc-800/30 transition-all";
+                            tr.innerHTML = `
+                                <td class="py-4 px-5">
+                                    <div class="font-bold text-zinc-100">${res.comprador}</div>
+                                    <div class="text-xs text-zinc-500 font-mono">${res.data}</div>
+                                </td>
+                                <td class="py-4 px-4 font-mono text-zinc-400 text-xs">${res.whatsapp}</td>
+                                <td class="py-4 px-4 font-mono text-amber-400 font-black text-base">${res.numeros}</td>
+                                <td class="py-4 px-4 font-bold text-zinc-200">R$ ${parseFloat(res.total).toFixed(2)}</td>
+                                <td class="py-4 px-4 text-center">${badgeStatus}</td>
+                                <td class="py-4 px-5 text-right space-x-1.5 whitespace-nowrap">
+                                    ${res.statusPagamento === 'Pendente' ? `
+                                        <button onclick="mudarStatus('${res.idReserva}', 'Aprovado')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black p-2.5 rounded-lg text-xs transition-all cursor-pointer" title="Aprovar Pagamento"><i class="fa-solid fa-check"></i></button>
+                                        <button onclick="mudarStatus('${res.idReserva}', 'Cancelado')" class="bg-zinc-800 hover:bg-red-950 text-red-400 border border-zinc-700 hover:border-red-600/30 p-2.5 rounded-lg text-xs transition-all cursor-pointer" title="Recusar e Liberar Números"><i class="fa-solid fa-xmark"></i></button>
+                                        <a href="${linkZap}" target="_blank" class="bg-blue-600 hover:bg-blue-500 inline-block text-white font-black p-2.5 rounded-lg text-xs transition-all" title="Cobrar por WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                                    ` : `<span class="text-xs text-zinc-700 font-mono italic">Sem pendências</span>`}
+                                </td>
+                            `;
+                            corpoTabela.appendChild(tr);
+                        });
                     } else {
-                        alert("Erro: " + data.message);
+                        contador.textContent = "0 Transações";
+                        corpoTabela.innerHTML = `<tr><td colspan="6" class="text-center py-14 text-zinc-600 text-sm italic">Nenhuma reserva pendente ou paga para esta ação ainda.</td></tr>`;
                     }
                 })
-                .catch(err => {
-                    console.error("Erro de conexão:", err);
-                    alert("Erro ao conectar com a planilha. Verifique o console (F12).");
+                .catch(() => {
+                    corpoTabela.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-red-400 text-xs">Erro de conexão com a planilha.</td></tr>`;
                 });
         }
-        
-        // ... (restante das suas funções)
+
+        function criarCampanha(e) {
+            e.preventDefault();
+            const btn = document.getElementById("btnSalvarCampanha");
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Registrando no Google Script...`;
+
+            const formData = new URLSearchParams();
+            formData.append("action", "criarCampanha");
+            formData.append("nomeAcao", document.getElementById("nomeAcao").value);
+            formData.append("numeroInicial", document.getElementById("numeroInicial").value);
+            formData.append("quantidadeNumeros", document.getElementById("quantidadeNumeros").value);
+            formData.append("valorCota", document.getElementById("valorCota").value);
+            formData.append("descricaoPremios", document.getElementById("descricaoPremios").value);
+            formData.append("obsCampanha", document.getElementById("obsCampanha").value);
+
+            fetch(API_URL, {
+                method: "POST",
+                body: formData,
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "sucesso") {
+                    alert("Campanha criada e salva com sucesso na planilha!");
+                    document.getElementById("formCriarCampanha").reset();
+                    document.getElementById("numeroInicial").value = "1";
+                    campanhaSelecionadaId = data.idCampanha;
+                    carregarCampanhas();
+                } else {
+                    alert("Erro ao criar campanha: " + data.message);
+                }
+            })
+            .catch(err => {
+                alert("Erro técnico ao salvar. Verifique se a sua planilha não mudou de estrutura.");
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Ativar e Publicar Ação`;
+            });
+        }
+
+        function mudarStatus(idReserva, novoStatus) {
+            const acaoTxt = novoStatus === 'Aprovado' ? 'APROVAR' : 'CANCELAR e LIBERAR os números';
+            if(!confirm(`Tem certeza que deseja ${acaoTxt} essa reserva de cupom?`)) return;
+
+            const formData = new URLSearchParams();
+            formData.append("action", "atualizarStatusPagamento");
+            formData.append("idReserva", idReserva);
+            formData.append("novoStatus", novoStatus);
+
+            fetch(API_URL, {
+                method: "POST",
+                body: formData,
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "sucesso") {
+                    carregarReservasDaCampanha(campanhaSelecionadaId);
+                } else {
+                    alert("Erro ao atualizar status: " + data.message);
+                }
+            })
+            .catch(() => {
+                carregarReservasDaCampanha(campanhaSelecionadaId);
+            });
+        }
+
+        function exportarParaExcel() {
+            if (listaReservasAtual.length === 0) {
+                alert("Não há dados para exportar.");
+                return;
+            }
+
+            let excelTemplate = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="UTF-8"></head>
+                <body>
+                    <table border="1">
+                        <tr style="background-color: #10B981; color: white; font-weight: bold;">
+                            <th>ID Reserva</th>
+                            <th>Data/Hora</th>
+                            <th>Comprador</th>
+                            <th>WhatsApp</th>
+                            <th>Cotas Escolhidas</th>
+                            <th>Valor Total</th>
+                            <th>Status Pagamento</th>
+                        </tr>
+            `;
+
+            listaReservasAtual.forEach(item => {
+                excelTemplate += `
+                    <tr>
+                        <td>${item.idReserva}</td>
+                        <td>${item.data}</td>
+                        <td>${item.comprador}</td>
+                        <td>${item.whatsapp}</td>
+                        <td>${item.numeros}</td>
+                        <td>R$ ${parseFloat(item.total).toFixed(2)}</td>
+                        <td>${item.statusPagamento}</td>
+                    </tr>
+                `;
+            });
+
+            excelTemplate += `
+                    </table>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([excelTemplate], { type: "application/vnd.ms-excel" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Reservas_Campanha_${campanhaSelecionadaId}.xls`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 </body>
 </html>
