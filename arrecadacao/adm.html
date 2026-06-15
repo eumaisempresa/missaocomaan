@@ -26,6 +26,8 @@
             .mobile-card-list { display: none; }
             .desktop-table { display: table; }
         }
+        .loading-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans flex flex-col justify-between">
@@ -93,6 +95,8 @@
                             <option value="100" selected>100</option>
                             <option value="200">200</option>
                             <option value="500">500</option>
+                            <option value="700">700</option>
+                            <option value="1000">1000</option>
                         </select>
                         <input type="number" id="valorCota" step="0.01" required placeholder="Valor" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2 py-3 text-sm text-zinc-100 outline-none">
                     </div>
@@ -105,7 +109,6 @@
             </section>
 
             <section class="lg:col-span-2 space-y-6">
-                <!-- SELEÇÃO E LINK -->
                 <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-xl">
                     <select id="selectCampanhas" onchange="selecionarCampanha(this.value)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-4 text-zinc-100 font-bold text-lg outline-none cursor-pointer mb-4">
                         <option value="">Carregando campanhas...</option>
@@ -123,7 +126,6 @@
                     </div>
                 </div>
 
-                <!-- PAINEL DE KPIs -->
                 <div id="painelKPIs" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl text-center">
                         <p class="text-[10px] text-zinc-500 font-bold uppercase">Total</p>
@@ -143,7 +145,6 @@
                     </div>
                 </div>
 
-                <!-- LISTA DE PEDIDOS -->
                 <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-xl min-h-[400px]">
                     <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                         <h2 class="text-lg font-bold text-white">Gestão de Pedidos</h2>
@@ -152,7 +153,7 @@
                                 <i class="fa-solid fa-file-excel"></i> Excel
                             </button>
                             <button onclick="gerarPDFCupons()" id="btnPDF" class="hidden bg-white text-black px-3 py-2 rounded-xl text-[10px] font-bold transition-all flex items-center gap-2 cursor-pointer">
-                                <i class="fa-solid fa-file-pdf"></i> Cupons PDF
+                                <i class="fa-solid fa-file-pdf" id="pdfIcon"></i> <span id="pdfTexto">Cupons PDF</span>
                             </button>
                             <span id="contadorReservas" class="text-[10px] bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800 text-zinc-500 font-bold">0 Pedidos</span>
                         </div>
@@ -253,7 +254,6 @@
                 cards.innerHTML = "";
                 dadosExportacao = json.reservas; 
                 
-                // KPIs
                 let pagos = 0;
                 let reservas = 0;
                 json.reservas.forEach(r => {
@@ -380,73 +380,91 @@
         }
 
         async function gerarPDFCupons() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const totalNum = parseInt(dadosCampanhaAtual.totalNumeros);
-            const numInicial = parseInt(dadosCampanhaAtual.numeroInicial);
-            const nomeAcao = dadosCampanhaAtual.nome;
-            const valorAcao = dadosCampanhaAtual.valorCota;
-            const premios = dadosCampanhaAtual.premios;
-            const obs = dadosCampanhaAtual.obs;
+            const btn = document.getElementById("btnPDF");
+            const icon = document.getElementById("pdfIcon");
+            const txt = document.getElementById("pdfTexto");
+            
+            btn.disabled = true;
+            icon.className = "fa-solid fa-spinner loading-spin";
+            txt.innerText = "Processando...";
 
-            // Mapeia números ocupados
-            let mapaReservas = {};
-            dadosExportacao.forEach(r => {
-                r.numeros.split(",").forEach(n => {
-                    mapaReservas[parseInt(n)] = {
-                        nome: r.comprador,
-                        fone: r.whatsapp,
-                        status: r.statusPagamento === "Aprovado" || r.statusPagamento === "PAGO" ? "[X] Pago" : "[X] Reservado"
-                    };
-                });
-            });
+            setTimeout(async () => {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+                    const totalNum = parseInt(dadosCampanhaAtual.totalNumeros);
+                    const numInicial = parseInt(dadosCampanhaAtual.numeroInicial);
+                    const nomeAcao = dadosCampanhaAtual.nome;
+                    const valorAcao = dadosCampanhaAtual.valorCota;
+                    const premios = dadosCampanhaAtual.premios;
+                    const obs = dadosCampanhaAtual.obs;
 
-            let cupomCount = 0;
-            let yOffset = 10;
+                    let mapaReservas = {};
+                    dadosExportacao.forEach(r => {
+                        r.numeros.split(",").forEach(n => {
+                            mapaReservas[parseInt(n)] = {
+                                nome: r.comprador,
+                                fone: r.whatsapp,
+                                status: r.statusPagamento === "Aprovado" || r.statusPagamento === "PAGO" ? "[X] Pago" : "[X] Reservado"
+                            };
+                        });
+                    });
 
-            for (let i = 0; i < totalNum; i++) {
-                const numAtual = numInicial + i;
-                const info = mapaReservas[numAtual] || { nome: "____________________", fone: "____________________", status: "[ ] Livre" };
+                    let cupomCount = 0;
+                    let yOffset = 10;
 
-                if (cupomCount > 0 && cupomCount % 7 === 0) {
-                    doc.addPage();
-                    yOffset = 10;
+                    for (let i = 0; i < totalNum; i++) {
+                        const numAtual = numInicial + i;
+                        const info = mapaReservas[numAtual] || { nome: "____________________", fone: "____________________", status: "[ ] Livre" };
+
+                        if (cupomCount > 0 && cupomCount % 7 === 0) {
+                            doc.addPage();
+                            yOffset = 10;
+                        }
+
+                        doc.setDrawColor(220);
+                        doc.rect(10, yOffset, 190, 38); 
+                        doc.line(100, yOffset, 100, yOffset + 38); 
+
+                        doc.setFontSize(7);
+                        doc.setFont("helvetica", "bold");
+                        
+                        // 1ª VIA
+                        doc.text("1ª VIA - CONTROLE", 12, yOffset + 5);
+                        doc.setFont("helvetica", "normal");
+                        doc.text(`Ação: ${nomeAcao.substring(0, 45)}`, 12, yOffset + 10);
+                        doc.text(`Número: ${numAtual.toString().padStart(3, '0')}`, 12, yOffset + 15);
+                        doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | Status: ${info.status}`, 12, yOffset + 20);
+                        doc.text(`Comprador: ${info.nome.substring(0, 35)}`, 12, yOffset + 25);
+                        doc.text(`Fone: ${info.fone}`, 12, yOffset + 30);
+                        doc.text(`Obs: ${obs.substring(0, 50)}`, 12, yOffset + 35);
+
+                        // 2ª VIA
+                        doc.setFont("helvetica", "bold");
+                        doc.text("2ª VIA - PARCEIRO", 102, yOffset + 5);
+                        doc.setFont("helvetica", "normal");
+                        doc.text(`Ação: ${nomeAcao.substring(0, 45)}`, 102, yOffset + 10);
+                        doc.text(`Número: ${numAtual.toString().padStart(3, '0')}`, 102, yOffset + 15);
+                        doc.text(`Prêmios: ${premios.substring(0, 50)}...`, 102, yOffset + 20);
+                        doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | Status: ${info.status}`, 102, yOffset + 25);
+                        doc.text(`Nome: ${info.nome.substring(0, 35)}`, 102, yOffset + 30);
+                        doc.text(`Fone: ${info.fone}`, 102, yOffset + 35);
+
+                        yOffset += 40;
+                        cupomCount++;
+                    }
+
+                    // Abre em nova aba para evitar bloqueio de download
+                    window.open(doc.output('bloburl'), '_blank');
+                    
+                } catch (err) {
+                    alert("Erro ao gerar PDF. Tente novamente.");
+                } finally {
+                    btn.disabled = false;
+                    icon.className = "fa-solid fa-file-pdf";
+                    txt.innerText = "Cupons PDF";
                 }
-
-                // Desenha Cupom (Duas Vias)
-                doc.setDrawColor(200);
-                doc.rect(10, yOffset, 190, 38); // Borda externa
-                doc.line(100, yOffset, 100, yOffset + 38); // Divisor de vias
-
-                doc.setFontSize(8);
-                doc.setFont("helvetica", "bold");
-                
-                // 1ª VIA - CONTROLE
-                doc.text("1ª VIA - CONTROLE", 12, yOffset + 5);
-                doc.setFont("helvetica", "normal");
-                doc.text(`Ação: ${nomeAcao.substring(0, 35)}`, 12, yOffset + 10);
-                doc.text(`Número: ${numAtual.toString().padStart(3, '0')}`, 12, yOffset + 15);
-                doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | ${info.status}`, 12, yOffset + 20);
-                doc.text(`Comprador: ${info.nome.substring(0, 30)}`, 12, yOffset + 25);
-                doc.text(`Fone: ${info.fone}`, 12, yOffset + 30);
-                doc.text(`Obs: ${obs.substring(0, 40)}`, 12, yOffset + 35);
-
-                // 2ª VIA - PARCEIRO
-                doc.setFont("helvetica", "bold");
-                doc.text("2ª VIA - PARCEIRO", 102, yOffset + 5);
-                doc.setFont("helvetica", "normal");
-                doc.text(`Ação: ${nomeAcao.substring(0, 35)}`, 102, yOffset + 10);
-                doc.text(`Número: ${numAtual.toString().padStart(3, '0')}`, 102, yOffset + 15);
-                doc.text(`Prêmios: ${premios.substring(0, 40)}...`, 102, yOffset + 20);
-                doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | ${info.status}`, 102, yOffset + 25);
-                doc.text(`Nome: ${info.nome.substring(0, 30)}`, 102, yOffset + 30);
-                doc.text(`Fone: ${info.fone}`, 102, yOffset + 35);
-
-                yOffset += 40;
-                cupomCount++;
-            }
-
-            doc.save(`Cupons_${nomeAcao}.pdf`);
+            }, 500);
         }
     </script>
 </body>
