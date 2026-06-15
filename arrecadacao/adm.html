@@ -391,7 +391,7 @@
             setTimeout(async () => {
                 try {
                     const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+                    const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4", compress: true });
                     const totalNum = parseInt(dadosCampanhaAtual.totalNumeros);
                     const numInicial = parseInt(dadosCampanhaAtual.numeroInicial);
                     const nomeAcao = dadosCampanhaAtual.nome;
@@ -412,53 +412,51 @@
 
                     let cupomCount = 0;
                     let yOffset = 10;
+                    const cupomHeight = 27; // Reduzido para caber 10 por página
 
                     for (let i = 0; i < totalNum; i++) {
                         const numAtual = numInicial + i;
                         const info = mapaReservas[numAtual] || { nome: "____________________", fone: "____________________", status: "[ ] Livre" };
 
-                        if (cupomCount > 0 && cupomCount % 7 === 0) {
+                        if (cupomCount > 0 && cupomCount % 10 === 0) {
                             doc.addPage();
                             yOffset = 10;
                         }
 
                         doc.setDrawColor(220);
-                        doc.rect(10, yOffset, 190, 38); 
-                        doc.line(100, yOffset, 100, yOffset + 38); 
+                        doc.rect(10, yOffset, 190, cupomHeight); 
+                        doc.line(100, yOffset, 100, yOffset + cupomHeight); 
 
-                        doc.setFontSize(7);
+                        doc.setFontSize(6);
                         doc.setFont("helvetica", "bold");
                         
                         // 1ª VIA
-                        doc.text("1ª VIA - CONTROLE", 12, yOffset + 5);
+                        doc.text("1ª VIA - CONTROLE", 12, yOffset + 4);
                         doc.setFont("helvetica", "normal");
-                        doc.text(`Ação: ${nomeAcao.substring(0, 45)}`, 12, yOffset + 10);
-                        doc.text(`Número: ${numAtual.toString().padStart(3, '0')}`, 12, yOffset + 15);
-                        doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | Status: ${info.status}`, 12, yOffset + 20);
-                        doc.text(`Comprador: ${info.nome.substring(0, 35)}`, 12, yOffset + 25);
-                        doc.text(`Fone: ${info.fone}`, 12, yOffset + 30);
-                        doc.text(`Obs: ${obs.substring(0, 50)}`, 12, yOffset + 35);
+                        doc.text(`Ação: ${nomeAcao.substring(0, 50)}`, 12, yOffset + 8);
+                        doc.text(`Número: ${numAtual.toString().padStart(3, '0')} | Status: ${info.status}`, 12, yOffset + 12);
+                        doc.text(`Comprador: ${info.nome.substring(0, 40)}`, 12, yOffset + 16);
+                        doc.text(`Fone: ${info.fone}`, 12, yOffset + 20);
+                        doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | Obs: ${obs.substring(0, 45)}`, 12, yOffset + 24);
 
                         // 2ª VIA
                         doc.setFont("helvetica", "bold");
-                        doc.text("2ª VIA - PARCEIRO", 102, yOffset + 5);
+                        doc.text("2ª VIA - PARCEIRO", 102, yOffset + 4);
                         doc.setFont("helvetica", "normal");
-                        doc.text(`Ação: ${nomeAcao.substring(0, 45)}`, 102, yOffset + 10);
-                        doc.text(`Número: ${numAtual.toString().padStart(3, '0')}`, 102, yOffset + 15);
-                        doc.text(`Prêmios: ${premios.substring(0, 50)}...`, 102, yOffset + 20);
-                        doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | Status: ${info.status}`, 102, yOffset + 25);
-                        doc.text(`Nome: ${info.nome.substring(0, 35)}`, 102, yOffset + 30);
-                        doc.text(`Fone: ${info.fone}`, 102, yOffset + 35);
+                        doc.text(`Ação: ${nomeAcao.substring(0, 50)}`, 102, yOffset + 8);
+                        doc.text(`Número: ${numAtual.toString().padStart(3, '0')} | Status: ${info.status}`, 102, yOffset + 12);
+                        doc.text(`Prêmios: ${premios.substring(0, 50)}`, 102, yOffset + 16);
+                        doc.text(`Nome: ${info.nome.substring(0, 40)}`, 102, yOffset + 20);
+                        doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)}`, 102, yOffset + 24);
 
-                        yOffset += 40;
+                        yOffset += cupomHeight + 1;
                         cupomCount++;
                     }
 
-                    // Abre em nova aba para evitar bloqueio de download
                     window.open(doc.output('bloburl'), '_blank');
                     
                 } catch (err) {
-                    alert("Erro ao gerar PDF. Tente novamente.");
+                    alert("Erro ao gerar PDF. Tente com uma campanha menor ou atualize a página.");
                 } finally {
                     btn.disabled = false;
                     icon.className = "fa-solid fa-file-pdf";
