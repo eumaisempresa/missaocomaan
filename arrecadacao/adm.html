@@ -386,16 +386,16 @@
             
             btn.disabled = true;
             icon.className = "fa-solid fa-spinner loading-spin";
-            txt.innerText = "Processando...";
+            txt.innerText = "Iniciando...";
 
             setTimeout(async () => {
                 try {
                     const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4", compress: true });
+                    const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
                     const totalNum = parseInt(dadosCampanhaAtual.totalNumeros);
                     const numInicial = parseInt(dadosCampanhaAtual.numeroInicial);
                     const nomeAcao = dadosCampanhaAtual.nome;
-                    const valorAcao = dadosCampanhaAtual.valorCota;
+                    const valorAcao = parseFloat(dadosCampanhaAtual.valorCota);
                     const premios = dadosCampanhaAtual.premios;
                     const obs = dadosCampanhaAtual.obs;
 
@@ -410,59 +410,58 @@
                         });
                     });
 
-                    let cupomCount = 0;
-                    let yOffset = 10;
-                    const cupomHeight = 27; // Reduzido para caber 10 por página
+                    const cupomHeight = 28;
+                    const itemsPerPage = 9;
 
                     for (let i = 0; i < totalNum; i++) {
                         const numAtual = numInicial + i;
                         const info = mapaReservas[numAtual] || { nome: "____________________", fone: "____________________", status: "[ ] Livre" };
 
-                        if (cupomCount > 0 && cupomCount % 10 === 0) {
+                        if (i > 0 && i % itemsPerPage === 0) {
                             doc.addPage();
-                            yOffset = 10;
+                            txt.innerText = `Pág ${Math.ceil(i/itemsPerPage)}...`;
                         }
 
-                        doc.setDrawColor(220);
-                        doc.rect(10, yOffset, 190, cupomHeight); 
-                        doc.line(100, yOffset, 100, yOffset + cupomHeight); 
+                        const y = 10 + (i % itemsPerPage) * cupomHeight;
+
+                        // Desenho minimalista para poupar memória
+                        doc.setDrawColor(200);
+                        doc.rect(10, y, 190, cupomHeight - 2); 
+                        doc.line(100, y, 100, y + cupomHeight - 2); 
 
                         doc.setFontSize(6);
                         doc.setFont("helvetica", "bold");
                         
-                        // 1ª VIA
-                        doc.text("1ª VIA - CONTROLE", 12, yOffset + 4);
+                        // VIA 1
+                        doc.text("1ª VIA - CONTROLE", 12, y + 4);
                         doc.setFont("helvetica", "normal");
-                        doc.text(`Ação: ${nomeAcao.substring(0, 50)}`, 12, yOffset + 8);
-                        doc.text(`Número: ${numAtual.toString().padStart(3, '0')} | Status: ${info.status}`, 12, yOffset + 12);
-                        doc.text(`Comprador: ${info.nome.substring(0, 40)}`, 12, yOffset + 16);
-                        doc.text(`Fone: ${info.fone}`, 12, yOffset + 20);
-                        doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | Obs: ${obs.substring(0, 45)}`, 12, yOffset + 24);
+                        doc.text(`${nomeAcao.substring(0, 40)}`, 12, y + 8);
+                        doc.text(`Nº: ${numAtual.toString().padStart(3, '0')} | ${info.status}`, 12, y + 12);
+                        doc.text(`Comprador: ${info.nome.substring(0, 35)}`, 12, y + 16);
+                        doc.text(`Fone: ${info.fone}`, 12, y + 20);
+                        doc.text(`Valor: R$ ${valorAcao.toFixed(2)}`, 12, y + 24);
 
-                        // 2ª VIA
+                        // VIA 2
                         doc.setFont("helvetica", "bold");
-                        doc.text("2ª VIA - PARCEIRO", 102, yOffset + 4);
+                        doc.text("2ª VIA - PARCEIRO", 102, y + 4);
                         doc.setFont("helvetica", "normal");
-                        doc.text(`Ação: ${nomeAcao.substring(0, 50)}`, 102, yOffset + 8);
-                        doc.text(`Número: ${numAtual.toString().padStart(3, '0')} | Status: ${info.status}`, 102, yOffset + 12);
-                        doc.text(`Prêmios: ${premios.substring(0, 50)}`, 102, yOffset + 16);
-                        doc.text(`Nome: ${info.nome.substring(0, 40)}`, 102, yOffset + 20);
-                        doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)}`, 102, yOffset + 24);
-
-                        yOffset += cupomHeight + 1;
-                        cupomCount++;
+                        doc.text(`${nomeAcao.substring(0, 40)}`, 102, y + 8);
+                        doc.text(`Nº: ${numAtual.toString().padStart(3, '0')} | ${info.status}`, 102, y + 12);
+                        doc.text(`Prêmio: ${premios.substring(0, 40)}`, 102, y + 16);
+                        doc.text(`Nome: ${info.nome.substring(0, 35)}`, 102, y + 20);
+                        doc.text(`Valor: R$ ${valorAcao.toFixed(2)}`, 102, y + 24);
                     }
 
                     window.open(doc.output('bloburl'), '_blank');
                     
                 } catch (err) {
-                    alert("Erro ao gerar PDF. Tente com uma campanha menor ou atualize a página.");
+                    alert("Ocorreu um erro técnico. Tente atualizar a página.");
                 } finally {
                     btn.disabled = false;
                     icon.className = "fa-solid fa-file-pdf";
                     txt.innerText = "Cupons PDF";
                 }
-            }, 500);
+            }, 300);
         }
     </script>
 </body>
