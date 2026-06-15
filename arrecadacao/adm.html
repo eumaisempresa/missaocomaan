@@ -6,6 +6,7 @@
     <title>Painel Administrativo - COMAAN+</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .gold-shine {
@@ -33,6 +34,7 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbwSeJjsgGrdsxZ0Ik4bYRnx8NoSHnwT4KVRzAacZgFdndO8y3nTMQbJCm8i-V_sCrDIHA/exec";
         let campanhaSelecionadaId = "";
         let dadosExportacao = [];
+        let dadosCampanhaAtual = null;
         const MASTER_PASSWORD = "Comaan123"; 
         const GITHUB_BASE_URL = "https://eumaisempresa.github.io/missaocomaan/arrecadacao/publico.html";
     </script>
@@ -103,6 +105,7 @@
             </section>
 
             <section class="lg:col-span-2 space-y-6">
+                <!-- SELEÇÃO E LINK -->
                 <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-xl">
                     <select id="selectCampanhas" onchange="selecionarCampanha(this.value)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-4 text-zinc-100 font-bold text-lg outline-none cursor-pointer mb-4">
                         <option value="">Carregando campanhas...</option>
@@ -120,19 +123,43 @@
                     </div>
                 </div>
 
+                <!-- PAINEL DE KPIs -->
+                <div id="painelKPIs" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl text-center">
+                        <p class="text-[10px] text-zinc-500 font-bold uppercase">Total</p>
+                        <p id="kpiTotal" class="text-xl font-black text-white">0</p>
+                    </div>
+                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl text-center">
+                        <p class="text-[10px] text-amber-500 font-bold uppercase">Reservas</p>
+                        <p id="kpiReservas" class="text-xl font-black text-amber-500">0</p>
+                    </div>
+                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl text-center">
+                        <p class="text-[10px] text-emerald-500 font-bold uppercase">Pagos</p>
+                        <p id="kpiPagos" class="text-xl font-black text-emerald-500">0</p>
+                    </div>
+                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl text-center">
+                        <p class="text-[10px] text-zinc-600 font-bold uppercase">Vagos</p>
+                        <p id="kpiVagos" class="text-xl font-black text-zinc-400">0</p>
+                    </div>
+                </div>
+
+                <!-- LISTA DE PEDIDOS -->
                 <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-xl min-h-[400px]">
                     <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
-                        <h2 class="text-lg font-bold text-white">Lista de Pagantes e Reservas</h2>
-                        <div class="flex items-center gap-3">
-                            <button onclick="exportarExcel()" id="btnExportar" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer">
-                                <i class="fa-solid fa-file-excel"></i> Baixar Excel
+                        <h2 class="text-lg font-bold text-white">Gestão de Pedidos</h2>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="exportarExcel()" id="btnExportar" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-xl text-[10px] font-bold transition-all flex items-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-file-excel"></i> Excel
                             </button>
-                            <span id="contadorReservas" class="text-[10px] bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800 text-zinc-500 font-bold">0 Transações</span>
+                            <button onclick="gerarPDFCupons()" id="btnPDF" class="hidden bg-white text-black px-3 py-2 rounded-xl text-[10px] font-bold transition-all flex items-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-file-pdf"></i> Cupons PDF
+                            </button>
+                            <span id="contadorReservas" class="text-[10px] bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800 text-zinc-500 font-bold">0 Pedidos</span>
                         </div>
                     </div>
 
                     <div id="resumoOcioso" class="text-center py-20 text-zinc-600">
-                        <p class="text-sm">Selecione uma campanha para ver os pedidos.</p>
+                        <p class="text-sm">Selecione uma campanha para ver os indicadores e pedidos.</p>
                     </div>
 
                     <div class="overflow-x-auto rounded-xl border border-zinc-800 hidden" id="tabelaReservasContainer">
@@ -181,7 +208,7 @@
                 const json = await res.json();
                 sel.innerHTML = '<option value="">-- Selecione uma Campanha --</option>';
                 json.campanhas.forEach(c => {
-                    sel.innerHTML += `<option value="${c.id}" data-status="${c.status}">${c.nome} (${c.totalNumeros} nºs) - [${c.status}]</option>`;
+                    sel.innerHTML += `<option value="${c.id}" data-status="${c.status}" data-json='${JSON.stringify(c)}'>${c.nome} (${c.totalNumeros} nºs) - [${c.status}]</option>`;
                 });
             } catch(e) { alert("Erro de conexão."); }
         }
@@ -191,6 +218,7 @@
             campanhaSelecionadaId = id;
             const option = document.getElementById("selectCampanhas").selectedOptions[0];
             const status = option.getAttribute("data-status");
+            dadosCampanhaAtual = JSON.parse(option.getAttribute("data-json"));
             
             const badge = document.getElementById("badgeStatus");
             badge.innerText = status;
@@ -198,9 +226,11 @@
 
             document.getElementById("linkPublicoTxt").innerText = `${GITHUB_BASE_URL}?id=${id}`;
             document.getElementById("boxLinkCampanha").classList.remove("hidden");
+            document.getElementById("painelKPIs").classList.remove("hidden");
             document.getElementById("resumoOcioso").classList.add("hidden");
             document.getElementById("tabelaReservasContainer").classList.remove("hidden");
             document.getElementById("btnExportar").classList.remove("hidden");
+            document.getElementById("btnPDF").classList.remove("hidden");
             
             atualizarListaReservas();
         }
@@ -221,8 +251,21 @@
                 const json = await res.json();
                 corpo.innerHTML = "";
                 cards.innerHTML = "";
-                dadosExportacao = json.reservas; // Salva para o Excel
+                dadosExportacao = json.reservas; 
                 
+                // KPIs
+                let pagos = 0;
+                let reservas = 0;
+                json.reservas.forEach(r => {
+                    const qtd = r.numeros.split(",").length;
+                    if(r.statusPagamento === "Aprovado" || r.statusPagamento === "PAGO") pagos += qtd;
+                    else reservas += qtd;
+                });
+                const totalNum = parseInt(dadosCampanhaAtual.totalNumeros);
+                document.getElementById("kpiTotal").innerText = totalNum;
+                document.getElementById("kpiReservas").innerText = reservas;
+                document.getElementById("kpiPagos").innerText = pagos;
+                document.getElementById("kpiVagos").innerText = totalNum - pagos - reservas;
                 document.getElementById("contadorReservas").innerText = `${json.reservas.length} Transações Registradas`;
 
                 json.reservas.forEach(r => {
@@ -230,6 +273,9 @@
                     const statusLabel = isAprovado ? "Aprovado" : "Pendente";
                     const statusClass = isAprovado ? "text-emerald-500 bg-emerald-500/10" : "text-amber-500 bg-amber-500/10";
                     
+                    const msgLembrete = `Olá ${r.comprador}, aqui é da COMAAN. Vimos que você reservou as cotas [ ${r.numeros} ], mas o comprovante Pix ainda não chegou. Pode nos enviar por aqui para validarmos? Obrigado!`;
+                    const linkZap = `https://api.whatsapp.com/send?phone=${r.whatsapp}&text=${encodeURIComponent(msgLembrete)}`;
+
                     const rowHtml = `
                         <tr class="hover:bg-zinc-800/30">
                             <td class="p-4 font-bold text-white">${r.comprador}<br><span class="text-[10px] text-zinc-500">${r.whatsapp}</span></td>
@@ -237,6 +283,7 @@
                             <td class="p-4 font-bold">R$ ${r.total.toFixed(2)}</td>
                             <td class="p-4 text-center"><span class="px-2 py-1 rounded-md text-[10px] font-bold uppercase ${statusClass}">${statusLabel}</span></td>
                             <td class="p-4 text-right flex justify-end gap-2">
+                                ${!isAprovado ? `<a href="${linkZap}" target="_blank" class="bg-amber-500/10 text-amber-500 p-2 rounded-lg cursor-pointer"><i class="fa-solid fa-bell"></i></a>` : ''}
                                 ${!isAprovado ? `<button onclick="alterarStatus('${r.idReserva}', 'Aprovado')" class="bg-emerald-600 p-2 rounded-lg text-white cursor-pointer"><i class="fa-solid fa-check"></i></button>` : ''}
                                 <button onclick="alterarStatus('${r.idReserva}', 'Cancelado')" class="bg-red-900/40 p-2 rounded-lg text-red-400 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
                             </td>
@@ -254,6 +301,7 @@
                             <div class="flex justify-between items-center">
                                 <p class="font-black text-lg text-white">R$ ${r.total.toFixed(2)}</p>
                                 <div class="flex gap-2">
+                                    ${!isAprovado ? `<a href="${linkZap}" target="_blank" class="bg-amber-500/10 text-amber-500 p-2 rounded-lg flex items-center justify-center"><i class="fa-solid fa-bell"></i></a>` : ''}
                                     ${!isAprovado ? `<button onclick="alterarStatus('${r.idReserva}', 'Aprovado')" class="bg-emerald-600 px-4 py-2 rounded-xl text-white font-bold text-sm">Aprovar</button>` : ''}
                                     <button onclick="alterarStatus('${r.idReserva}', 'Cancelado')" class="bg-red-900/40 px-3 py-2 rounded-xl text-red-400 font-bold text-sm"><i class="fa-solid fa-trash"></i></button>
                                 </div>
@@ -314,17 +362,91 @@
 
         function exportarExcel() {
             if(dadosExportacao.length === 0) { alert("Não há dados para exportar."); return; }
-            const nomeAcao = document.getElementById("selectCampanhas").selectedOptions[0].text.split('(')[0].trim();
+            const nomeAcao = dadosCampanhaAtual.nome;
             const ws = XLSX.utils.json_to_sheet(dadosExportacao.map(r => ({
+                "Ação": nomeAcao,
                 "Comprador": r.comprador,
                 "WhatsApp": r.whatsapp,
                 "Números": r.numeros,
+                "Quantidade": r.numeros.split(",").length,
                 "Valor Total": r.total,
-                "Status": r.statusPagamento
+                "Status": r.statusPagamento,
+                "Prêmios": dadosCampanhaAtual.premios,
+                "Obs": dadosCampanhaAtual.obs
             })));
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Reservas");
-            XLSX.writeFile(wb, `Campanha_${nomeAcao}.xlsx`);
+            XLSX.utils.book_append_sheet(wb, ws, "Base_Completa");
+            XLSX.writeFile(wb, `Base_Campanha_${nomeAcao}.xlsx`);
+        }
+
+        async function gerarPDFCupons() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const totalNum = parseInt(dadosCampanhaAtual.totalNumeros);
+            const numInicial = parseInt(dadosCampanhaAtual.numeroInicial);
+            const nomeAcao = dadosCampanhaAtual.nome;
+            const valorAcao = dadosCampanhaAtual.valorCota;
+            const premios = dadosCampanhaAtual.premios;
+            const obs = dadosCampanhaAtual.obs;
+
+            // Mapeia números ocupados
+            let mapaReservas = {};
+            dadosExportacao.forEach(r => {
+                r.numeros.split(",").forEach(n => {
+                    mapaReservas[parseInt(n)] = {
+                        nome: r.comprador,
+                        fone: r.whatsapp,
+                        status: r.statusPagamento === "Aprovado" || r.statusPagamento === "PAGO" ? "[X] Pago" : "[X] Reservado"
+                    };
+                });
+            });
+
+            let cupomCount = 0;
+            let yOffset = 10;
+
+            for (let i = 0; i < totalNum; i++) {
+                const numAtual = numInicial + i;
+                const info = mapaReservas[numAtual] || { nome: "____________________", fone: "____________________", status: "[ ] Livre" };
+
+                if (cupomCount > 0 && cupomCount % 7 === 0) {
+                    doc.addPage();
+                    yOffset = 10;
+                }
+
+                // Desenha Cupom (Duas Vias)
+                doc.setDrawColor(200);
+                doc.rect(10, yOffset, 190, 38); // Borda externa
+                doc.line(100, yOffset, 100, yOffset + 38); // Divisor de vias
+
+                doc.setFontSize(8);
+                doc.setFont("helvetica", "bold");
+                
+                // 1ª VIA - CONTROLE
+                doc.text("1ª VIA - CONTROLE", 12, yOffset + 5);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Ação: ${nomeAcao.substring(0, 35)}`, 12, yOffset + 10);
+                doc.text(`Número: ${numAtual.toString().padStart(3, '0')}`, 12, yOffset + 15);
+                doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | ${info.status}`, 12, yOffset + 20);
+                doc.text(`Comprador: ${info.nome.substring(0, 30)}`, 12, yOffset + 25);
+                doc.text(`Fone: ${info.fone}`, 12, yOffset + 30);
+                doc.text(`Obs: ${obs.substring(0, 40)}`, 12, yOffset + 35);
+
+                // 2ª VIA - PARCEIRO
+                doc.setFont("helvetica", "bold");
+                doc.text("2ª VIA - PARCEIRO", 102, yOffset + 5);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Ação: ${nomeAcao.substring(0, 35)}`, 102, yOffset + 10);
+                doc.text(`Número: ${numAtual.toString().padStart(3, '0')}`, 102, yOffset + 15);
+                doc.text(`Prêmios: ${premios.substring(0, 40)}...`, 102, yOffset + 20);
+                doc.text(`Valor: R$ ${parseFloat(valorAcao).toFixed(2)} | ${info.status}`, 102, yOffset + 25);
+                doc.text(`Nome: ${info.nome.substring(0, 30)}`, 102, yOffset + 30);
+                doc.text(`Fone: ${info.fone}`, 102, yOffset + 35);
+
+                yOffset += 40;
+                cupomCount++;
+            }
+
+            doc.save(`Cupons_${nomeAcao}.pdf`);
         }
     </script>
 </body>
