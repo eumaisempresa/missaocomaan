@@ -26,7 +26,6 @@
             .desktop-table { display: table; }
         }
         
-        /* Estilos para Impressão do Relatório */
         @media print {
             body * { visibility: hidden; }
             #modalRelatorio, #modalRelatorio * { visibility: visible; }
@@ -66,7 +65,6 @@
 
     <!-- CONTEÚDO PRINCIPAL -->
     <div id="conteudoPainel" class="hidden flex-col min-h-screen w-full">
-        
         <header class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
                 <div class="flex items-center gap-2">
@@ -86,7 +84,6 @@
         </header>
 
         <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6 w-full flex-grow">
-            
             <section class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-xl h-fit">
                 <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-plus text-amber-500"></i> Criar Nova Campanha
@@ -449,8 +446,8 @@
                 "Quantidade": r.numeros.split(",").length,
                 "Valor Total": r.total,
                 "Status": r.statusPagamento,
-                "Prêmios": dadosCampanhaAtual.premios,
-                "Obs": dadosCampanhaAtual.obs
+                "Prêmios": dadosCampanhaAtual.descricaoPremios,
+                "Obs": dadosCampanhaAtual.obsCampanha
             })));
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Base_Completa");
@@ -459,11 +456,11 @@
 
         function abrirRelatorioVisual() {
             const totalNum = parseInt(dadosCampanhaAtual.totalNumeros);
-            const numInicial = parseInt(dadosCampanhaAtual.numeroInicial);
+            const numInicial = parseInt(dadosCampanhaAtual.numeroInicial) || 1;
             
             document.getElementById("relNomeAcao").innerText = dadosCampanhaAtual.nome;
-            document.getElementById("relPremios").innerText = dadosCampanhaAtual.premios;
-            document.getElementById("relObs").innerText = dadosCampanhaAtual.obs || "Nenhuma observação cadastrada.";
+            document.getElementById("relPremios").innerText = dadosCampanhaAtual.descricaoPremios || "Prêmios não cadastrados.";
+            document.getElementById("relObs").innerText = dadosCampanhaAtual.obsCampanha || "Nenhuma observação cadastrada.";
             document.getElementById("relDataHora").innerText = new Date().toLocaleString();
 
             let pagosArr = [];
@@ -472,10 +469,12 @@
 
             dadosExportacao.forEach(r => {
                 r.numeros.split(",").forEach(n => {
-                    const num = parseInt(n);
-                    todosOcupados.add(num);
-                    if(r.statusPagamento === "Aprovado" || r.statusPagamento === "PAGO") pagosArr.push(num);
-                    else reservasArr.push(num);
+                    const num = parseInt(n.trim());
+                    if(!isNaN(num)) {
+                        todosOcupados.add(num);
+                        if(r.statusPagamento === "Aprovado" || r.statusPagamento === "PAGO") pagosArr.push(num);
+                        else reservasArr.push(num);
+                    }
                 });
             });
 
