@@ -1,225 +1,74 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Virtuosas Brechó + - Catálogo</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
-    
-    body { margin:0; font-family:'Inter',sans-serif; background:#f8f9fa; color:#333; }
-    header { background:#0A1428; color:white; padding:15px 20px; position:sticky; top:0; z-index:100; }
-    .header-content { max-width:1280px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
-    .logo { font-family:'Playfair Display',serif; font-size:26px; }
-    .logo .plus { color:#D4AF37; }
-    .client-name { font-size:22px; font-weight:600; color:#D4AF37; }
-
-    .search-bar { flex:1; max-width:500px; padding:12px 20px; background:white; border:1px solid #ddd; border-radius:50px; }
-
-    .categories { background:white; padding:12px 20px; border-bottom:1px solid #eee; overflow-x:auto; white-space:nowrap; }
-    .cat-btn { display:inline-block; padding:8px 18px; margin-right:10px; background:#f1f1f1; border-radius:30px; cursor:pointer; }
-    .cat-btn.active, .cat-btn:hover { background:#0A1428; color:white; }
-
-    .product-grid { max-width:1280px; margin:30px auto; padding:20px; display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:24px; }
-    .product-card { background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.08); display:flex; }
-    .product-image { width:50%; height:240px; object-fit:cover; }
-    .product-info { width:50%; padding:15px; display:flex; flex-direction:column; }
-    .product-name { font-size:16px; font-weight:600; margin:0 0 8px 0; }
-    .price { color:#D4AF37; font-size:19px; font-weight:700; }
-    .stock { font-size:13px; color:#28a745; margin:5px 0; }
-
-    .floating-cart {
-      position:fixed; bottom:25px; right:25px; background:#0A1428; color:white;
-      width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-      font-size:30px; box-shadow:0 8px 25px rgba(10,20,40,0.4); z-index:300; cursor:pointer;
-    }
-
-    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:400; align-items:center; justify-content:center; }
-    .modal-content { background:white; width:90%; max-width:500px; border-radius:20px; max-height:90vh; overflow-y:auto; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja de Bolsas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .product { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin: 10px; 
+            width: 220px; 
+            display: inline-block; 
+            vertical-align: top;
+            border-radius: 8px;
+        }
+        .cart-float { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            background: #333; 
+            color: white; 
+            padding: 15px; 
+            border-radius: 50px; 
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+        .cart { 
+            display: none; 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: white; 
+            padding: 25px; 
+            border: 1px solid #ddd; 
+            max-height: 80vh; 
+            overflow: auto;
+            z-index: 200;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+        }
+        button { 
+            padding: 8px 14px; 
+            margin: 5px; 
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    <h1>Produtos</h1>
+    <div id="products"></div>
 
-  <header>
-    <div class="header-content">
-      <div>
-        <div class="logo">EU<span class="plus">+</span> NEGÓCIO</div>
-        <div class="client-name">Virtuosas Brechó +</div>
-      </div>
-      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Buscar..." onkeyup="filterProducts()">
+    <div class="cart-float" onclick="toggleCart()">
+        🛒 Carrinho: <span id="cart-count">0</span>
     </div>
-  </header>
 
-  <div class="categories">
-    <span class="cat-btn active" onclick="filterCategory('all')">Todos</span>
-    <span class="cat-btn" onclick="filterCategory('Feminino')">Feminino</span>
-    <span class="cat-btn" onclick="filterCategory('Calçados')">Calçados</span>
-    <span class="cat-btn" onclick="filterCategory('Infantil')">Infantil</span>
-  </div>
-
-  <div class="product-grid" id="productGrid"></div>
-
-  <div class="floating-cart" onclick="showCartModal()">
-    🛒 <span id="cart-count" style="position:absolute;top:-8px;right:-8px;background:#D4AF37;color:#000;font-size:16px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;">0</span>
-  </div>
-
-  <!-- Modal Carrinho -->
-  <div id="cartModal" class="modal">
-    <div class="modal-content">
-      <div style="padding:20px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between;">
-        <h2>Seu Pedido</h2>
-        <span onclick="closeCartModal()" style="font-size:28px;cursor:pointer;">✕</span>
-      </div>
-      <div id="cartItems" style="padding:20px;"></div>
-      
-      <div style="padding:20px; background:#f8f9fa;">
-        <h3>Total: <span id="cartTotal" style="color:#D4AF37;"></span></h3>
+    <div id="cart" class="cart">
+        <h2>Seu Carrinho</h2>
+        <div id="cart-items"></div>
+        <p><strong>Total: R$ <span id="cart-total">0</span></strong></p>
         
-        <div style="margin:20px 0;">
-          <button onclick="copyPix()" style="width:100%; padding:14px; background:#D4AF37; color:#000; border:none; border-radius:10px; margin-bottom:10px;">
-            📋 Copiar PIX
-          </button>
-          <button onclick="finalizeOrder()" style="width:100%; padding:18px; background:#0A1428; color:white; border:none; border-radius:12px; font-size:18px;">
-            Finalizar e Enviar via WhatsApp
-          </button>
-        </div>
-      </div>
+        <button onclick="showPaymentOptions()">Escolher Forma de Pagamento</button>
+        <button onclick="finalizePurchase()">Finalizar Compra</button>
+        <button onclick="toggleCart()">Fechar</button>
     </div>
-  </div>
 
-  <footer style="background:#0A1428; color:#D4AF37; text-align:center; padding:25px 20px; margin-top:60px;">
-    Virtuosas Brechó + • Rua Chaves Barcelos, 278 - São Luís<br>
-    (51) 98226-4855 • @virtuosasbrecho<br>
-    Powered by EU+ Negócio
-  </footer>
-
-  <script>
-    const products = [];
-    for (let i = 1; i <= 50; i++) {
-      products.push({
-        id: i,
-        name: `Produto ${i} - ${['Blusa Feminina', 'Bota Chelsea', 'Calça Jeans', 'Vestido'][i%4]}`,
-        category: ['Feminino', 'Calçados', 'Infantil'][i%3],
-        price: 35 + (i % 85),
-        size: ['P','M','G','34','36'][i%5],
-        stock: 8 + (i % 12),
-        img: `https://picsum.photos/id/${i+30}/600/600`
-      });
-    }
-
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    function saveCart() {
-      localStorage.setItem('cart', JSON.stringify(cart));
-      document.getElementById('cart-count').textContent = cart.length;
-    }
-
-    function renderProducts(filtered) {
-      const grid = document.getElementById('productGrid');
-      grid.innerHTML = '';
-      filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-          <img src="${p.img}" class="product-image">
-          <div class="product-info">
-            <h3 class="product-name">${p.name}</h3>
-            <p>Tam: ${p.size}</p>
-            <p class="stock">Estoque: ${p.stock} unid.</p>
-            <p class="price">R$ ${p.price},00</p>
-            <button onclick="addToCart(${p.id}); event.stopImmediatePropagation()" style="margin-top:15px; width:100%; padding:14px; background:#0A1428; color:white; border:none; border-radius:8px; font-weight:600;">Adicionar ao Carrinho</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function addToCart(id) {
-      const item = products.find(p => p.id === id);
-      const existing = cart.find(c => c.id === id);
-      if (existing) {
-        existing.quantity = (existing.quantity || 1) + 1;
-      } else {
-        cart.push({...item, quantity: 1});
-      }
-      saveCart();
-    }
-
-    function showCartModal() {
-      if (cart.length === 0) return alert("Carrinho vazio!");
-      
-      let html = '';
-      let total = 0;
-      cart.forEach((item, index) => {
-        const subtotal = item.price * (item.quantity || 1);
-        total += subtotal;
-        html += `
-          <div style="margin:15px 0; padding:15px; border-bottom:1px solid #eee;">
-            <div style="display:flex; justify-content:space-between;">
-              <div><strong>${item.name}</strong><br>Tam: ${item.size}</div>
-              <div style="text-align:right;">
-                <button onclick="changeQuantity(${index}, -1)" style="margin:0 5px;">–</button>
-                <span style="font-weight:600;">${item.quantity || 1}</span>
-                <button onclick="changeQuantity(${index}, 1)" style="margin:0 5px;">+</button>
-              </div>
-            </div>
-            <div style="margin-top:8px; color:#D4AF37;">R$ ${subtotal},00</div>
-          </div>`;
-      });
-
-      document.getElementById('cartItems').innerHTML = html;
-      document.getElementById('cartTotal').innerHTML = `R$ ${total},00`;
-      document.getElementById('cartModal').style.display = 'flex';
-    }
-
-    function changeQuantity(index, change) {
-      cart[index].quantity = (cart[index].quantity || 1) + change;
-      if (cart[index].quantity < 1) cart[index].quantity = 1;
-      showCartModal();
-      saveCart();
-    }
-
-    function copyPix() {
-      navigator.clipboard.writeText("27997161826");
-      alert("✅ PIX copiado: (27) 99716-1826");
-    }
-
-    function finalizeOrder() {
-      let msg = "Olá Virtuosas Brechó! Gostaria de comprar:\n\n";
-      let total = 0;
-      cart.forEach(item => {
-        msg += `- ${item.name} (Tam: \( {item.size}) x \){item.quantity || 1} - R$ ${item.price * (item.quantity || 1)},00\n`;
-        total += item.price * (item.quantity || 1);
-      });
-      msg += `\nTotal: R$ ${total},00\n\nPagamento: PIX ou Presencial`;
-      
-      window.open(`https://wa.me/27997161826?text=${encodeURIComponent(msg)}`);
-      closeCartModal();
-      cart = [];
-      saveCart();
-    }
-
-    function closeCartModal() {
-      document.getElementById('cartModal').style.display = 'none';
-    }
-
-    function filterCategory(cat) {
-      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      const filtered = cat === 'all' ? products : products.filter(p => p.category === cat);
-      renderProducts(filtered);
-    }
-
-    function filterProducts() {
-      const term = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-      renderProducts(filtered);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      renderProducts(products);
-      document.getElementById('cart-count').textContent = cart.length;
-    });
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
