@@ -3,139 +3,158 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha Loja + - Catálogo</title>
+  <title>Virtuosas Brechó + - Catálogo</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
     
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: #05080F;
-      color: #fff;
+      background: #f8f9fa;
+      color: #333;
     }
     header {
-      background: rgba(10, 20, 40, 0.95);
+      background: #0A1428;
+      color: white;
       padding: 15px 20px;
-      border-bottom: 1px solid #D4AF37;
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     .header-content {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
     }
     .logo {
       font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: #fff;
+      font-size: 26px;
     }
     .logo .plus { color: #D4AF37; }
+    .client-name {
+      font-size: 22px;
+      font-weight: 600;
+      color: #D4AF37;
+    }
     .search-bar {
       flex: 1;
       max-width: 500px;
-      margin: 0 20px;
+      margin: 10px 20px;
       padding: 12px 20px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid #D4AF37;
+      background: white;
+      border: 1px solid #ddd;
       border-radius: 50px;
-      color: #fff;
+      font-size: 16px;
     }
 
-    .filters {
-      background: #0A1428;
+    .categories {
+      background: white;
       padding: 12px 20px;
+      border-bottom: 1px solid #eee;
       overflow-x: auto;
       white-space: nowrap;
     }
+    .cat-btn {
+      display: inline-block;
+      padding: 8px 18px;
+      margin-right: 10px;
+      background: #f1f1f1;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .cat-btn.active, .cat-btn:hover {
+      background: #0A1428;
+      color: white;
+    }
+
     .product-grid {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 30px auto;
       padding: 0 20px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
     }
     .product-card {
-      background: #0F1B2E;
+      background: white;
       border-radius: 16px;
       overflow: hidden;
-      border: 1px solid rgba(212,175,55,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       transition: all 0.3s;
     }
     .product-card:hover {
-      transform: translateY(-8px);
+      transform: translateY(-10px);
       box-shadow: 0 15px 30px rgba(212,175,55,0.15);
     }
     .product-card img {
       width: 100%;
-      height: 260px;
+      height: 240px;
       object-fit: cover;
     }
     .product-info {
       padding: 15px;
     }
     .product-name {
-      font-size: 17px;
-      margin: 0 0 8px 0;
+      font-size: 16px;
+      margin: 0 0 6px 0;
+      font-weight: 600;
     }
     .price {
       color: #D4AF37;
       font-size: 18px;
-      font-weight: 600;
+      font-weight: 700;
     }
-    .promo-price {
+    .promo {
       text-decoration: line-through;
-      color: #777;
+      color: #999;
       font-size: 14px;
     }
 
     .floating-cart {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #D4AF37;
-      color: #000;
-      width: 60px;
-      height: 60px;
+      bottom: 25px;
+      right: 25px;
+      background: #0A1428;
+      color: white;
+      width: 65px;
+      height: 65px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 28px;
-      box-shadow: 0 10px 25px rgba(212,175,55,0.4);
-      z-index: 200;
+      box-shadow: 0 8px 25px rgba(10,20,40,0.3);
+      z-index: 300;
       cursor: pointer;
     }
     .whatsapp-btn {
       position: fixed;
-      bottom: 100px;
-      right: 20px;
+      bottom: 110px;
+      right: 25px;
       background: #25D366;
       color: white;
-      width: 60px;
-      height: 60px;
+      width: 65px;
+      height: 65px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-      z-index: 200;
+      font-size: 30px;
+      box-shadow: 0 8px 25px rgba(37,211,102,0.4);
+      z-index: 300;
     }
 
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.9);
-      z-index: 300;
-      align-items: center;
-      justify-content: center;
+    footer {
+      background: #0A1428;
+      color: #D4AF37;
+      text-align: center;
+      padding: 25px 20px;
+      margin-top: 80px;
     }
   </style>
 </head>
@@ -143,86 +162,147 @@
 
   <header>
     <div class="header-content">
-      <div class="logo">EU<span class="plus">+</span> <span style="font-size:22px;">Minha Loja +</span></div>
-      <input type="text" class="search-bar" placeholder="🔍 Buscar produtos...">
-      <div>Virtuosas Brechó +</div>
+      <div>
+        <div class="logo">EU<span class="plus">+</span> NEGÓCIO</div>
+        <div class="client-name">Virtuosas Brechó +</div>
+      </div>
+      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Buscar por nome, tamanho ou marca..." onkeyup="filterProducts()">
     </div>
   </header>
 
-  <div class="filters">
-    <strong>Filtros:</strong> 
-    Feminino • Masculino • Infantil • Calçados • Promoções • Preço: Baixo-Alto
+  <div class="categories">
+    <span class="cat-btn active" onclick="filterCategory('all')">Todos</span>
+    <span class="cat-btn" onclick="filterCategory('Feminino')">Feminino</span>
+    <span class="cat-btn" onclick="filterCategory('Calçados')">Calçados</span>
+    <span class="cat-btn" onclick="filterCategory('Infantil')">Infantil</span>
+    <span class="cat-btn" onclick="filterCategory('Acessórios')">Acessórios</span>
+    <span class="cat-btn" onclick="filterCategory('Promo')">Promoções</span>
   </div>
 
-  <div class="product-grid">
-    <!-- Exemplo de produto -->
-    <div class="product-card" onclick="showProductModal()">
-      <img src="https://via.placeholder.com/300x300/1a1a1a/fff?text=Bota+Preta" alt="Bota">
-      <div class="product-info">
-        <h3 class="product-name">Bota Chelsea Preta Salto</h3>
-        <p>Tam: 34 | Seminova</p>
-        <p class="promo-price">R$ 55,00</p>
-        <p class="price">R$ 35,00</p>
-        <button onclick="addToCart(event)" style="margin-top:10px; width:100%; padding:10px; background:#D4AF37; border:none; border-radius:8px; color:#000; font-weight:bold;">Adicionar ao Carrinho</button>
-      </div>
-    </div>
-
-    <!-- Mais cards virão aqui via script -->
+  <div class="product-grid" id="productGrid">
+    <!-- Os 50 produtos serão gerados via JavaScript -->
   </div>
 
   <!-- Carrinho Flutuante -->
   <div class="floating-cart" onclick="showCart()">
-    🛒 <span id="cart-count" style="position:absolute; top:-8px; right:-8px; background:red; color:white; font-size:14px; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center;">0</span>
+    🛒 <span id="cart-count" style="position:absolute;top:-6px;right:-6px;background:#D4AF37;color:#000;font-size:14px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;">0</span>
   </div>
 
-  <!-- Botão WhatsApp -->
-  <div class="whatsapp-btn" onclick="sendToWhatsApp()">
-    📲
-  </div>
+  <!-- WhatsApp -->
+  <div class="whatsapp-btn" onclick="sendToWhatsApp()">📲</div>
 
-  <!-- Modal de Produto -->
-  <div id="productModal" class="modal">
-    <div style="background:#0F1B2E; width:90%; max-width:500px; border-radius:20px; padding:20px;">
-      <h2 id="modal-name"></h2>
-      <img id="modal-image" style="width:100%; border-radius:12px;">
-      <p id="modal-price" style="color:#D4AF37; font-size:24px;"></p>
-      <button onclick="addToCartFromModal()" style="width:100%; padding:16px; background:#D4AF37; color:#000; border:none; border-radius:10px; font-weight:bold;">Adicionar ao Carrinho</button>
-      <button onclick="closeModal()" style="margin-top:10px; width:100%; padding:14px;">Fechar</button>
-    </div>
-  </div>
+  <footer>
+    <strong>Virtuosas Brechó + • Rua Chaves Barcelos, 278 - São Luís</strong><br>
+    (51) 98226-4855 • Powered by EU+ Negócio
+  </footer>
 
   <script>
+    const products = [];
+    const categories = ['Feminino', 'Calçados', 'Infantil', 'Acessórios'];
+    
+    // Gerando 50 produtos
+    for (let i = 1; i <= 50; i++) {
+      const cat = categories[Math.floor(Math.random()*categories.length)];
+      const price = Math.floor(Math.random() * 120) + 15;
+      const promo = price > 40 ? Math.floor(price * 0.7) : null;
+      
+      products.push({
+        id: i,
+        name: `${cat} - Produto ${i} ${['Blusa', 'Calça', 'Bota', 'Vestido', 'Tênis', 'Casaco'][Math.floor(Math.random()*6)]}`,
+        category: cat,
+        price: price,
+        promo: promo,
+        size: ['P','M','G','34','36','Único'][Math.floor(Math.random()*6)],
+        img: `https://picsum.photos/id/${i+10}/300/300`
+      });
+    }
+
+    function renderProducts(filteredProducts) {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      
+      filteredProducts.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="\( {p.img}" alt=" \){p.name}">
+          <div class="product-info">
+            <h3 class="product-name">${p.name}</h3>
+            <p>Tam: ${p.size}</p>
+            \( {p.promo ? `<p class="promo">R \) ${p.promo},00</p>` : ''}
+            <p class="price">R$ ${p.price},00</p>
+            <button onclick="addToCart(${p.id}); event.stopImmediatePropagation();" style="margin-top:12px; width:100%; padding:12px; background:#0A1428; color:white; border:none; border-radius:8px; font-weight:600;">Adicionar ao Carrinho</button>
+            <button onclick="generateInstagramPost(${p.id}); event.stopImmediatePropagation();" style="margin-top:8px; width:100%; padding:10px; background:#D4AF37; color:#000; border:none; border-radius:8px; font-weight:600;">📸 Gerar Post</button>
+          </div>
+        `;
+        card.onclick = () => showProductModal(p);
+        grid.appendChild(card);
+      });
+    }
+
+    // Funções de filtro
+    function filterCategory(cat) {
+      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const filtered = cat === 'all' ? products : products.filter(p => p.category === cat);
+      renderProducts(filtered);
+    }
+
+    function filterProducts() {
+      const term = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = products.filter(p => 
+        p.name.toLowerCase().includes(term) || p.size.toLowerCase().includes(term)
+      );
+      renderProducts(filtered);
+    }
+
     let cart = [];
-    function addToCart(e) {
-      e.stopImmediatePropagation();
-      cart.push({name: "Bota Chelsea Preta", price: 35});
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      cart.push(product);
       document.getElementById('cart-count').textContent = cart.length;
-      alert("✅ Adicionado ao carrinho!");
+      alert(`✅ ${product.name} adicionado ao carrinho!`);
     }
 
     function showCart() {
-      alert("🛒 Carrinho (" + cart.length + " itens)\nTotal aproximado: R$ " + (cart.length * 35) + "\n\nBotão para enviar via WhatsApp aparecerá aqui.");
+      if (cart.length === 0) {
+        alert("🛒 Carrinho vazio!");
+        return;
+      }
+      let msg = "🛒 Carrinho - Virtuosas Brechó +\n\n";
+      let total = 0;
+      cart.forEach(item => {
+        msg += `- \( {item.name} - R \) ${item.price},00\n`;
+        total += item.price;
+      });
+      msg += `\nTotal: R$ ${total},00`;
+      alert(msg);
     }
 
     function sendToWhatsApp() {
-      const msg = "Olá! Vi os produtos no Minha Loja + e gostaria de comprar:\n\n" + cart.map(item => `- \( {item.name} - R \) ${item.price}`).join("\n");
+      if (cart.length === 0) return alert("Adicione produtos primeiro!");
+      let msg = "Olá! Gostaria de comprar estes itens:\n\n";
+      let total = 0;
+      cart.forEach(item => {
+        msg += `- \( {item.name} - R \) ${item.price},00\n`;
+        total += item.price;
+      });
+      msg += `\nTotal: R$ ${total},00\n\nPosso pagar via PIX ou presencialmente.`;
       window.open(`https://wa.me/51982264855?text=${encodeURIComponent(msg)}`);
     }
 
-    function showProductModal() {
-      document.getElementById('modal-name').textContent = "Bota Chelsea Preta Salto";
-      document.getElementById('modal-price').innerHTML = 'R$ 35,00 <span style="font-size:16px; text-decoration:line-through; color:#777;">R$ 55,00</span>';
-      document.getElementById('productModal').style.display = 'flex';
+    function showProductModal(p) {
+      alert(`Produto: \( {p.name}\nPreço: R \) ${p.price},00\nTamanho: ${p.size}\n\nClique em "Adicionar ao Carrinho" no card.`);
     }
 
-    function closeModal() {
-      document.getElementById('productModal').style.display = 'none';
+    function generateInstagramPost(id) {
+      const p = products.find(prod => prod.id === id);
+      alert(`📸 Post gerado para Instagram!\n\n\( {p.name}\nR \) ${p.price},00\nVirtuosas Brechó +\n\n(Esta funcionalidade será integrada com canvas no código final)`);
     }
 
-    function addToCartFromModal() {
-      addToCart({stopImmediatePropagation: () => {}});
-      closeModal();
-    }
+    // Render inicial
+    renderProducts(products);
   </script>
 </body>
 </html>
