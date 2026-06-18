@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Loja + | EU+ Negócio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0A1428 0%, #05080F 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 580px;
+      margin: 40px auto;
+      padding: 40px 35px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 24px;
+      box-shadow: 0 0 50px rgba(212, 175, 55, 0.12);
+    }
+    .logo-header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+    .logo-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+      letter-spacing: -2px;
+      display: inline-block;
+    }
+    .logo-header .plus {
+      color: #D4AF37;
+      font-size: 52px;
+    }
+    .logo-header .sub {
+      font-size: 20px;
+      color: #D4AF37;
+      margin-top: 4px;
+      letter-spacing: 2px;
+    }
+    h2 {
+      text-align: center;
+      color: #D4AF37;
+      margin-bottom: 8px;
+      font-size: 26px;
+    }
+    .form-group {
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #D4AF37;
+      font-weight: 500;
+      font-size: 15px;
+    }
+    input, select {
+      width: 100%;
+      padding: 15px 18px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 16px;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #D4AF37;
+      box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15);
+    }
+    button {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(90deg, #D4AF37, #B8972E);
+      color: #000;
+      font-weight: 700;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(212, 175, 55, 0.4);
+    }
+    .footer {
+      text-align: center;
+      margin-top: 45px;
+      font-size: 14px;
+      color: #777;
+    }
+    .footer a {
+      color: #D4AF37;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-header">
+      <h1>EU<span class="plus">+</span> NEGÓCIO</h1>
+      <div class="sub">Minha Loja +</div>
+    </div>
+    
+    <h2>Crie sua loja agora</h2>
+    <p style="text-align:center; color:#bbb; margin-bottom:35px;">Eficiência intelectual para quem opera com seriedade.</p>
+
+    <form>
+      <div class="form-group">
+        <label>Nome da Loja</label>
+        <input type="text" placeholder="Virtuosas Brechó" required>
+      </div>
+
+      <div class="form-group">
+        <label>Nome do Responsável</label>
+        <input type="text" placeholder="Cristiane Minho" required>
+      </div>
+
+      <div class="form-group">
+        <label>Segmento de Atuação</label>
+        <select id="segmento" onchange="toggleOutro()" required>
+          <option value="">Selecione o segmento...</option>
+          <option>Brechó / Roupas Usadas</option>
+          <option>Loja de Roupas</option>
+          <option>Calçados</option>
+          <option>Mercearia / Minimercado</option>
+          <option>Acessórios</option>
+          <option>Cosméticos</option>
+          <option>Alimentos</option>
+          <option>Eletrônicos</option>
+          <option>Móveis e Decoração</option>
+          <option>Beleza e Estética</option>
+          <option>Infantil</option>
+          <option>Esportes</option>
+          <option>Pet Shop</option>
+          <option>Livraria</option>
+          <option>Suplementos</option>
+          <option>Outros</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="outroGrupo" style="display:none;">
+        <label>Qual o segmento? (Outros)</label>
+        <input type="text" placeholder="Digite o segmento">
+      </div>
+
+      <div class="form-group">
+        <label>WhatsApp para Gestão</label>
+        <input type="tel" placeholder="(51) 98226-4855" required>
+      </div>
+
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" placeholder="contato@exemplo.com">
+      </div>
+
+      <button type="button" onclick="simularCadastro()">FINALIZAR CADASTRO E INICIAR MINHA LOJA +</button>
+    </form>
+
+    <div class="footer">
+      Você é o EU. Nós somos o + que soma com você.<br>
+      <a href="https://www.eumaisempresa.com.br/" target="_blank">www.eumaisempresa.com.br</a><br>
+      © 2026 EU+ Negócio
+    </div>
+  </div>
+
+  <script>
+    function toggleOutro() {
+      const select = document.getElementById('segmento');
+      const outroGrupo = document.getElementById('outroGrupo');
+      outroGrupo.style.display = select.value === 'Outros' ? 'block' : 'none';
+    }
+
+    function simularCadastro() {
+      alert("✅ Cadastro realizado com sucesso!\n\nID da Loja: EU47892+\nSenha temporária: Loja@2026\n\nSua planilha 'Minha Loja +' foi criada automaticamente.");
+    }
+  </script>
+</body>
+</html>
