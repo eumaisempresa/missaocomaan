@@ -29,6 +29,7 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
+      gap: 10px;
     }
     .logo {
       font-family: 'Playfair Display', serif;
@@ -43,7 +44,6 @@
     .search-bar {
       flex: 1;
       max-width: 500px;
-      margin: 10px 20px;
       padding: 12px 20px;
       background: white;
       border: 1px solid #ddd;
@@ -89,7 +89,7 @@
     }
     .product-card:hover {
       transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(212,175,55,0.15);
+      box-shadow: 0 15px 30px rgba(212,175,55,0.2);
     }
     .product-card img {
       width: 100%;
@@ -155,6 +155,7 @@
       text-align: center;
       padding: 25px 20px;
       margin-top: 80px;
+      font-size: 15px;
     }
   </style>
 </head>
@@ -179,11 +180,9 @@
     <span class="cat-btn" onclick="filterCategory('Promo')">Promoções</span>
   </div>
 
-  <div class="product-grid" id="productGrid">
-    <!-- Os 50 produtos serão gerados via JavaScript -->
-  </div>
+  <div class="product-grid" id="productGrid"></div>
 
-  <!-- Carrinho Flutuante -->
+  <!-- Carrinho -->
   <div class="floating-cart" onclick="showCart()">
     🛒 <span id="cart-count" style="position:absolute;top:-6px;right:-6px;background:#D4AF37;color:#000;font-size:14px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;">0</span>
   </div>
@@ -192,36 +191,35 @@
   <div class="whatsapp-btn" onclick="sendToWhatsApp()">📲</div>
 
   <footer>
-    <strong>Virtuosas Brechó + • Rua Chaves Barcelos, 278 - São Luís</strong><br>
+    Virtuosas Brechó + • Rua Chaves Barcelos, 278 - São Luís<br>
     (51) 98226-4855 • Powered by EU+ Negócio
   </footer>
 
   <script>
+    // === 50 PRODUTOS GERADOS AUTOMATICAMENTE ===
     const products = [];
     const categories = ['Feminino', 'Calçados', 'Infantil', 'Acessórios'];
     
-    // Gerando 50 produtos
     for (let i = 1; i <= 50; i++) {
       const cat = categories[Math.floor(Math.random()*categories.length)];
-      const price = Math.floor(Math.random() * 120) + 15;
-      const promo = price > 40 ? Math.floor(price * 0.7) : null;
+      const price = Math.floor(Math.random() * 140) + 20;
+      const promo = price > 50 ? Math.floor(price * 0.75) : null;
       
       products.push({
         id: i,
-        name: `${cat} - Produto ${i} ${['Blusa', 'Calça', 'Bota', 'Vestido', 'Tênis', 'Casaco'][Math.floor(Math.random()*6)]}`,
+        name: `${['Blusa', 'Calça', 'Bota', 'Vestido', 'Tênis', 'Casaco', 'Saia'][Math.floor(Math.random()*7)]} ${cat} ${i}`,
         category: cat,
         price: price,
         promo: promo,
-        size: ['P','M','G','34','36','Único'][Math.floor(Math.random()*6)],
-        img: `https://picsum.photos/id/${i+10}/300/300`
+        size: ['P','M','G','34','36','38','Único'][Math.floor(Math.random()*7)],
+        img: `https://picsum.photos/id/${(i % 100) + 10}/300/300`
       });
     }
 
-    function renderProducts(filteredProducts) {
+    function renderProducts(filtered) {
       const grid = document.getElementById('productGrid');
       grid.innerHTML = '';
-      
-      filteredProducts.forEach(p => {
+      filtered.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
@@ -231,8 +229,8 @@
             <p>Tam: ${p.size}</p>
             \( {p.promo ? `<p class="promo">R \) ${p.promo},00</p>` : ''}
             <p class="price">R$ ${p.price},00</p>
-            <button onclick="addToCart(${p.id}); event.stopImmediatePropagation();" style="margin-top:12px; width:100%; padding:12px; background:#0A1428; color:white; border:none; border-radius:8px; font-weight:600;">Adicionar ao Carrinho</button>
-            <button onclick="generateInstagramPost(${p.id}); event.stopImmediatePropagation();" style="margin-top:8px; width:100%; padding:10px; background:#D4AF37; color:#000; border:none; border-radius:8px; font-weight:600;">📸 Gerar Post</button>
+            <button onclick="addToCart(${p.id}); event.stopImmediatePropagation();" style="margin-top:12px;width:100%;padding:12px;background:#0A1428;color:white;border:none;border-radius:8px;font-weight:600;">Adicionar ao Carrinho</button>
+            <button onclick="generateInstagramPost(${p.id}); event.stopImmediatePropagation();" style="margin-top:8px;width:100%;padding:10px;background:#D4AF37;color:#000;border:none;border-radius:8px;font-weight:600;">📸 Gerar Post IG</button>
           </div>
         `;
         card.onclick = () => showProductModal(p);
@@ -240,68 +238,50 @@
       });
     }
 
-    // Funções de filtro
+    let cart = [];
+    function addToCart(id) {
+      const prod = products.find(p => p.id === id);
+      cart.push(prod);
+      document.getElementById('cart-count').textContent = cart.length;
+    }
+
+    function showCart() {
+      if (cart.length === 0) return alert("Carrinho vazio!");
+      let total = cart.reduce((sum, item) => sum + item.price, 0);
+      alert(`🛒 Carrinho (\( {cart.length} itens)\nTotal: R \) ${total},00`);
+    }
+
+    function sendToWhatsApp() {
+      if (cart.length === 0) return alert("Adicione produtos ao carrinho!");
+      let msg = "Olá Virtuosas Brechó! Gostaria de comprar:\n\n";
+      cart.forEach(item => msg += `- \( {item.name} - R \) ${item.price},00\n`);
+      msg += `\nTotal: R$ ${cart.reduce((sum, item) => sum + item.price, 0)},00`;
+      window.open(`https://wa.me/51982264855?text=${encodeURIComponent(msg)}`);
+    }
+
+    function showProductModal(p) {
+      alert(`📌 ${p.name}\nTamanho: \( {p.size}\nPreço: R \) ${p.price},00`);
+    }
+
+    function generateInstagramPost(id) {
+      const p = products.find(x => x.id === id);
+      alert(`📸 Post gerado!\n\( {p.name}\nR \) ${p.price},00\nVirtuosas Brechó +`);
+    }
+
     function filterCategory(cat) {
-      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       event.target.classList.add('active');
-      
       const filtered = cat === 'all' ? products : products.filter(p => p.category === cat);
       renderProducts(filtered);
     }
 
     function filterProducts() {
       const term = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = products.filter(p => 
-        p.name.toLowerCase().includes(term) || p.size.toLowerCase().includes(term)
-      );
+      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
       renderProducts(filtered);
     }
 
-    let cart = [];
-    function addToCart(id) {
-      const product = products.find(p => p.id === id);
-      cart.push(product);
-      document.getElementById('cart-count').textContent = cart.length;
-      alert(`✅ ${product.name} adicionado ao carrinho!`);
-    }
-
-    function showCart() {
-      if (cart.length === 0) {
-        alert("🛒 Carrinho vazio!");
-        return;
-      }
-      let msg = "🛒 Carrinho - Virtuosas Brechó +\n\n";
-      let total = 0;
-      cart.forEach(item => {
-        msg += `- \( {item.name} - R \) ${item.price},00\n`;
-        total += item.price;
-      });
-      msg += `\nTotal: R$ ${total},00`;
-      alert(msg);
-    }
-
-    function sendToWhatsApp() {
-      if (cart.length === 0) return alert("Adicione produtos primeiro!");
-      let msg = "Olá! Gostaria de comprar estes itens:\n\n";
-      let total = 0;
-      cart.forEach(item => {
-        msg += `- \( {item.name} - R \) ${item.price},00\n`;
-        total += item.price;
-      });
-      msg += `\nTotal: R$ ${total},00\n\nPosso pagar via PIX ou presencialmente.`;
-      window.open(`https://wa.me/51982264855?text=${encodeURIComponent(msg)}`);
-    }
-
-    function showProductModal(p) {
-      alert(`Produto: \( {p.name}\nPreço: R \) ${p.price},00\nTamanho: ${p.size}\n\nClique em "Adicionar ao Carrinho" no card.`);
-    }
-
-    function generateInstagramPost(id) {
-      const p = products.find(prod => prod.id === id);
-      alert(`📸 Post gerado para Instagram!\n\n\( {p.name}\nR \) ${p.price},00\nVirtuosas Brechó +\n\n(Esta funcionalidade será integrada com canvas no código final)`);
-    }
-
-    // Render inicial
+    // Carregar produtos
     renderProducts(products);
   </script>
 </body>
