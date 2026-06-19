@@ -29,7 +29,7 @@
     .stock { font-size:13px; color:#28a745; margin:5px 0; }
 
     .qty-controls { display:flex; align-items:center; gap:8px; margin:10px 0; }
-    .qty-btn { width:28px; height:28px; background:#0A1428; color:white; border:none; border-radius:50%; font-size:16px; }
+    .qty-btn { width:28px; height:28px; background:#0A1428; color:white; border:none; border-radius:50%; font-size:16px; cursor:pointer; }
 
     .floating-cart {
       position:fixed; bottom:25px; right:25px; background:#0A1428; color:white;
@@ -49,7 +49,7 @@
         <div class="logo">EU<span class="plus">+</span> NEGÓCIO</div>
         <div class="client-name">Virtuosas Brechó +</div>
       </div>
-      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Buscar..." onkeyup="filterProducts()">
+      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Buscar (ex: vest 34 preto)" onkeyup="filterProducts()">
     </div>
   </header>
 
@@ -84,7 +84,7 @@
             <option value="PIX">PIX</option>
             <option value="Dinheiro">Dinheiro (Presencial)</option>
             <option value="Cartão">Cartão</option>
-            <option value="Presencial">Presencial (sem especificar)</option>
+            <option value="Presencial">Presencial</option>
           </select>
         </div>
 
@@ -106,7 +106,7 @@
     for (let i = 1; i <= 50; i++) {
       products.push({
         id: i,
-        name: `Produto ${i} - ${['Blusa Feminina', 'Bota Chelsea', 'Calça Jeans', 'Vestido Floral'][i%4]}`,
+        name: `Produto ${i} - ${['Blusa Feminina', 'Bota Chelsea', 'Calça Jeans', 'Vestido Floral', 'Tênis Infantil'][i%5]}`,
         category: ['Feminino', 'Calçados', 'Infantil'][i%3],
         price: 35 + (i % 85),
         size: ['P','M','G','34','36'][i%5],
@@ -123,8 +123,8 @@
     }
 
     function updateCartCount() {
-      const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-      document.getElementById('cart-count').textContent = totalItems;
+      const total = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      document.getElementById('cart-count').textContent = total;
     }
 
     function renderProducts(filtered) {
@@ -146,7 +146,7 @@
             
             <div class="qty-controls">
               <button class="qty-btn" onclick="changeProductQty(${p.id}, -1); event.stopImmediatePropagation()">–</button>
-              <span style="font-weight:600; min-width:20px; text-align:center;">${qty}</span>
+              <span style="font-weight:600; min-width:24px; text-align:center;">${qty}</span>
               <button class="qty-btn" onclick="changeProductQty(${p.id}, 1); event.stopImmediatePropagation()">+</button>
             </div>
           </div>
@@ -160,18 +160,20 @@
       let item = cart.find(c => c.id === id);
 
       if (!item) {
-        if (change > 0) {
-          item = {...product, quantity: 0, reservaId: "RES-" + String(1000 + Math.floor(Math.random()*9000))};
-          cart.push(item);
-        } else return;
+        if (change <= 0) return;
+        item = {...product, quantity: 0, reservaId: "RES-" + String(1000 + Math.floor(Math.random()*9000))};
+        cart.push(item);
       }
 
-      item.quantity = (item.quantity || 0) + change;
-      if (item.quantity < 1) item.quantity = 1;
+      item.quantity = Math.max(0, (item.quantity || 0) + change);
       if (item.quantity > product.stock) item.quantity = product.stock;
 
+      if (item.quantity === 0) {
+        cart = cart.filter(c => c.id !== id);
+      }
+
       saveCart();
-      renderProducts(products); // Atualiza todos os cards
+      renderProducts(products);
     }
 
     function showCartModal() {
@@ -208,9 +210,9 @@
     function changeCartQty(index, change) {
       const item = cart[index];
       const product = products.find(p => p.id === item.id);
-      item.quantity = (item.quantity || 1) + change;
-      if (item.quantity < 1) item.quantity = 1;
+      item.quantity = Math.max(0, (item.quantity || 1) + change);
       if (item.quantity > product.stock) item.quantity = product.stock;
+      if (item.quantity === 0) cart.splice(index, 1);
       showCartModal();
       saveCart();
     }
@@ -247,8 +249,16 @@
     }
 
     function filterProducts() {
-      const term = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+      const term = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!term) {
+        renderProducts(products);
+        return;
+      }
+      const terms = term.split(' ');
+      const filtered = products.filter(p => {
+        const text = (p.name + " " + p.size).toLowerCase();
+        return terms.every(t => text.includes(t));
+      });
       renderProducts(filtered);
     }
 
