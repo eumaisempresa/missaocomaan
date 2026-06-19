@@ -171,10 +171,7 @@
 
       item.quantity = Math.max(0, (item.quantity || 0) + change);
       if (item.quantity > product.stock) item.quantity = product.stock;
-
-      if (item.quantity === 0) {
-        cart = cart.filter(c => c.id !== id);
-      }
+      if (item.quantity === 0) cart = cart.filter(c => c.id !== id);
 
       saveCart();
       renderProducts(products);
@@ -257,6 +254,10 @@
       renderProducts(filtered);
     }
 
+    function removeAccents(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
     function filterProducts() {
       const term = document.getElementById('searchInput').value.toLowerCase().trim();
       if (!term) {
@@ -265,8 +266,8 @@
       }
       const terms = term.split(/\s+/);
       const filtered = products.filter(p => {
-        const text = (p.name + " " + p.size).toLowerCase();
-        return terms.every(t => text.includes(t));
+        const text = removeAccents(p.name + " " + p.size).toLowerCase();
+        return terms.every(t => text.includes(removeAccents(t)));
       });
       renderProducts(filtered);
     }
