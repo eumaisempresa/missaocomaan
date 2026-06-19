@@ -49,7 +49,7 @@
         <div class="logo">EU<span class="plus">+</span> NEGÓCIO</div>
         <div class="client-name">Virtuosas Brechó +</div>
       </div>
-      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Buscar (ex: vest 34 preto)" onkeyup="filterProducts()">
+      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Buscar (ex: vest 34)" onkeyup="filterProducts()">
     </div>
   </header>
 
@@ -87,6 +87,10 @@
             <option value="Presencial">Presencial</option>
           </select>
         </div>
+
+        <button onclick="copyPix()" style="width:100%; padding:14px; background:#D4AF37; color:#000; border:none; border-radius:10px; margin-bottom:10px;">
+          📋 Copiar PIX (27) 99716-1826
+        </button>
 
         <button onclick="finalizeOrder()" style="width:100%; padding:18px; background:#0A1428; color:white; border:none; border-radius:12px; font-size:18px;">
           Finalizar Reservas e Enviar via WhatsApp
@@ -217,6 +221,11 @@
       saveCart();
     }
 
+    function copyPix() {
+      navigator.clipboard.writeText("27997161826");
+      alert("✅ PIX copiado: (27) 99716-1826");
+    }
+
     function finalizeOrder() {
       const payment = document.getElementById('paymentMethod').value;
       let msg = "Olá Virtuosas Brechó! Gostaria de confirmar as seguintes reservas:\n\n";
@@ -254,7 +263,7 @@
         renderProducts(products);
         return;
       }
-      const terms = term.split(' ');
+      const terms = term.split(/\s+/);
       const filtered = products.filter(p => {
         const text = (p.name + " " + p.size).toLowerCase();
         return terms.every(t => text.includes(t));
